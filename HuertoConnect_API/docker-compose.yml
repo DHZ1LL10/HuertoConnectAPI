@@ -1,0 +1,150 @@
+services:
+  # ===================== DATABASES =====================
+  mongodb:
+    image: mongo:7
+    container_name: huerto-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - huerto-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: huerto-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-postgres.sql:/docker-entrypoint-initdb.d/init-postgres.sql:ro
+    networks:
+      - huerto-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===================== MICROSERVICES =====================
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: huerto-auth
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8001:8001"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - huerto-network
+
+  huertos-service:
+    build:
+      context: .
+      dockerfile: huertos-service/Dockerfile
+    container_name: huerto-huertos
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8002:8002"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - huerto-network
+
+  plagas-service:
+    build:
+      context: .
+      dockerfile: plagas-service/Dockerfile
+    container_name: huerto-plagas
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8003:8003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - huerto-network
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: chat-service/Dockerfile
+    container_name: huerto-chat
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8004:8004"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - huerto-network
+
+  reportes-service:
+    build:
+      context: .
+      dockerfile: reportes-service/Dockerfile
+    container_name: huerto-reportes
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8005:8005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - huerto-network
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: huerto-gateway
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - huertos-service
+      - plagas-service
+      - chat-service
+      - reportes-service
+    networks:
+      - huerto-network
+
+volumes:
+  mongo_data:
+  postgres_data:
+
+
+networks:
+  huerto-network:
+    driver: bridge
