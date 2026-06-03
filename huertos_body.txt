@@ -1,0 +1,1 @@
+{"detail":"Sesión no encontrada o revocada"}

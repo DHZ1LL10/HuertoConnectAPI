@@ -1,3 +1,20 @@
+# Node.js
 node_modules/
-.env
 npm-debug.log
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Entorno
+.env
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo

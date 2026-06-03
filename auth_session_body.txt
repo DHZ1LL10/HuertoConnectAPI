@@ -1,0 +1,1 @@
+{"id":"69bd927323085b02f56f5794","nombre":"Abiel","apellidos":"Ontiveros Calvario","email":"abielon252005@gmail.com","role":"Usuario","estado":"Activo","email_verificado":true,"profile_picture":null,"auth_provider":"email"}
