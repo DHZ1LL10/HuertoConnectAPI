@@ -1,146 +1,100 @@
-# 📚 Documentación de Consumo API (Para Equipo Frontend)
+# 📚 Documentación Completa de Consumo API (Frontend)
 
-Este documento contiene la guía oficial para que el equipo de Frontend (Web / Móvil) pueda conectarse a los microservicios de **Huerto Connect**, enfocándose especialmente en los nuevos endpoints de **Inteligencia Artificial**.
-
----
-
-## 🏗️ Arquitectura y Puertos Base
-
-El backend está dividido en 3 servicios principales que corren en puertos distintos. Asegúrense de apuntar sus peticiones (axios, fetch, http) al puerto correcto:
-
-1. **API Gateway (Autenticación y Sesiones)**
-   * **URL Base:** `http://localhost:3000/api`
-   * **Propósito:** Login, Registro, OTP, Gestión de usuarios.
-
-2. **Huertos Service (IA - Random Forest)**
-   * **URL Base:** `http://localhost:8000/api/huertos`
-   * **Propósito:** Recomendaciones predictivas de cultivos con datos de clima.
-
-3. **Plagas Service (IA - YOLOv8 Visión Artificial)**
-   * **URL Base:** `http://localhost:8003/api/plagas`
-   * **Propósito:** Subida de imágenes, detección de plagas y tratamientos.
+Este documento es la guía definitiva para conectar el Frontend (Web / Móvil) con los **3 microservicios** que conforman el Backend de Huerto Connect. 
 
 ---
 
-## 🔐 Autenticación Universal (JWT)
+## 🏗️ Puertos y URLs Base
 
-Todos los endpoints protegidos (incluyendo los de IA) requieren que el usuario haya iniciado sesión en el Gateway (puerto `3000`).
-El Gateway les devolverá un `token` en la respuesta del Login/Verificación OTP. 
+El backend corre en 3 servicios distintos. Dependiendo de la función, debes apuntar a un puerto u otro:
 
-Ese token deben mandarlo en los **Headers** de **todas** las peticiones a la IA:
-
-```json
-{
-  "Authorization": "Bearer eyJhbGciOiJIUz...",
-  "Content-Type": "application/json"
-}
-```
+1. **API Gateway (Auth & Usuarios)** 👉 `http://localhost:3000`
+2. **Huertos Service (IA Cultivos)** 👉 `http://localhost:8000`
+3. **Plagas Service (IA Visión)** 👉 `http://localhost:8003`
 
 ---
 
-## 🤖 1. Endpoint: Recomendación Inteligente de Cultivos
+## 🔐 1. API GATEWAY (Puerto `3000`)
+**URL Base:** `http://localhost:3000/api`
 
-Este endpoint toma la ubicación GPS del usuario, consulta el clima en vivo y lo pasa por el modelo de *Random Forest* para recomendar qué sembrar.
+Este es el módulo central. Aquí inicia la sesión el usuario y es quien **te entrega el Token JWT** que usarás para todas las demás peticiones.
 
-* **URL:** `POST http://localhost:8000/api/huertos/recomendar`
-* **Header requerido:** `Authorization: Bearer <token>`
+### Autenticación y Cuentas (`/auth`)
 
-### Request Body (JSON)
-Deberán enviar la latitud, longitud y municipio del usuario:
-```json
-{
-  "lat": 19.5312,
-  "lon": -96.9276,
-  "municipio": "Xalapa"
-}
-```
+* **`POST /auth/register`** (Registrar usuario)
+  * **Body:** `{ "firstName": "Juan", "lastName": "Perez", "email": "juan@correo.com", "password": "Password123!" }`
+  * **Response:** Envía un código OTP al correo.
 
-### Response Exitosa (200 OK)
-Devolverá el clima actual y un arreglo de 3 recomendaciones. 
-**Recomendación UI:** Pinten el campo `justificacion` para que el usuario entienda la decisión de la IA.
+* **`POST /auth/send-otp`** (Iniciar Login)
+  * **Body:** `{ "email": "juan@correo.com", "password": "Password123!" }`
+  * **Response:** Si las credenciales son correctas, envía un código OTP de 6 dígitos al correo.
 
-```json
-{
-  "clima": {
-    "temp_actual": 17.8,
-    "humedad": 97,
-    "descripcion": "Lluvia ligera",
-    "ciudad": "Xalapa"
-  },
-  "recomendaciones": [
+* **`POST /auth/verify-otp`** (Confirmar Login)
+  * **Body:** `{ "email": "juan@correo.com", "otp": "123456" }`
+  * **Response:** Devuelve la información del usuario y el **`token` JWT** (¡GUÁRDALO EN LOCALSTORAGE/SECURESTORAGE!).
+
+* **`POST /auth/forgot-password`** (Olvidé mi contraseña)
+  * **Body:** `{ "email": "juan@correo.com" }`
+  * **Response:** Envía un OTP para recuperar la cuenta.
+
+* **`POST /auth/reset-password`** (Cambiar contraseña)
+  * **Body:** `{ "resetToken": "...", "newPassword": "NuevaPassword123!" }`
+
+* **`GET /auth/me`** (Mi Perfil)
+  * **Headers:** `Authorization: Bearer <TU_TOKEN>`
+  * **Response:** Devuelve los datos del usuario logueado.
+
+* **`POST /auth/logout`** (Cerrar sesión)
+  * **Headers:** `Authorization: Bearer <TU_TOKEN>`
+
+### Recursos de Usuario (`/user`)
+*(Requieren Header: `Authorization: Bearer <TU_TOKEN>`)*
+
+* **`GET /user/huertos`** -> Devuelve la lista de huertos del usuario.
+* **`GET /user/dashboard`** -> Devuelve el dashboard principal del productor.
+
+---
+
+## 🤖 2. IA HUERTOS SERVICE (Puerto `8000`)
+**URL Base:** `http://localhost:8000/api/huertos`
+
+*(Requiere Header: `Authorization: Bearer <TU_TOKEN>`)*
+
+* **`POST /recomendar`** (Recomendación Predictiva)
+  * **Body:**
+    ```json
     {
-      "cultivo": "Tomate",
-      "confianza": 0.85,
-      "justificacion": "Modelo predictivo basado en Xalapa, temp: 17.8°C, humedad: 97%",
-      "temporada_ideal": "Otoño-Invierno (Oct–Feb)",
-      "tecnica_riego": "Goteo, cada 2 días"
+      "lat": 19.5312,
+      "lon": -96.9276,
+      "municipio": "Xalapa"
     }
-  ],
-  "modo": "modelo_real"
-}
-```
+    ```
+  * **Response:** Descarga el clima real y lo pasa por un modelo *Random Forest* para devolver los 3 cultivos más óptimos con su nivel de confianza y técnica de riego.
 
 ---
 
-## 🐞 2. Endpoint: Detección de Plagas (Visión Artificial)
+## 🐞 3. IA PLAGAS SERVICE (Puerto `8003`)
+**URL Base:** `http://localhost:8003/api/plagas`
 
-Este endpoint recibe la URL de una foto tomada por el usuario, la procesa a través de la Red Neuronal Convolucional (YOLOv8) y devuelve la plaga detectada junto con los tratamientos ecológicos para combatirla.
+*(Requiere Header: `Authorization: Bearer <TU_TOKEN>`)*
 
-* **URL:** `POST http://localhost:8003/api/plagas/detectar`
-* **Header requerido:** `Authorization: Bearer <token>`
-
-### Request Body (JSON)
-*Nota: El Frontend debe subir primero la foto a la nube (ej. Cloudinary, Firebase Storage) y mandar a este endpoint la URL pública.*
-
-```json
-{
-  "imagen_url": "https://raw.githubusercontent.com/ultralytics/yolov5/master/data/images/bus.jpg"
-}
-```
-
-### Response Exitosa (200 OK)
-**Recomendación UI:** El nivel de `severidad` (Alta/Media/Baja) se puede usar para poner un ícono rojo/amarillo. Los `tratamientos_ecologicos` deben pintarse en tarjetas (Cards) iterando el arreglo.
-
-```json
-{
-  "deteccion": {
-    "plaga": "Pulgon Verde",
-    "nombre_cientifico": "Myzus persicae / Aphis gossypii",
-    "confianza": 0.72,
-    "severidad": "Media",
-    "descripcion_plaga": "Áfido verde que coloniza brotes...",
-    "cultivos_afectados": ["Chile", "Jitomate"],
-    "tratamientos_ecologicos": [
-      {
-        "nombre": "Extracto de ajo y chile",
-        "tipo": "botanico",
-        "descripcion": "Alicina y capsaicina repelen y dañan colonias de pulgón.",
-        "aplicacion": "50 g ajo + 50 g chile / L agua. Macerar, filtrar, diluir 1:10.",
-        "frecuencia": "Cada 5 días hasta eliminar colonias"
-      }
-    ],
-    "nota_mitigacion": null
-  },
-  "modo": "modelo_real"
-}
-```
+* **`POST /detectar`** (Detección por Visión Artificial)
+  * **Nota Front:** Primero debes subir la foto tomada por la cámara a tu nube (Cloudinary/S3) y luego enviar la URL pública aquí.
+  * **Body:**
+    ```json
+    {
+      "imagen_url": "https://raw.githubusercontent.com/ultralytics/yolov5/master/data/images/bus.jpg"
+    }
+    ```
+  * **Response:** El modelo *YOLOv8* analiza la foto y devuelve:
+    * Nombre de la plaga.
+    * Nivel de Severidad (Alta/Media/Baja).
+    * Arreglo `tratamientos_ecologicos` (Itera este arreglo para crear tarjetas con curas botánicas/biológicas).
 
 ---
 
-## 💡 Recomendaciones y Buenas Prácticas para el Frontend
+## 💡 Buenas Prácticas UI/UX para el Frontend
 
-1. **Manejo de Tiempos de Carga (Loading States):**
-   * Los modelos de IA pesan gigabytes y hacen cálculos matemáticos complejos en milisegundos.
-   * Sin embargo, descargar el clima en vivo o descargar la foto de la nube puede tomar **de 1 a 3 segundos**.
-   * **Recomendación:** Pongan un *Loading Spinner* bonito (animación) o un "Skeleton Loader" mientras esperan la respuesta de los puertos `8000` y `8003`. ¡No dejen la pantalla congelada!
-
-2. **Validación del "Modo" del Modelo:**
-   * Ambas respuestas de IA devuelven un campo `"modo"`. 
-   * Si en sus pruebas notan que `"modo"` dice `"mock"`, significa que al Backend (Docker) le faltó cargar los archivos `.pt` (PyTorch) o `.pkl`. Solo deben avisarle al equipo de Backend para que lo reinicie. En producción **siempre** debe decir `"modelo_real"`.
-
-3. **Excepción: Araña Roja vs Mancha Foliar:**
-   * El modelo de visión de plagas (YOLO) fue entrenado con la versión V1. Existe un ligero solapamiento visual entre etapas tempranas de Araña Roja y Mancha Foliar.
-   * Si el modelo detecta Mancha Foliar, enviará un aviso en el campo `nota_mitigacion`. Asegúrense de **mostrar esa nota** en pantalla ("Tip: Si notas telarañas, revisa tratamientos de Araña Roja"). Esto hará ver al sistema mucho más inteligente y "humano" durante las presentaciones o demos.
-
-4. **CORS:**
-   * Si les da error de CORS, asegúrense de estar corriendo la app desde la URL configurada en el `.env` del backend (por defecto `http://localhost:4200` o `http://localhost:8081`).
+1. **Tokens Vencidos:** Si el backend te responde `401 Unauthorized`, cierra la sesión del usuario inmediatamente y mándalo a la pantalla de Login.
+2. **Loading States en IA:** Las peticiones a los puertos `8000` y `8003` pueden tardar de 1 a 3 segundos porque procesan matemáticas complejas y descargan imágenes. Pon un *Spinner* o *Skeleton Loader* mientras esperas.
+3. **Manejo de Errores:** Si mandas mal una contraseña o el OTP no es válido, el Gateway (puerto `3000`) te devolverá un código HTTP `400` o `401` con un mensaje JSON. Atrapa ese error en tu `try/catch` y muéstraselo al usuario en un modal/toast.
