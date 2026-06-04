@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.regiones import router as regiones_router
 from app.routes.huertos import router as huertos_router
 from app.routes.cultivos import router as cultivos_router
+from app.routes.ia_recomendar import router as ia_recomendar_router
 from app.routes.extras import (
     contacto_router,
     usuarios_router,
@@ -58,6 +59,7 @@ app.add_middleware(
 app.include_router(regiones_router)
 app.include_router(huertos_router)
 app.include_router(cultivos_router)
+app.include_router(ia_recomendar_router)
 app.include_router(contacto_router)
 app.include_router(usuarios_router)
 app.include_router(notificaciones_router)
