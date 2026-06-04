@@ -70,9 +70,13 @@ async def _create_session(db, user_id: str, request: Request) -> tuple[str, str,
         "jti": jti,
     })
 
+    import hashlib as _hashlib
+    token_hash = _hashlib.sha256(token.encode()).hexdigest()
+
     session_doc = {
         "user_id": user_id,
         "jti": jti,
+        "token_hash": token_hash,
         "ip": request.client.host if request.client else None,
         "user_agent": request.headers.get("user-agent"),
         "dispositivo": request.headers.get("x-device", "web"),

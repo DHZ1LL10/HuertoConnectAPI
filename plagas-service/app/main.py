@@ -18,6 +18,7 @@ from app.routes.routes import (
     predicciones_router,
     recomendaciones_router,
 )
+from app.routes.ia_detectar import router as ia_detectar_router
 from shared.config import settings
 from shared.database import (
     connect_mongodb,
@@ -78,6 +79,7 @@ app.include_router(modelos_router)
 app.include_router(predicciones_router)
 app.include_router(datasets_router)
 app.include_router(recomendaciones_router)
+app.include_router(ia_detectar_router)
 
 
 @app.get("/api/health")

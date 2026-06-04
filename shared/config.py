@@ -63,6 +63,9 @@ class Settings(BaseSettings):
     CHAT_SERVICE_URL: str = "http://chat-service:8004"
     REPORTES_SERVICE_URL: str = "http://reportes-service:8005"
 
+    # --- OpenWeather ---
+    OPENWEATHER_API_KEY: str = ""
+
     class Config:
         env_file = ".env"
         case_sensitive = True
