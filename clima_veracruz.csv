@@ -1,0 +1,193 @@
+municipio,region,fecha,temperatura_minima,temperatura_maxima,temperatura_promedio,humedad,probabilidad_lluvia,lluvia_acumulada,velocidad_viento,radiacion_uv,condicion_climatica,altitud,temporada,riesgo_sequia,riesgo_exceso_humedad,riesgo_helada,recomendacion_riego
+Xalapa,Capital,2026-01-01,9.8,22.7,16.0,69.8,6.0,46.6,29.4,3.4,despejado,1420,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-02-01,12.9,21.8,17.0,69.2,6.2,32.4,23.6,5.7,despejado,1420,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-03-01,11.3,24.5,17.7,75.1,28.6,19.3,16.2,5.1,despejado,1420,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-04-01,13.5,26.5,20.0,67.9,18.5,67.2,27.4,9.1,despejado,1420,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-05-01,15.2,28.2,21.7,84.8,93.9,183.5,28.7,8.0,lluvia,1420,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-06-01,16.5,25.7,20.7,83.3,56.8,211.3,10.4,5.9,lluvia,1420,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Xalapa,Capital,2026-07-01,15.7,28.2,20.5,84.7,69.6,199.9,23.6,8.3,lluvia,1420,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-08-01,14.1,27.6,21.1,82.6,84.2,123.2,21.4,8.8,lluvia,1420,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-09-01,12.9,22.9,17.8,83.3,86.0,234.1,13.1,10.6,lluvia,1420,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Xalapa,Capital,2026-10-01,12.4,25.0,19.1,87.6,67.6,239.6,14.4,5.7,lluvia,1420,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Xalapa,Capital,2026-11-01,13.2,23.3,18.4,72.8,15.5,41.5,31.9,5.5,despejado,1420,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Xalapa,Capital,2026-12-01,11.1,23.1,17.5,68.1,6.9,10.9,9.5,4.9,despejado,1420,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-01-01,15.3,26.2,19.3,80.7,26.2,69.7,24.4,5.7,nublado,1250,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-02-01,12.4,25.6,17.8,72.1,30.6,22.3,29.0,4.3,despejado,1250,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-03-01,16.9,28.4,21.8,80.1,12.1,37.5,22.6,5.1,nublado,1250,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-04-01,18.6,27.9,22.6,78.8,26.6,54.6,8.5,10.5,nublado,1250,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-05-01,14.3,28.7,20.9,88.1,88.3,240.0,10.1,7.4,lluvia,1250,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Coatepec,Capital,2026-06-01,15.7,27.4,21.2,92.7,85.4,106.4,14.4,10.1,nublado,1250,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-07-01,18.7,28.6,23.3,90.4,63.5,164.8,31.9,8.5,lluvia,1250,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-08-01,16.5,27.9,21.5,86.2,75.7,167.3,13.5,5.5,lluvia,1250,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-09-01,15.4,26.2,22.0,87.3,80.2,106.7,13.7,8.7,nublado,1250,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-10-01,15.3,27.9,20.8,94.4,60.3,130.3,27.4,5.3,lluvia,1250,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-11-01,11.7,24.6,17.9,75.2,22.2,11.3,31.6,3.5,despejado,1250,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Coatepec,Capital,2026-12-01,12.5,22.9,17.1,79.6,18.6,31.2,18.1,4.4,nublado,1250,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-01-01,15.6,25.5,21.3,73.4,41.9,21.2,32.0,7.2,despejado,860,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-02-01,13.3,23.7,18.8,77.5,42.1,68.0,17.6,3.3,nublado,860,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-03-01,18.2,29.2,23.5,71.7,44.4,29.6,31.0,11.0,despejado,860,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-04-01,16.9,30.1,23.8,70.5,33.7,41.1,21.0,9.2,despejado,860,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-05-01,21.3,33.6,25.8,88.0,78.4,104.4,9.9,5.3,nublado,860,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-06-01,16.5,28.1,23.1,85.4,82.0,193.2,22.3,8.3,lluvia,860,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-07-01,21.5,32.9,26.1,88.2,78.3,164.2,13.7,6.8,lluvia,860,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-08-01,21.2,31.2,25.4,86.2,67.0,205.8,32.0,11.0,lluvia,860,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-09-01,17.4,31.6,24.1,85.7,63.5,107.1,16.9,5.1,nublado,860,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-10-01,18.3,28.3,24.3,89.1,83.1,232.6,27.6,6.1,lluvia,860,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Cordoba,Montanas,2026-11-01,14.3,24.8,18.6,70.3,42.6,48.1,14.5,6.0,despejado,860,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cordoba,Montanas,2026-12-01,13.7,26.8,19.2,75.3,13.1,51.6,28.3,3.5,despejado,860,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-01-01,13.1,24.0,19.0,68.0,16.1,32.5,25.8,5.8,despejado,1236,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-02-01,12.7,25.6,19.4,68.8,5.4,32.8,28.0,5.9,despejado,1236,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-03-01,15.5,29.4,21.9,71.1,10.1,14.6,29.6,5.5,despejado,1236,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-04-01,18.7,30.4,23.9,75.8,9.1,21.2,11.7,10.5,despejado,1236,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-05-01,19.8,30.8,23.9,90.1,94.0,237.7,16.0,10.5,lluvia,1236,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Orizaba,Montanas,2026-06-01,15.3,26.1,21.7,90.1,89.6,227.4,28.9,10.0,lluvia,1236,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Orizaba,Montanas,2026-07-01,15.4,26.7,21.8,86.6,87.7,131.7,8.6,5.4,lluvia,1236,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-08-01,15.8,27.3,21.7,91.7,89.6,149.2,31.5,7.8,lluvia,1236,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-09-01,12.5,24.4,19.3,91.7,59.6,250.0,10.6,7.0,lluvia,1236,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Orizaba,Montanas,2026-10-01,15.4,26.8,20.5,88.1,67.5,215.2,14.1,9.0,lluvia,1236,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Orizaba,Montanas,2026-11-01,12.6,25.5,18.8,73.4,42.0,5.1,16.7,3.3,despejado,1236,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Orizaba,Montanas,2026-12-01,13.1,24.5,19.3,71.1,18.2,48.2,15.4,5.0,despejado,1236,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-01-01,17.9,31.4,24.7,66.3,16.8,31.2,29.7,6.1,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-02-01,18.9,30.6,24.2,65.0,26.9,24.6,23.7,5.3,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-03-01,22.6,33.6,28.9,69.7,13.5,33.7,10.0,7.6,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-04-01,24.4,35.3,30.4,73.2,18.4,46.1,12.8,4.2,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-05-01,22.7,34.5,28.0,87.5,74.0,135.4,12.7,8.9,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-06-01,21.5,34.8,27.7,85.6,64.8,176.6,10.6,7.0,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-07-01,23.1,35.3,27.9,84.2,93.3,124.0,19.0,9.6,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-08-01,24.4,37.6,31.1,85.0,94.5,205.2,25.3,7.5,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-09-01,23.0,33.4,28.4,88.0,76.9,232.0,13.9,8.5,lluvia,10,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Veracruz,Sotavento,2026-10-01,22.5,31.8,26.7,85.3,75.9,221.4,14.5,6.2,lluvia,10,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Veracruz,Sotavento,2026-11-01,19.6,30.0,25.7,67.3,10.5,40.1,17.8,5.7,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Veracruz,Sotavento,2026-12-01,20.7,33.2,26.5,69.2,13.3,32.0,28.6,6.8,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-01-01,20.4,34.7,26.9,70.5,5.2,29.7,18.1,6.7,despejado,5,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-02-01,19.7,29.1,25.0,69.2,29.1,40.5,16.1,6.4,despejado,5,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-03-01,21.3,31.3,27.2,71.7,11.6,31.3,17.5,8.0,despejado,5,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-04-01,26.2,35.9,30.4,68.4,30.7,6.8,13.1,6.3,despejado,5,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-05-01,26.9,36.0,31.7,88.5,70.2,220.6,8.5,7.8,lluvia,5,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Alvarado,Sotavento,2026-06-01,25.6,38.5,31.5,87.5,69.0,260.0,30.8,5.4,lluvia,5,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Alvarado,Sotavento,2026-07-01,25.4,36.0,31.1,82.3,61.1,98.4,24.8,9.4,nublado,5,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-08-01,22.7,37.0,29.1,88.5,79.3,122.7,10.6,4.2,lluvia,5,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-09-01,22.0,32.4,28.1,90.6,82.1,146.5,24.6,8.4,lluvia,5,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-10-01,24.5,36.8,28.9,89.5,85.9,111.8,26.8,6.4,nublado,5,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-11-01,18.9,32.7,25.4,72.1,19.8,32.8,10.5,7.8,despejado,5,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Alvarado,Sotavento,2026-12-01,19.6,33.6,25.8,74.1,38.1,46.3,14.5,7.0,despejado,5,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-01-01,19.0,31.2,23.8,72.4,24.3,40.0,27.9,3.4,despejado,180,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-02-01,18.3,27.5,23.4,72.6,14.8,62.3,28.4,3.9,despejado,180,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-03-01,20.8,32.0,26.9,71.4,36.9,18.8,8.2,10.6,despejado,180,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-04-01,22.4,35.0,28.4,72.9,33.8,10.6,19.8,9.6,despejado,180,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-05-01,21.1,32.7,26.8,88.9,63.9,110.4,20.7,7.0,nublado,180,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-06-01,21.9,31.2,26.7,89.0,68.2,218.1,12.6,4.8,lluvia,180,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Papantla,Totonaca,2026-07-01,21.0,33.4,26.5,83.9,85.5,183.4,31.4,7.7,lluvia,180,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-08-01,22.0,30.6,26.5,83.9,59.0,141.7,20.8,5.9,lluvia,180,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-09-01,17.5,30.1,24.2,89.0,77.1,255.8,28.9,8.0,lluvia,180,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Papantla,Totonaca,2026-10-01,17.1,29.8,23.9,83.8,72.6,172.5,27.7,6.8,lluvia,180,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-11-01,16.0,27.0,21.7,68.5,30.2,9.8,31.9,3.6,despejado,180,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Papantla,Totonaca,2026-12-01,16.4,27.8,22.0,75.9,29.3,54.7,18.6,7.3,despejado,180,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-01-01,18.2,32.2,24.4,72.2,17.2,69.4,13.0,4.1,despejado,80,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-02-01,18.5,28.3,22.5,67.7,11.3,47.9,22.3,4.5,despejado,80,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-03-01,20.3,34.0,26.3,73.0,33.3,20.0,26.9,8.4,despejado,80,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-04-01,22.7,36.3,28.7,70.3,42.3,48.0,27.8,4.5,despejado,80,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-05-01,23.9,33.2,28.7,87.5,67.3,122.4,24.5,8.9,lluvia,80,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-06-01,22.9,32.7,27.0,84.9,75.0,250.5,15.7,5.8,lluvia,80,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Martinez de la Torre,Nautla,2026-07-01,21.9,36.8,28.8,88.4,93.5,110.1,24.1,5.9,nublado,80,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-08-01,22.3,33.8,29.0,84.7,85.3,101.6,22.0,8.4,nublado,80,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-09-01,19.9,33.3,25.9,83.5,58.6,176.1,15.9,8.9,lluvia,80,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-10-01,21.3,31.9,26.7,88.1,92.8,142.6,15.8,10.8,lluvia,80,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-11-01,18.9,30.2,24.6,75.9,25.6,31.3,12.5,4.8,despejado,80,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Martinez de la Torre,Nautla,2026-12-01,17.3,30.6,22.9,73.6,30.0,54.2,18.5,6.5,despejado,80,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-01-01,19.6,30.3,24.1,70.1,43.9,12.9,21.3,3.5,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-02-01,17.1,29.6,23.6,68.6,41.5,69.5,25.2,5.5,despejado,10,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-03-01,20.9,32.1,26.6,73.8,38.4,22.8,30.1,7.6,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-04-01,25.3,38.3,30.5,66.8,39.6,62.2,20.2,9.7,despejado,10,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-05-01,25.8,35.9,31.3,83.9,66.9,141.7,20.9,6.4,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-06-01,24.3,35.6,28.9,82.6,76.7,186.1,21.7,5.6,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-07-01,23.8,35.8,30.2,85.4,56.7,223.0,23.9,9.7,lluvia,10,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Tuxpan,Huasteca Baja,2026-08-01,23.7,37.0,29.5,78.4,74.8,256.8,29.0,7.1,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-09-01,21.2,31.8,27.2,85.2,73.3,181.8,19.3,10.8,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-10-01,22.2,36.2,28.8,84.5,82.7,150.9,17.1,6.2,lluvia,10,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-11-01,19.1,29.9,23.3,72.7,35.4,51.7,30.1,8.0,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Tuxpan,Huasteca Baja,2026-12-01,18.9,31.3,25.5,65.0,22.4,53.5,24.7,7.5,despejado,10,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-01-01,21.1,31.7,25.5,61.9,36.8,8.0,21.6,7.0,despejado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-02-01,21.7,34.1,26.4,67.7,8.2,16.0,11.4,5.3,despejado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-03-01,22.9,36.3,29.6,59.1,15.2,21.5,11.8,7.1,despejado,20,seca,alto,bajo,bajo,regar temprano y usar cobertura vegetal
+Panuco,Huasteca Alta,2026-04-01,25.5,37.6,30.2,65.4,28.5,27.5,12.8,6.7,despejado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-05-01,23.8,36.0,30.8,78.7,64.5,174.7,31.5,8.6,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-06-01,27.2,37.8,31.4,79.9,77.6,140.3,19.9,10.3,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-07-01,24.1,36.5,30.0,79.1,87.0,142.2,24.3,9.0,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-08-01,26.0,37.2,32.0,79.3,88.5,203.8,18.6,8.1,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-09-01,24.9,33.9,29.4,76.0,58.6,215.8,20.9,10.8,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-10-01,21.2,33.6,27.6,81.3,91.5,182.6,27.4,9.2,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-11-01,17.8,32.1,24.7,68.6,9.6,27.0,25.4,7.9,despejado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Panuco,Huasteca Alta,2026-12-01,23.0,33.2,27.0,62.7,37.2,67.9,18.9,6.4,despejado,20,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-01-01,23.3,32.5,27.6,74.2,28.4,48.7,8.6,7.4,despejado,12,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-02-01,18.0,32.1,24.4,68.2,41.6,41.5,15.3,5.0,despejado,12,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-03-01,24.2,36.0,28.5,69.0,42.9,14.1,11.3,7.2,despejado,12,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-04-01,24.0,34.8,30.2,75.5,34.7,48.6,18.0,4.7,despejado,12,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-05-01,23.7,34.6,28.8,89.5,71.3,175.7,30.8,10.0,lluvia,12,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-06-01,27.1,37.8,32.2,85.4,82.4,111.4,12.6,4.9,nublado,12,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-07-01,25.2,35.1,31.0,86.6,73.2,234.9,26.9,5.7,lluvia,12,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Cosamaloapan,Papaloapan,2026-08-01,26.8,36.3,31.5,80.7,77.6,115.8,28.9,6.3,nublado,12,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-09-01,25.4,34.3,29.8,80.0,91.0,119.3,14.0,5.2,nublado,12,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-10-01,24.8,34.8,29.5,80.1,56.0,204.1,12.2,4.4,lluvia,12,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-11-01,19.6,32.0,25.9,73.5,26.0,53.2,10.6,5.5,despejado,12,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Cosamaloapan,Papaloapan,2026-12-01,21.8,33.2,27.3,73.8,6.7,66.5,31.1,3.3,despejado,12,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-01-01,16.2,27.3,23.0,78.9,21.1,36.1,9.9,6.0,nublado,300,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-02-01,18.2,31.2,23.2,78.3,16.0,9.3,20.7,5.3,nublado,300,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-03-01,20.8,33.8,26.8,79.0,9.0,44.4,25.3,5.5,nublado,300,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-04-01,22.1,31.7,27.3,75.4,14.1,34.4,18.2,8.7,despejado,300,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-05-01,19.4,30.3,25.9,95,61.1,156.8,10.3,9.2,lluvia,300,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-06-01,22.7,32.2,27.7,91.9,77.3,228.9,16.5,8.7,lluvia,300,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+San Andres Tuxtla,Los Tuxtlas,2026-07-01,23.4,34.6,29.2,93.2,89.7,218.8,21.9,5.5,lluvia,300,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+San Andres Tuxtla,Los Tuxtlas,2026-08-01,23.6,35.8,28.7,87.1,64.0,203.4,21.8,9.7,lluvia,300,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-09-01,20.0,30.0,25.9,94.2,94.0,234.5,30.3,9.8,lluvia,300,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+San Andres Tuxtla,Los Tuxtlas,2026-10-01,19.8,28.8,24.8,93.0,62.2,139.1,28.9,8.0,lluvia,300,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-11-01,15.1,26.2,21.3,78.3,10.7,31.1,18.1,4.7,nublado,300,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+San Andres Tuxtla,Los Tuxtlas,2026-12-01,19.0,27.5,23.2,79.8,33.9,29.1,11.8,6.1,nublado,300,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-01-01,20.6,31.0,25.9,76.6,15.9,48.8,26.1,3.6,nublado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-02-01,20.0,30.1,26.0,76.8,16.3,32.9,17.5,6.0,nublado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-03-01,22.4,32.5,27.2,72.1,17.1,5.5,8.2,9.2,despejado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-04-01,24.0,37.7,30.5,77.0,20.2,16.4,9.7,10.0,nublado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-05-01,26.1,38.1,31.8,93.2,55.7,102.0,25.0,6.9,nublado,20,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-06-01,25.7,38.9,31.6,87.2,55.8,114.0,30.1,4.6,nublado,20,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-07-01,25.4,35.8,30.6,89.9,64.7,234.3,16.1,6.3,lluvia,20,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Minatitlan,Olmeca,2026-08-01,23.8,35.9,30.5,85.1,75.4,122.7,25.5,9.7,lluvia,20,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-09-01,21.6,34.5,27.4,85.5,64.5,229.5,23.7,5.2,lluvia,20,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Minatitlan,Olmeca,2026-10-01,24.1,37.1,29.4,91.5,74.8,222.5,21.5,8.4,lluvia,20,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Minatitlan,Olmeca,2026-11-01,20.5,30.5,24.7,76.3,39.6,45.6,15.3,4.4,nublado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Minatitlan,Olmeca,2026-12-01,21.7,33.2,25.8,73.1,25.3,8.7,9.8,7.3,despejado,20,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-01-01,19.2,32.0,24.9,74.1,29.6,60.6,29.5,5.2,despejado,100,seca,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-02-01,20.5,29.2,24.9,72.2,31.1,57.6,10.5,7.5,despejado,100,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-03-01,21.6,32.1,26.3,74.0,33.6,27.3,18.5,7.7,despejado,100,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-04-01,24.2,35.6,29.2,71.8,19.9,15.3,26.9,8.5,despejado,100,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-05-01,22.6,35.3,28.7,89.8,58.8,105.9,29.8,10.1,nublado,100,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-06-01,22.1,35.8,29.0,84.4,78.3,150.0,17.4,8.2,lluvia,100,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-07-01,24.1,37.2,30.5,86.8,67.4,249.8,27.9,9.2,lluvia,100,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Acayucan,Olmeca,2026-08-01,24.1,34.7,29.2,89.5,76.1,208.1,12.3,5.5,lluvia,100,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-09-01,22.0,33.6,26.2,85.3,74.5,251.4,10.4,9.4,lluvia,100,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Acayucan,Olmeca,2026-10-01,20.6,31.4,26.9,83.4,90.3,232.8,17.0,5.1,lluvia,100,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Acayucan,Olmeca,2026-11-01,18.5,29.4,23.8,77.1,35.8,59.0,24.2,4.2,nublado,100,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Acayucan,Olmeca,2026-12-01,19.2,30.1,24.8,76.5,16.4,33.9,27.4,5.3,nublado,100,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-01-01,9.4,19.9,14.7,56.5,19.7,59.3,17.2,5.6,despejado,2400,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-02-01,6.9,18.3,11.7,55.0,37.7,67.8,29.0,5.8,despejado,2400,seca,bajo,bajo,medio,mantener riego segun humedad del suelo
+Perote,Capital,2026-03-01,8.4,19.8,14.7,55.5,38.8,11.7,29.7,5.0,despejado,2400,seca,alto,bajo,medio,regar temprano y usar cobertura vegetal
+Perote,Capital,2026-04-01,12.3,21.4,17.3,49.2,42.9,33.4,9.3,7.5,despejado,2400,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-05-01,9.0,23.2,15.8,64.7,94.8,133.9,23.6,9.5,lluvia,2400,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-06-01,13.8,25.0,18.2,69.3,66.5,117.7,18.8,4.0,despejado,2400,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-07-01,11.5,23.8,17.7,69.3,65.2,108.1,10.7,6.0,despejado,2400,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-08-01,13.2,23.0,18.6,65.2,56.9,144.7,29.7,8.2,lluvia,2400,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-09-01,8.9,20.7,14.2,63.4,75.6,97.7,13.8,6.9,despejado,2400,lluvias,bajo,bajo,medio,mantener riego segun humedad del suelo
+Perote,Capital,2026-10-01,8.4,20.0,13.9,70.7,58.4,204.6,31.7,7.9,lluvia,2400,lluvias,bajo,medio,medio,mantener riego segun humedad del suelo
+Perote,Capital,2026-11-01,10.0,18.8,14.7,53.4,23.8,30.4,26.9,4.7,despejado,2400,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Perote,Capital,2026-12-01,8.8,18.0,13.8,54.7,30.1,52.6,21.1,7.1,despejado,2400,seca,medio,bajo,medio,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-01-01,11.8,24.9,17.7,74.6,36.2,16.4,9.5,6.9,despejado,1340,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-02-01,11.8,23.7,15.9,70.4,16.7,34.7,20.4,7.9,despejado,1340,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-03-01,13.3,25.5,18.4,77.5,15.1,40.3,28.8,6.3,nublado,1340,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-04-01,15.7,27.9,22.4,78.9,19.7,13.1,31.4,7.5,nublado,1340,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-05-01,16.4,26.9,22.6,89.2,92.0,177.1,22.5,9.8,lluvia,1340,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-06-01,17.2,28.5,22.1,84.8,67.8,185.0,18.2,8.8,lluvia,1340,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-07-01,14.0,26.1,21.0,92.7,56.7,153.0,31.5,10.6,lluvia,1340,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-08-01,16.5,30.4,22.6,87.6,80.5,107.4,11.4,8.3,nublado,1340,lluvias,bajo,bajo,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-09-01,15.4,26.0,20.5,84.7,56.4,223.9,21.6,8.2,lluvia,1340,lluvias,bajo,alto,bajo,mejorar drenaje y evitar riego adicional
+Huatusco,Montanas,2026-10-01,14.7,26.6,20.4,87.7,93.0,207.0,17.6,8.5,lluvia,1340,lluvias,bajo,medio,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-11-01,11.8,23.2,17.0,77.4,9.5,21.2,14.3,4.3,nublado,1340,seca,medio,bajo,bajo,mantener riego segun humedad del suelo
+Huatusco,Montanas,2026-12-01,13.0,23.0,18.5,72.9,44.9,34.0,28.5,5.3,despejado,1340,seca,medio,bajo,bajo,mantener riego segun humedad del suelo

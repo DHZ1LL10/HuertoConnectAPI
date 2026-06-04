@@ -1,0 +1,589 @@
+municipio,region,tipo_cultivo,etapa_cultivo,temperatura,humedad_ambiental,probabilidad_lluvia,lluvia_acumulada,velocidad_viento,radiacion_uv,humedad_suelo,tipo_suelo,ultimo_riego,dias_desde_siembra,historial_plagas,temporada_ano,altitud_aproximada,requiere_riego,riesgo_plaga,riesgo_climatico,cultivo_recomendado_zona,prioridad_alerta,recomendacion_agricola
+Xalapa,Capital,Cafe,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,franco_humifero,5,18,alto,seca,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,franco,2,18,alto,seca,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,franco,1,18,alto,seca,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,arenoso_franco,4,18,alto,seca,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,franco,6,18,alto,seca,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,franco,1,18,alto,seca,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,franco,2,18,alto,seca,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,siembra,16.0,69.8,6.0,46.6,29.4,3.4,48.57,arenoso_franco,3,18,alto,seca,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,franco_humifero,5,36,alto,seca,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,franco,2,36,alto,seca,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,franco,1,36,alto,seca,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,arenoso_franco,4,36,alto,seca,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,franco,6,36,alto,seca,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,franco,1,36,alto,seca,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,franco,2,36,alto,seca,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,siembra,17.0,69.2,6.2,32.4,23.6,5.7,45.8,arenoso_franco,3,36,alto,seca,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,franco_humifero,6,54,alto,seca,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,franco,3,54,alto,seca,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,franco,2,54,alto,seca,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,arenoso_franco,5,54,alto,seca,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,franco,6,54,alto,seca,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,franco,2,54,alto,seca,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,franco,3,54,alto,seca,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,crecimiento,17.7,75.1,28.6,19.3,16.2,5.1,45.51,arenoso_franco,4,54,alto,seca,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,franco_humifero,5,72,alto,seca,1420,si,alto,bajo,Cafe,alta,Regar por la manana y verificar humedad del suelo.
+Xalapa,Capital,Tomate,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,franco,2,72,alto,seca,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,franco,1,72,alto,seca,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,arenoso_franco,4,72,alto,seca,1420,si,alto,bajo,Papa,alta,Regar por la manana y verificar humedad del suelo.
+Xalapa,Capital,Aguacate,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,franco,5,72,alto,seca,1420,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Xalapa,Capital,Cilantro,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,franco,1,72,alto,seca,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,franco,2,72,alto,seca,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,crecimiento,20.0,67.9,18.5,67.2,27.4,9.1,51.61,arenoso_franco,3,72,alto,seca,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,franco_humifero,4,90,alto,lluvias,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,franco,1,90,alto,lluvias,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,franco,1,90,alto,lluvias,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,arenoso_franco,3,90,alto,lluvias,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,franco,4,90,alto,lluvias,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,franco,1,90,alto,lluvias,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,franco,1,90,alto,lluvias,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,crecimiento,21.7,84.8,93.9,183.5,28.7,8.0,86.46,arenoso_franco,2,90,alto,lluvias,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,franco_humifero,4,108,alto,lluvias,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,franco,1,108,alto,lluvias,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,franco,1,108,alto,lluvias,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,arenoso_franco,3,108,alto,lluvias,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,franco,4,108,alto,lluvias,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,franco,1,108,alto,lluvias,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,franco,1,108,alto,lluvias,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,floracion,20.7,83.3,56.8,211.3,10.4,5.9,90.94,arenoso_franco,2,108,alto,lluvias,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,franco_humifero,4,126,alto,lluvias,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,franco,1,126,alto,lluvias,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,franco,1,126,alto,lluvias,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,arenoso_franco,3,126,alto,lluvias,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,franco,4,126,alto,lluvias,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,franco,1,126,alto,lluvias,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,franco,1,126,alto,lluvias,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,floracion,20.5,84.7,69.6,199.9,23.6,8.3,89.38,arenoso_franco,2,126,alto,lluvias,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,franco_humifero,4,144,alto,lluvias,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,franco,1,144,alto,lluvias,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,franco,1,144,alto,lluvias,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,arenoso_franco,3,144,alto,lluvias,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,franco,4,144,alto,lluvias,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,franco,1,144,alto,lluvias,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,franco,1,144,alto,lluvias,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,fructificacion,21.1,82.6,84.2,123.2,21.4,8.8,74.84,arenoso_franco,2,144,alto,lluvias,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,franco_humifero,4,162,alto,lluvias,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,franco,1,162,alto,lluvias,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,franco,1,162,alto,lluvias,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,arenoso_franco,3,162,alto,lluvias,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,franco,4,162,alto,lluvias,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,franco,1,162,alto,lluvias,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,franco,1,162,alto,lluvias,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,siembra,17.8,83.3,86.0,234.1,13.1,10.6,92.0,arenoso_franco,2,162,alto,lluvias,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,franco_humifero,4,180,alto,lluvias,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,franco,1,180,alto,lluvias,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,franco,1,180,alto,lluvias,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,arenoso_franco,3,180,alto,lluvias,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,franco,4,180,alto,lluvias,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,franco,1,180,alto,lluvias,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,franco,1,180,alto,lluvias,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,siembra,19.1,87.6,67.6,239.6,14.4,5.7,92.0,arenoso_franco,2,180,alto,lluvias,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,franco_humifero,5,198,alto,seca,1420,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Tomate,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,franco,2,198,alto,seca,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,franco,1,198,alto,seca,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,arenoso_franco,4,198,alto,seca,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,franco,6,198,alto,seca,1420,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cilantro,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,franco,1,198,alto,seca,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,franco,2,198,alto,seca,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,siembra,18.4,72.8,15.5,41.5,31.9,5.5,48.7,arenoso_franco,3,198,alto,seca,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Cafe,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,franco_humifero,6,216,alto,seca,1420,si,alto,bajo,Cafe,alta,Regar por la manana y verificar humedad del suelo.
+Xalapa,Capital,Tomate,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,franco,3,216,alto,seca,1420,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Lechuga,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,franco,2,216,alto,seca,1420,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Papa,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,arenoso_franco,5,216,alto,seca,1420,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Aguacate,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,franco,6,216,alto,seca,1420,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Xalapa,Capital,Cilantro,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,franco,2,216,alto,seca,1420,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Acelga,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,franco,3,216,alto,seca,1420,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Xalapa,Capital,Zanahoria,siembra,17.5,68.1,6.9,10.9,9.5,4.9,41.55,arenoso_franco,4,216,alto,seca,1420,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,franco_humifero,5,18,alto,seca,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,franco,2,18,alto,seca,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,franco,1,18,alto,seca,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,arenoso_franco,4,18,alto,seca,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,franco,5,18,alto,seca,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,franco,1,18,alto,seca,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,franco,2,18,alto,seca,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,siembra,19.3,80.7,26.2,69.7,24.4,5.7,56.54,arenoso_franco,3,18,alto,seca,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,franco_humifero,6,36,alto,seca,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,franco,3,36,alto,seca,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,franco,2,36,alto,seca,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,arenoso_franco,5,36,alto,seca,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,franco,6,36,alto,seca,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,franco,2,36,alto,seca,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,franco,3,36,alto,seca,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,siembra,17.8,72.1,30.6,22.3,29.0,4.3,45.0,arenoso_franco,4,36,alto,seca,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,franco_humifero,5,54,alto,seca,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,franco,2,54,alto,seca,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,franco,1,54,alto,seca,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,arenoso_franco,4,54,alto,seca,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,franco,6,54,alto,seca,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,franco,1,54,alto,seca,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,franco,2,54,alto,seca,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,crecimiento,21.8,80.1,12.1,37.5,22.6,5.1,50.53,arenoso_franco,3,54,alto,seca,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,franco_humifero,5,72,alto,seca,1250,si,alto,bajo,Cafe,alta,Regar por la manana y verificar humedad del suelo.
+Coatepec,Capital,Tomate,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,franco,2,72,alto,seca,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,franco,1,72,alto,seca,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,arenoso_franco,4,72,alto,seca,1250,si,alto,bajo,Papa,alta,Regar por la manana y verificar humedad del suelo.
+Coatepec,Capital,Aguacate,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,franco,6,72,alto,seca,1250,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Coatepec,Capital,Cilantro,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,franco,1,72,alto,seca,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,franco,2,72,alto,seca,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,crecimiento,22.6,78.8,26.6,54.6,8.5,10.5,53.16,arenoso_franco,3,72,alto,seca,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,franco_humifero,4,90,alto,lluvias,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,franco,1,90,alto,lluvias,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,franco,1,90,alto,lluvias,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,arenoso_franco,3,90,alto,lluvias,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,franco,4,90,alto,lluvias,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,franco,1,90,alto,lluvias,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,franco,1,90,alto,lluvias,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,crecimiento,20.9,88.1,88.3,240.0,10.1,7.4,92.0,arenoso_franco,2,90,alto,lluvias,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,franco_humifero,4,108,alto,lluvias,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,franco,1,108,alto,lluvias,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,franco,1,108,alto,lluvias,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,arenoso_franco,3,108,alto,lluvias,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,franco,5,108,alto,lluvias,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,franco,1,108,alto,lluvias,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,franco,1,108,alto,lluvias,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,floracion,21.2,92.7,85.4,106.4,14.4,10.1,75.35,arenoso_franco,2,108,alto,lluvias,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,franco_humifero,4,126,alto,lluvias,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,franco,1,126,alto,lluvias,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,franco,1,126,alto,lluvias,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,arenoso_franco,3,126,alto,lluvias,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,franco,4,126,alto,lluvias,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,franco,1,126,alto,lluvias,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,franco,1,126,alto,lluvias,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,floracion,23.3,90.4,63.5,164.8,31.9,8.5,85.05,arenoso_franco,2,126,alto,lluvias,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,franco_humifero,4,144,alto,lluvias,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,franco,1,144,alto,lluvias,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,franco,1,144,alto,lluvias,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,arenoso_franco,3,144,alto,lluvias,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,franco,4,144,alto,lluvias,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,franco,1,144,alto,lluvias,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,franco,1,144,alto,lluvias,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,fructificacion,21.5,86.2,75.7,167.3,13.5,5.5,84.03,arenoso_franco,2,144,alto,lluvias,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,franco_humifero,4,162,alto,lluvias,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,franco,1,162,alto,lluvias,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,franco,1,162,alto,lluvias,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,arenoso_franco,3,162,alto,lluvias,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,franco,5,162,alto,lluvias,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,franco,1,162,alto,lluvias,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,franco,1,162,alto,lluvias,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,siembra,22.0,87.3,80.2,106.7,13.7,8.7,73.51,arenoso_franco,2,162,alto,lluvias,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,franco_humifero,4,180,alto,lluvias,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,franco,1,180,alto,lluvias,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,franco,1,180,alto,lluvias,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,arenoso_franco,3,180,alto,lluvias,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,franco,4,180,alto,lluvias,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,franco,1,180,alto,lluvias,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,franco,1,180,alto,lluvias,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,siembra,20.8,94.4,60.3,130.3,27.4,5.3,80.24,arenoso_franco,2,180,alto,lluvias,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,franco_humifero,6,198,alto,seca,1250,si,alto,bajo,Cafe,alta,Regar por la manana y verificar humedad del suelo.
+Coatepec,Capital,Tomate,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,franco,3,198,alto,seca,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,franco,2,198,alto,seca,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,arenoso_franco,5,198,alto,seca,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,franco,6,198,alto,seca,1250,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Coatepec,Capital,Cilantro,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,franco,2,198,alto,seca,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,franco,3,198,alto,seca,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,siembra,17.9,75.2,22.2,11.3,31.6,3.5,44.1,arenoso_franco,4,198,alto,seca,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cafe,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,franco_humifero,5,216,alto,seca,1250,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Tomate,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,franco,2,216,alto,seca,1250,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Lechuga,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,franco,1,216,alto,seca,1250,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Papa,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,arenoso_franco,4,216,alto,seca,1250,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Aguacate,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,franco,6,216,alto,seca,1250,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Cilantro,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,franco,1,216,alto,seca,1250,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Acelga,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,franco,2,216,alto,seca,1250,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Coatepec,Capital,Zanahoria,siembra,17.1,79.6,18.6,31.2,18.1,4.4,49.23,arenoso_franco,3,216,alto,seca,1250,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,siembra,21.3,73.4,41.9,21.2,32.0,7.2,45.26,franco_arcilloso,8,18,alto,seca,860,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Fresa,siembra,21.3,73.4,41.9,21.2,32.0,7.2,45.26,franco_humifero,3,18,alto,seca,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,siembra,21.3,73.4,41.9,21.2,32.0,7.2,45.26,franco_humifero,4,18,alto,seca,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,siembra,18.8,77.5,42.1,68.0,17.6,3.3,55.12,franco_arcilloso,7,36,alto,seca,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,siembra,18.8,77.5,42.1,68.0,17.6,3.3,55.12,franco_humifero,2,36,alto,seca,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,siembra,18.8,77.5,42.1,68.0,17.6,3.3,55.12,franco_humifero,3,36,alto,seca,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,crecimiento,23.5,71.7,44.4,29.6,31.0,11.0,46.17,franco_arcilloso,8,54,alto,seca,860,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Fresa,crecimiento,23.5,71.7,44.4,29.6,31.0,11.0,46.17,franco_humifero,2,54,alto,seca,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,crecimiento,23.5,71.7,44.4,29.6,31.0,11.0,46.17,franco_humifero,3,54,alto,seca,860,si,alto,bajo,Chayote,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Cana de azucar,crecimiento,23.8,70.5,33.7,41.1,21.0,9.2,47.82,franco_arcilloso,8,72,alto,seca,860,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Fresa,crecimiento,23.8,70.5,33.7,41.1,21.0,9.2,47.82,franco_humifero,2,72,alto,seca,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,crecimiento,23.8,70.5,33.7,41.1,21.0,9.2,47.82,franco_humifero,3,72,alto,seca,860,si,alto,bajo,Chayote,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Cana de azucar,crecimiento,25.8,88.0,78.4,104.4,9.9,5.3,73.34,franco_arcilloso,7,90,alto,lluvias,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,crecimiento,25.8,88.0,78.4,104.4,9.9,5.3,73.34,franco_humifero,1,90,alto,lluvias,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,crecimiento,25.8,88.0,78.4,104.4,9.9,5.3,73.34,franco_humifero,2,90,alto,lluvias,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,floracion,23.1,85.4,82.0,193.2,22.3,8.3,88.42,franco_arcilloso,6,108,alto,lluvias,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,floracion,23.1,85.4,82.0,193.2,22.3,8.3,88.42,franco_humifero,1,108,alto,lluvias,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,floracion,23.1,85.4,82.0,193.2,22.3,8.3,88.42,franco_humifero,2,108,alto,lluvias,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,floracion,26.1,88.2,78.3,164.2,13.7,6.8,84.18,franco_arcilloso,6,126,alto,lluvias,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,floracion,26.1,88.2,78.3,164.2,13.7,6.8,84.18,franco_humifero,1,126,alto,lluvias,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,floracion,26.1,88.2,78.3,164.2,13.7,6.8,84.18,franco_humifero,2,126,alto,lluvias,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,fructificacion,25.4,86.2,67.0,205.8,32.0,11.0,90.96,franco_arcilloso,6,144,alto,lluvias,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,fructificacion,25.4,86.2,67.0,205.8,32.0,11.0,90.96,franco_humifero,1,144,alto,lluvias,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,fructificacion,25.4,86.2,67.0,205.8,32.0,11.0,90.96,franco_humifero,2,144,alto,lluvias,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,siembra,24.1,85.7,63.5,107.1,16.9,5.1,73.02,franco_arcilloso,7,162,alto,lluvias,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,siembra,24.1,85.7,63.5,107.1,16.9,5.1,73.02,franco_humifero,1,162,alto,lluvias,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,siembra,24.1,85.7,63.5,107.1,16.9,5.1,73.02,franco_humifero,2,162,alto,lluvias,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,siembra,24.3,89.1,83.1,232.6,27.6,6.1,92.0,franco_arcilloso,6,180,alto,lluvias,860,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Fresa,siembra,24.3,89.1,83.1,232.6,27.6,6.1,92.0,franco_humifero,1,180,alto,lluvias,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,siembra,24.3,89.1,83.1,232.6,27.6,6.1,92.0,franco_humifero,2,180,alto,lluvias,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,siembra,18.6,70.3,42.6,48.1,14.5,6.0,49.01,franco_arcilloso,8,198,alto,seca,860,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Fresa,siembra,18.6,70.3,42.6,48.1,14.5,6.0,49.01,franco_humifero,2,198,alto,seca,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,siembra,18.6,70.3,42.6,48.1,14.5,6.0,49.01,franco_humifero,3,198,alto,seca,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Cana de azucar,siembra,19.2,75.3,13.1,51.6,28.3,3.5,51.39,franco_arcilloso,8,216,alto,seca,860,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Cordoba,Montanas,Fresa,siembra,19.2,75.3,13.1,51.6,28.3,3.5,51.39,franco_humifero,2,216,alto,seca,860,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cordoba,Montanas,Chayote,siembra,19.2,75.3,13.1,51.6,28.3,3.5,51.39,franco_humifero,3,216,alto,seca,860,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,siembra,19.0,68.0,16.1,32.5,25.8,5.8,45.4,franco_arcilloso,8,18,alto,seca,1236,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Fresa,siembra,19.0,68.0,16.1,32.5,25.8,5.8,45.4,franco_humifero,2,18,alto,seca,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,siembra,19.0,68.0,16.1,32.5,25.8,5.8,45.4,franco_humifero,3,18,alto,seca,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,siembra,19.4,68.8,5.4,32.8,28.0,5.9,45.73,franco_arcilloso,8,36,alto,seca,1236,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Fresa,siembra,19.4,68.8,5.4,32.8,28.0,5.9,45.73,franco_humifero,2,36,alto,seca,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,siembra,19.4,68.8,5.4,32.8,28.0,5.9,45.73,franco_humifero,3,36,alto,seca,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,crecimiento,21.9,71.1,10.1,14.6,29.6,5.5,43.26,franco_arcilloso,8,54,alto,seca,1236,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Fresa,crecimiento,21.9,71.1,10.1,14.6,29.6,5.5,43.26,franco_humifero,3,54,alto,seca,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,crecimiento,21.9,71.1,10.1,14.6,29.6,5.5,43.26,franco_humifero,4,54,alto,seca,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,crecimiento,23.9,75.8,9.1,21.2,11.7,10.5,46.1,franco_arcilloso,8,72,alto,seca,1236,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Fresa,crecimiento,23.9,75.8,9.1,21.2,11.7,10.5,46.1,franco_humifero,3,72,alto,seca,1236,si,alto,bajo,Fresa,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Chayote,crecimiento,23.9,75.8,9.1,21.2,11.7,10.5,46.1,franco_humifero,4,72,alto,seca,1236,si,alto,bajo,Chayote,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Cana de azucar,crecimiento,23.9,90.1,94.0,237.7,16.0,10.5,92.0,franco_arcilloso,6,90,alto,lluvias,1236,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Fresa,crecimiento,23.9,90.1,94.0,237.7,16.0,10.5,92.0,franco_humifero,1,90,alto,lluvias,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,crecimiento,23.9,90.1,94.0,237.7,16.0,10.5,92.0,franco_humifero,2,90,alto,lluvias,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,floracion,21.7,90.1,89.6,227.4,28.9,10.0,92.0,franco_arcilloso,6,108,alto,lluvias,1236,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Fresa,floracion,21.7,90.1,89.6,227.4,28.9,10.0,92.0,franco_humifero,1,108,alto,lluvias,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,floracion,21.7,90.1,89.6,227.4,28.9,10.0,92.0,franco_humifero,2,108,alto,lluvias,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,floracion,21.8,86.6,87.7,131.7,8.6,5.4,77.77,franco_arcilloso,6,126,alto,lluvias,1236,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Fresa,floracion,21.8,86.6,87.7,131.7,8.6,5.4,77.77,franco_humifero,1,126,alto,lluvias,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,floracion,21.8,86.6,87.7,131.7,8.6,5.4,77.77,franco_humifero,2,126,alto,lluvias,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,fructificacion,21.7,91.7,89.6,149.2,31.5,7.8,82.7,franco_arcilloso,6,144,alto,lluvias,1236,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Fresa,fructificacion,21.7,91.7,89.6,149.2,31.5,7.8,82.7,franco_humifero,1,144,alto,lluvias,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,fructificacion,21.7,91.7,89.6,149.2,31.5,7.8,82.7,franco_humifero,2,144,alto,lluvias,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,siembra,19.3,91.7,59.6,250.0,10.6,7.0,92.0,franco_arcilloso,6,162,alto,lluvias,1236,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Fresa,siembra,19.3,91.7,59.6,250.0,10.6,7.0,92.0,franco_humifero,1,162,alto,lluvias,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,siembra,19.3,91.7,59.6,250.0,10.6,7.0,92.0,franco_humifero,2,162,alto,lluvias,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,siembra,20.5,88.1,67.5,215.2,14.1,9.0,92.0,franco_arcilloso,6,180,alto,lluvias,1236,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Fresa,siembra,20.5,88.1,67.5,215.2,14.1,9.0,92.0,franco_humifero,1,180,alto,lluvias,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,siembra,20.5,88.1,67.5,215.2,14.1,9.0,92.0,franco_humifero,2,180,alto,lluvias,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,siembra,18.8,73.4,42.0,5.1,16.7,3.3,42.36,franco_arcilloso,8,198,alto,seca,1236,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Fresa,siembra,18.8,73.4,42.0,5.1,16.7,3.3,42.36,franco_humifero,3,198,alto,seca,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,siembra,18.8,73.4,42.0,5.1,16.7,3.3,42.36,franco_humifero,4,198,alto,seca,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Cana de azucar,siembra,19.3,71.1,18.2,48.2,15.4,5.0,49.31,franco_arcilloso,8,216,alto,seca,1236,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Orizaba,Montanas,Fresa,siembra,19.3,71.1,18.2,48.2,15.4,5.0,49.31,franco_humifero,2,216,alto,seca,1236,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Orizaba,Montanas,Chayote,siembra,19.3,71.1,18.2,48.2,15.4,5.0,49.31,franco_humifero,3,216,alto,seca,1236,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,siembra,24.7,66.3,16.8,31.2,29.7,6.1,44.57,franco_arenoso,3,18,alto,seca,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,siembra,24.7,66.3,16.8,31.2,29.7,6.1,44.57,franco_arenoso,11,18,alto,seca,10,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Veracruz,Sotavento,Chile,siembra,24.2,65.0,26.9,24.6,23.7,5.3,42.93,franco_arenoso,4,36,alto,seca,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,siembra,24.2,65.0,26.9,24.6,23.7,5.3,42.93,franco_arenoso,11,36,alto,seca,10,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Veracruz,Sotavento,Chile,crecimiento,28.9,69.7,13.5,33.7,10.0,7.6,46.21,franco_arenoso,3,54,alto,seca,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,crecimiento,28.9,69.7,13.5,33.7,10.0,7.6,46.21,franco_arenoso,11,54,alto,seca,10,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Veracruz,Sotavento,Chile,crecimiento,30.4,73.2,18.4,46.1,12.8,4.2,49.67,franco_arenoso,3,72,alto,seca,10,si,alto,bajo,Chile,alta,Regar por la manana y verificar humedad del suelo.
+Veracruz,Sotavento,Mango,crecimiento,30.4,73.2,18.4,46.1,12.8,4.2,49.67,franco_arenoso,11,72,alto,seca,10,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Veracruz,Sotavento,Chile,crecimiento,28.0,87.5,74.0,135.4,12.7,8.9,78.75,franco_arenoso,2,90,alto,lluvias,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,crecimiento,28.0,87.5,74.0,135.4,12.7,8.9,78.75,franco_arenoso,9,90,alto,lluvias,10,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,floracion,27.7,85.6,64.8,176.6,10.6,7.0,85.5,franco_arenoso,2,108,alto,lluvias,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,floracion,27.7,85.6,64.8,176.6,10.6,7.0,85.5,franco_arenoso,9,108,alto,lluvias,10,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,floracion,27.9,84.2,93.3,124.0,19.0,9.6,75.54,franco_arenoso,2,126,alto,lluvias,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,floracion,27.9,84.2,93.3,124.0,19.0,9.6,75.54,franco_arenoso,9,126,alto,lluvias,10,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,fructificacion,31.1,85.0,94.5,205.2,25.3,7.5,90.44,franco_arenoso,2,144,alto,lluvias,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,fructificacion,31.1,85.0,94.5,205.2,25.3,7.5,90.44,franco_arenoso,9,144,alto,lluvias,10,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,siembra,28.4,88.0,76.9,232.0,13.9,8.5,92.0,franco_arenoso,2,162,alto,lluvias,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,siembra,28.4,88.0,76.9,232.0,13.9,8.5,92.0,franco_arenoso,9,162,alto,lluvias,10,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,siembra,26.7,85.3,75.9,221.4,14.5,6.2,92.0,franco_arenoso,2,180,alto,lluvias,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,siembra,26.7,85.3,75.9,221.4,14.5,6.2,92.0,franco_arenoso,9,180,alto,lluvias,10,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Chile,siembra,25.7,67.3,10.5,40.1,17.8,5.7,46.52,franco_arenoso,3,198,alto,seca,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,siembra,25.7,67.3,10.5,40.1,17.8,5.7,46.52,franco_arenoso,11,198,alto,seca,10,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Veracruz,Sotavento,Chile,siembra,26.5,69.2,13.3,32.0,28.6,6.8,45.73,franco_arenoso,3,216,alto,seca,10,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Veracruz,Sotavento,Mango,siembra,26.5,69.2,13.3,32.0,28.6,6.8,45.73,franco_arenoso,11,216,alto,seca,10,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,siembra,26.9,70.5,5.2,29.7,18.1,6.7,45.77,franco_arenoso,3,18,alto,seca,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,siembra,26.9,70.5,5.2,29.7,18.1,6.7,45.77,franco_arenoso,11,18,alto,seca,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,siembra,25.0,69.2,29.1,40.5,16.1,6.4,47.26,franco_arenoso,3,36,alto,seca,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,siembra,25.0,69.2,29.1,40.5,16.1,6.4,47.26,franco_arenoso,11,36,alto,seca,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,crecimiento,27.2,71.7,11.6,31.3,17.5,8.0,46.48,franco_arenoso,3,54,alto,seca,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,crecimiento,27.2,71.7,11.6,31.3,17.5,8.0,46.48,franco_arenoso,11,54,alto,seca,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,crecimiento,30.4,68.4,30.7,6.8,13.1,6.3,40.91,franco_arenoso,4,72,alto,seca,5,si,alto,bajo,Chile,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Mango,crecimiento,30.4,68.4,30.7,6.8,13.1,6.3,40.91,franco_arenoso,11,72,alto,seca,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,crecimiento,31.7,88.5,70.2,220.6,8.5,7.8,92.0,franco_arenoso,2,90,alto,lluvias,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,crecimiento,31.7,88.5,70.2,220.6,8.5,7.8,92.0,franco_arenoso,9,90,alto,lluvias,5,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Chile,floracion,31.5,87.5,69.0,260.0,30.8,5.4,92.0,franco_arenoso,2,108,alto,lluvias,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,floracion,31.5,87.5,69.0,260.0,30.8,5.4,92.0,franco_arenoso,9,108,alto,lluvias,5,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Chile,floracion,31.1,82.3,61.1,98.4,24.8,9.4,70.27,franco_arenoso,2,126,alto,lluvias,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,floracion,31.1,82.3,61.1,98.4,24.8,9.4,70.27,franco_arenoso,10,126,alto,lluvias,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,fructificacion,29.1,88.5,79.3,122.7,10.6,4.2,76.81,franco_arenoso,2,144,alto,lluvias,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,fructificacion,29.1,88.5,79.3,122.7,10.6,4.2,76.81,franco_arenoso,9,144,alto,lluvias,5,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Chile,siembra,28.1,90.6,82.1,146.5,24.6,8.4,81.83,franco_arenoso,2,162,alto,lluvias,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,siembra,28.1,90.6,82.1,146.5,24.6,8.4,81.83,franco_arenoso,9,162,alto,lluvias,5,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Chile,siembra,28.9,89.5,85.9,111.8,26.8,6.4,75.2,franco_arenoso,2,180,alto,lluvias,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,siembra,28.9,89.5,85.9,111.8,26.8,6.4,75.2,franco_arenoso,9,180,alto,lluvias,5,no,alto,bajo,Mango,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Chile,siembra,25.4,72.1,19.8,32.8,10.5,7.8,46.89,franco_arenoso,3,198,alto,seca,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,siembra,25.4,72.1,19.8,32.8,10.5,7.8,46.89,franco_arenoso,11,198,alto,seca,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Alvarado,Sotavento,Chile,siembra,25.8,74.1,38.1,46.3,14.5,7.0,50.02,franco_arenoso,3,216,alto,seca,5,no,alto,bajo,Chile,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Alvarado,Sotavento,Mango,siembra,25.8,74.1,38.1,46.3,14.5,7.0,50.02,franco_arenoso,11,216,alto,seca,5,si,alto,bajo,Mango,alta,Regar por la manana y verificar humedad del suelo.
+Papantla,Totonaca,Vainilla,siembra,23.8,72.4,24.3,40.0,27.9,3.4,48.29,franco_humifero,5,18,alto,seca,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,siembra,23.4,72.6,14.8,62.3,28.4,3.9,52.37,franco_humifero,4,36,alto,seca,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,crecimiento,26.9,71.4,36.9,18.8,8.2,10.6,44.12,franco_humifero,5,54,alto,seca,180,si,alto,bajo,Vainilla,alta,Regar por la manana y verificar humedad del suelo.
+Papantla,Totonaca,Vainilla,crecimiento,28.4,72.9,33.8,10.6,19.8,9.6,43.17,franco_humifero,5,72,alto,seca,180,si,alto,bajo,Vainilla,alta,Regar por la manana y verificar humedad del suelo.
+Papantla,Totonaca,Vainilla,crecimiento,26.8,88.9,63.9,110.4,20.7,7.0,74.74,franco_humifero,3,90,alto,lluvias,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,floracion,26.7,89.0,68.2,218.1,12.6,4.8,92.0,franco_humifero,3,108,alto,lluvias,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,floracion,26.5,83.9,85.5,183.4,31.4,7.7,86.13,franco_humifero,3,126,alto,lluvias,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,fructificacion,26.5,83.9,59.0,141.7,20.8,5.9,78.62,franco_humifero,3,144,alto,lluvias,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,siembra,24.2,89.0,77.1,255.8,28.9,8.0,92.0,franco_humifero,3,162,alto,lluvias,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,siembra,23.9,83.8,72.6,172.5,27.7,6.8,84.13,franco_humifero,3,180,alto,lluvias,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,siembra,21.7,68.5,30.2,9.8,31.9,3.6,41.49,franco_humifero,5,198,alto,seca,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Papantla,Totonaca,Vainilla,siembra,22.0,75.9,29.3,54.7,18.6,7.3,52.16,franco_humifero,5,216,alto,seca,180,no,alto,bajo,Vainilla,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,siembra,24.4,72.2,17.2,69.4,13.0,4.1,53.51,franco_arenoso,8,18,alto,seca,80,si,alto,bajo,Naranja,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Limon,siembra,24.4,72.2,17.2,69.4,13.0,4.1,53.51,franco_arenoso,7,18,alto,seca,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,siembra,22.5,67.7,11.3,47.9,22.3,4.5,48.07,franco_arenoso,9,36,alto,seca,80,si,alto,bajo,Naranja,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Limon,siembra,22.5,67.7,11.3,47.9,22.3,4.5,48.07,franco_arenoso,7,36,alto,seca,80,si,alto,bajo,Limon,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Naranja,crecimiento,26.3,73.0,33.3,20.0,26.9,8.4,44.9,franco_arenoso,9,54,alto,seca,80,si,alto,bajo,Naranja,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Limon,crecimiento,26.3,73.0,33.3,20.0,26.9,8.4,44.9,franco_arenoso,8,54,alto,seca,80,si,alto,bajo,Limon,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Naranja,crecimiento,28.7,70.3,42.3,48.0,27.8,4.5,48.99,franco_arenoso,9,72,alto,seca,80,si,alto,bajo,Naranja,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Limon,crecimiento,28.7,70.3,42.3,48.0,27.8,4.5,48.99,franco_arenoso,7,72,alto,seca,80,si,alto,bajo,Limon,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Naranja,crecimiento,28.7,87.5,67.3,122.4,24.5,8.9,76.41,franco_arenoso,7,90,alto,lluvias,80,no,alto,bajo,Naranja,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Limon,crecimiento,28.7,87.5,67.3,122.4,24.5,8.9,76.41,franco_arenoso,6,90,alto,lluvias,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,floracion,27.0,84.9,75.0,250.5,15.7,5.8,92.0,franco_arenoso,7,108,alto,lluvias,80,no,alto,bajo,Naranja,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Limon,floracion,27.0,84.9,75.0,250.5,15.7,5.8,92.0,franco_arenoso,6,108,alto,lluvias,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,floracion,28.8,88.4,93.5,110.1,24.1,5.9,74.51,franco_arenoso,7,126,alto,lluvias,80,no,alto,bajo,Naranja,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Limon,floracion,28.8,88.4,93.5,110.1,24.1,5.9,74.51,franco_arenoso,6,126,alto,lluvias,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,fructificacion,29.0,84.7,85.3,101.6,22.0,8.4,71.68,franco_arenoso,8,144,alto,lluvias,80,no,alto,bajo,Naranja,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Limon,fructificacion,29.0,84.7,85.3,101.6,22.0,8.4,71.68,franco_arenoso,6,144,alto,lluvias,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,siembra,25.9,83.5,58.6,176.1,15.9,8.9,84.67,franco_arenoso,7,162,alto,lluvias,80,no,alto,bajo,Naranja,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Limon,siembra,25.9,83.5,58.6,176.1,15.9,8.9,84.67,franco_arenoso,6,162,alto,lluvias,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,siembra,26.7,88.1,92.8,142.6,15.8,10.8,80.25,franco_arenoso,7,180,alto,lluvias,80,no,alto,bajo,Naranja,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Limon,siembra,26.7,88.1,92.8,142.6,15.8,10.8,80.25,franco_arenoso,6,180,alto,lluvias,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Martinez de la Torre,Nautla,Naranja,siembra,24.6,75.9,25.6,31.3,12.5,4.8,47.95,franco_arenoso,9,198,alto,seca,80,si,alto,bajo,Naranja,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Limon,siembra,24.6,75.9,25.6,31.3,12.5,4.8,47.95,franco_arenoso,7,198,alto,seca,80,si,alto,bajo,Limon,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Naranja,siembra,22.9,73.6,30.0,54.2,18.5,6.5,51.27,franco_arenoso,9,216,alto,seca,80,si,alto,bajo,Naranja,alta,Regar por la manana y verificar humedad del suelo.
+Martinez de la Torre,Nautla,Limon,siembra,22.9,73.6,30.0,54.2,18.5,6.5,51.27,franco_arenoso,7,216,alto,seca,80,no,alto,bajo,Limon,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,siembra,24.1,70.1,43.9,12.9,21.3,3.5,42.61,franco_arenoso,5,18,alto,seca,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,siembra,23.6,68.6,41.5,69.5,25.2,5.5,52.27,franco_arenoso,4,36,alto,seca,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,crecimiento,26.6,73.8,38.4,22.8,30.1,7.6,45.68,franco_arenoso,5,54,alto,seca,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,crecimiento,30.5,66.8,39.6,62.2,20.2,9.7,50.33,franco_arenoso,4,72,alto,seca,10,si,alto,bajo,Frijol,alta,Regar por la manana y verificar humedad del suelo.
+Tuxpan,Huasteca Baja,Frijol,crecimiento,31.3,83.9,66.9,141.7,20.9,6.4,78.62,franco_arenoso,3,90,alto,lluvias,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,floracion,28.9,82.6,76.7,186.1,21.7,5.6,86.16,franco_arenoso,3,108,alto,lluvias,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,floracion,30.2,85.4,56.7,223.0,23.9,9.7,92.0,franco_arenoso,3,126,alto,lluvias,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,fructificacion,29.5,78.4,74.8,256.8,29.0,7.1,90.79,franco_arenoso,3,144,alto,lluvias,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,siembra,27.2,85.2,73.3,181.8,19.3,10.8,86.29,franco_arenoso,3,162,alto,lluvias,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,siembra,28.8,84.5,82.7,150.9,17.1,6.2,80.49,franco_arenoso,3,180,alto,lluvias,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,siembra,23.3,72.7,35.4,51.7,30.1,8.0,50.5,franco_arenoso,4,198,alto,seca,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Tuxpan,Huasteca Baja,Frijol,siembra,25.5,65.0,22.4,53.5,24.7,7.5,48.13,franco_arenoso,4,216,alto,seca,10,no,alto,bajo,Frijol,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,siembra,25.5,61.9,36.8,8.0,21.6,7.0,38.85,franco,6,18,alto,seca,20,si,alto,bajo,Maiz,alta,Regar por la manana y verificar humedad del suelo.
+Panuco,Huasteca Alta,Maiz,siembra,26.4,67.7,8.2,16.0,11.4,5.3,42.33,franco,6,36,alto,seca,20,si,alto,bajo,Maiz,alta,Regar por la manana y verificar humedad del suelo.
+Panuco,Huasteca Alta,Maiz,crecimiento,29.6,59.1,15.2,21.5,11.8,7.1,40.3,franco,6,54,alto,seca,20,si,alto,bajo,Maiz,alta,Regar por la manana y verificar humedad del suelo.
+Panuco,Huasteca Alta,Maiz,crecimiento,30.2,65.4,28.5,27.5,12.8,6.7,43.59,franco,6,72,alto,seca,20,si,alto,bajo,Maiz,alta,Regar por la manana y verificar humedad del suelo.
+Panuco,Huasteca Alta,Maiz,crecimiento,30.8,78.7,64.5,174.7,31.5,8.6,82.74,franco,4,90,alto,lluvias,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,floracion,31.4,79.9,77.6,140.3,19.9,10.3,76.97,franco,4,108,alto,lluvias,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,floracion,30.0,79.1,87.0,142.2,24.3,9.0,77.03,franco,4,126,alto,lluvias,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,fructificacion,32.0,79.3,88.5,203.8,18.6,8.1,88.19,franco,4,144,alto,lluvias,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,siembra,29.4,76.0,58.6,215.8,20.9,10.8,89.19,franco,4,162,alto,lluvias,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,siembra,27.6,81.3,91.5,182.6,27.4,9.2,85.07,franco,4,180,alto,lluvias,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,siembra,24.7,68.6,9.6,27.0,25.4,7.9,44.62,franco,6,198,alto,seca,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Panuco,Huasteca Alta,Maiz,siembra,27.0,62.7,37.2,67.9,18.9,6.4,49.92,franco,5,216,alto,seca,20,no,alto,bajo,Maiz,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,siembra,27.6,74.2,28.4,48.7,8.6,7.4,50.49,franco_arenoso,9,18,alto,seca,12,si,alto,bajo,Pina,alta,Regar por la manana y verificar humedad del suelo.
+Cosamaloapan,Papaloapan,Calabaza,siembra,27.6,74.2,28.4,48.7,8.6,7.4,50.49,franco,3,18,alto,seca,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,siembra,24.4,68.2,41.6,41.5,15.3,5.0,47.09,franco_arenoso,9,36,alto,seca,12,si,alto,bajo,Pina,alta,Regar por la manana y verificar humedad del suelo.
+Cosamaloapan,Papaloapan,Calabaza,siembra,24.4,68.2,41.6,41.5,15.3,5.0,47.09,franco,3,36,alto,seca,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,crecimiento,28.5,69.0,42.9,14.1,11.3,7.2,42.44,franco_arenoso,9,54,alto,seca,12,si,alto,bajo,Pina,alta,Regar por la manana y verificar humedad del suelo.
+Cosamaloapan,Papaloapan,Calabaza,crecimiento,28.5,69.0,42.9,14.1,11.3,7.2,42.44,franco,4,54,alto,seca,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,crecimiento,30.2,75.5,34.7,48.6,18.0,4.7,50.92,franco_arenoso,9,72,alto,seca,12,si,alto,bajo,Pina,alta,Regar por la manana y verificar humedad del suelo.
+Cosamaloapan,Papaloapan,Calabaza,crecimiento,30.2,75.5,34.7,48.6,18.0,4.7,50.92,franco,3,72,alto,seca,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,crecimiento,28.8,89.5,71.3,175.7,30.8,10.0,86.7,franco_arenoso,7,90,alto,lluvias,12,no,alto,bajo,Pina,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Calabaza,crecimiento,28.8,89.5,71.3,175.7,30.8,10.0,86.7,franco,2,90,alto,lluvias,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,floracion,32.2,85.4,82.4,111.4,12.6,4.9,73.69,franco_arenoso,7,108,alto,lluvias,12,no,alto,bajo,Pina,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Calabaza,floracion,32.2,85.4,82.4,111.4,12.6,4.9,73.69,franco,2,108,alto,lluvias,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,floracion,31.0,86.6,73.2,234.9,26.9,5.7,92.0,franco_arenoso,7,126,alto,lluvias,12,no,alto,bajo,Pina,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Calabaza,floracion,31.0,86.6,73.2,234.9,26.9,5.7,92.0,franco,2,126,alto,lluvias,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,fructificacion,31.5,80.7,77.6,115.8,28.9,6.3,72.84,franco_arenoso,7,144,alto,lluvias,12,no,alto,bajo,Pina,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Calabaza,fructificacion,31.5,80.7,77.6,115.8,28.9,6.3,72.84,franco,2,144,alto,lluvias,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,siembra,29.8,80.0,91.0,119.3,14.0,5.2,73.22,franco_arenoso,7,162,alto,lluvias,12,no,alto,bajo,Pina,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Calabaza,siembra,29.8,80.0,91.0,119.3,14.0,5.2,73.22,franco,2,162,alto,lluvias,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,siembra,29.5,80.1,56.0,204.1,12.2,4.4,88.52,franco_arenoso,7,180,alto,lluvias,12,no,alto,bajo,Pina,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Calabaza,siembra,29.5,80.1,56.0,204.1,12.2,4.4,88.52,franco,2,180,alto,lluvias,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,siembra,25.9,73.5,26.0,53.2,10.6,5.5,51.05,franco_arenoso,9,198,alto,seca,12,si,alto,bajo,Pina,alta,Regar por la manana y verificar humedad del suelo.
+Cosamaloapan,Papaloapan,Calabaza,siembra,25.9,73.5,26.0,53.2,10.6,5.5,51.05,franco,3,198,alto,seca,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Cosamaloapan,Papaloapan,Pina,siembra,27.3,73.8,6.7,66.5,31.1,3.3,53.55,franco_arenoso,8,216,alto,seca,12,si,alto,bajo,Pina,alta,Regar por la manana y verificar humedad del suelo.
+Cosamaloapan,Papaloapan,Calabaza,siembra,27.3,73.8,6.7,66.5,31.1,3.3,53.55,franco,3,216,alto,seca,12,no,alto,bajo,Calabaza,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,siembra,23.0,78.9,21.1,36.1,9.9,6.0,49.86,volcanico,4,18,alto,seca,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,siembra,23.2,78.3,16.0,9.3,20.7,5.3,44.83,volcanico,4,36,alto,seca,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,crecimiento,26.8,79.0,9.0,44.4,25.3,5.5,51.39,volcanico,4,54,alto,seca,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,crecimiento,27.3,75.4,14.1,34.4,18.2,8.7,48.33,volcanico,4,72,alto,seca,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,crecimiento,25.9,95.0,61.1,156.8,10.3,9.2,85.22,volcanico,2,90,alto,lluvias,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,floracion,27.7,91.9,77.3,228.9,16.5,8.7,92.0,volcanico,2,108,alto,lluvias,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,floracion,29.2,93.2,89.7,218.8,21.9,5.5,92.0,volcanico,2,126,alto,lluvias,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,fructificacion,28.7,87.1,64.0,203.4,21.8,9.7,90.85,volcanico,2,144,alto,lluvias,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,siembra,25.9,94.2,94.0,234.5,30.3,9.8,92.0,volcanico,2,162,alto,lluvias,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,siembra,24.8,93.0,62.2,139.1,28.9,8.0,81.34,volcanico,2,180,alto,lluvias,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,siembra,21.3,78.3,10.7,31.1,18.1,4.7,48.75,volcanico,4,198,alto,seca,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+San Andres Tuxtla,Los Tuxtlas,Platano,siembra,23.2,79.8,33.9,29.1,11.8,6.1,48.92,volcanico,4,216,alto,seca,300,no,alto,bajo,Platano,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,siembra,25.9,76.6,15.9,48.8,26.1,3.6,51.34,luvisol,3,18,alto,seca,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,siembra,25.9,76.6,15.9,48.8,26.1,3.6,51.34,franco_humifero,5,18,alto,seca,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,siembra,26.0,76.8,16.3,32.9,17.5,6.0,48.55,luvisol,3,36,alto,seca,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,siembra,26.0,76.8,16.3,32.9,17.5,6.0,48.55,franco_humifero,5,36,alto,seca,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,crecimiento,27.2,72.1,17.1,5.5,8.2,9.2,41.98,luvisol,4,54,alto,seca,20,si,alto,bajo,Papaya,alta,Regar por la manana y verificar humedad del suelo.
+Minatitlan,Olmeca,Cacao,crecimiento,27.2,72.1,17.1,5.5,8.2,9.2,41.98,franco_humifero,5,54,alto,seca,20,si,alto,bajo,Cacao,alta,Regar por la manana y verificar humedad del suelo.
+Minatitlan,Olmeca,Papaya,crecimiento,30.5,77.0,20.2,16.4,9.7,10.0,45.65,luvisol,4,72,alto,seca,20,si,alto,bajo,Papaya,alta,Regar por la manana y verificar humedad del suelo.
+Minatitlan,Olmeca,Cacao,crecimiento,30.5,77.0,20.2,16.4,9.7,10.0,45.65,franco_humifero,5,72,alto,seca,20,si,alto,bajo,Cacao,alta,Regar por la manana y verificar humedad del suelo.
+Minatitlan,Olmeca,Papaya,crecimiento,31.8,93.2,55.7,102.0,25.0,6.9,74.73,luvisol,2,90,alto,lluvias,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,crecimiento,31.8,93.2,55.7,102.0,25.0,6.9,74.73,franco_humifero,4,90,alto,lluvias,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,floracion,31.6,87.2,55.8,114.0,30.1,4.6,74.79,luvisol,2,108,alto,lluvias,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,floracion,31.6,87.2,55.8,114.0,30.1,4.6,74.79,franco_humifero,3,108,alto,lluvias,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,floracion,30.6,89.9,64.7,234.3,16.1,6.3,92.0,luvisol,2,126,alto,lluvias,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,floracion,30.6,89.9,64.7,234.3,16.1,6.3,92.0,franco_humifero,3,126,alto,lluvias,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,fructificacion,30.5,85.1,75.4,122.7,25.5,9.7,75.62,luvisol,2,144,alto,lluvias,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,fructificacion,30.5,85.1,75.4,122.7,25.5,9.7,75.62,franco_humifero,3,144,alto,lluvias,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,siembra,27.4,85.5,64.5,229.5,23.7,5.2,92.0,luvisol,2,162,alto,lluvias,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,siembra,27.4,85.5,64.5,229.5,23.7,5.2,92.0,franco_humifero,3,162,alto,lluvias,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,siembra,29.4,91.5,74.8,222.5,21.5,8.4,92.0,luvisol,2,180,alto,lluvias,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,siembra,29.4,91.5,74.8,222.5,21.5,8.4,92.0,franco_humifero,3,180,alto,lluvias,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,siembra,24.7,76.3,39.6,45.6,15.3,4.4,50.66,luvisol,3,198,alto,seca,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,siembra,24.7,76.3,39.6,45.6,15.3,4.4,50.66,franco_humifero,5,198,alto,seca,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Papaya,siembra,25.8,73.1,25.3,8.7,9.8,7.3,42.9,luvisol,4,216,alto,seca,20,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Minatitlan,Olmeca,Cacao,siembra,25.8,73.1,25.3,8.7,9.8,7.3,42.9,franco_humifero,5,216,alto,seca,20,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,siembra,24.9,74.1,29.6,60.6,29.5,5.2,52.59,luvisol,3,18,alto,seca,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,siembra,24.9,74.1,29.6,60.6,29.5,5.2,52.59,franco_humifero,4,18,alto,seca,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,siembra,24.9,72.2,31.1,57.6,10.5,7.5,51.39,luvisol,3,36,alto,seca,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,siembra,24.9,72.2,31.1,57.6,10.5,7.5,51.39,franco_humifero,4,36,alto,seca,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,crecimiento,26.3,74.0,33.6,27.3,18.5,7.7,46.56,luvisol,4,54,alto,seca,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,crecimiento,26.3,74.0,33.6,27.3,18.5,7.7,46.56,franco_humifero,5,54,alto,seca,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,crecimiento,29.2,71.8,19.9,15.3,26.9,8.5,43.63,luvisol,4,72,alto,seca,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,crecimiento,29.2,71.8,19.9,15.3,26.9,8.5,43.63,franco_humifero,5,72,alto,seca,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,crecimiento,28.7,89.8,58.8,105.9,29.8,10.1,74.24,luvisol,2,90,alto,lluvias,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,crecimiento,28.7,89.8,58.8,105.9,29.8,10.1,74.24,franco_humifero,4,90,alto,lluvias,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,floracion,29.0,84.4,78.3,150.0,17.4,8.2,80.29,luvisol,2,108,alto,lluvias,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,floracion,29.0,84.4,78.3,150.0,17.4,8.2,80.29,franco_humifero,3,108,alto,lluvias,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,floracion,30.5,86.8,67.4,249.8,27.9,9.2,92.0,luvisol,2,126,alto,lluvias,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,floracion,30.5,86.8,67.4,249.8,27.9,9.2,92.0,franco_humifero,3,126,alto,lluvias,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,fructificacion,29.2,89.5,76.1,208.1,12.3,5.5,92.0,luvisol,2,144,alto,lluvias,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,fructificacion,29.2,89.5,76.1,208.1,12.3,5.5,92.0,franco_humifero,3,144,alto,lluvias,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,siembra,26.2,85.3,74.5,251.4,10.4,9.4,92.0,luvisol,2,162,alto,lluvias,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,siembra,26.2,85.3,74.5,251.4,10.4,9.4,92.0,franco_humifero,3,162,alto,lluvias,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,siembra,26.9,83.4,90.3,232.8,17.0,5.1,92.0,luvisol,2,180,alto,lluvias,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,siembra,26.9,83.4,90.3,232.8,17.0,5.1,92.0,franco_humifero,3,180,alto,lluvias,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,siembra,23.8,77.1,35.8,59.0,24.2,4.2,53.35,luvisol,3,198,alto,seca,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,siembra,23.8,77.1,35.8,59.0,24.2,4.2,53.35,franco_humifero,4,198,alto,seca,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Papaya,siembra,24.8,76.5,16.4,33.9,27.4,5.3,48.63,luvisol,3,216,alto,seca,100,no,alto,bajo,Papaya,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Acayucan,Olmeca,Cacao,siembra,24.8,76.5,16.4,33.9,27.4,5.3,48.63,franco_humifero,5,216,alto,seca,100,no,alto,bajo,Cacao,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,franco_humifero,5,18,alto,seca,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,franco,2,18,alto,seca,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,franco,1,18,alto,seca,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,arenoso_franco,4,18,alto,seca,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,franco,5,18,alto,seca,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,franco,1,18,alto,seca,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,franco,2,18,alto,seca,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,siembra,14.7,56.5,19.7,59.3,17.2,5.6,46.2,arenoso_franco,3,18,alto,seca,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,franco_humifero,5,36,alto,seca,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,franco,2,36,alto,seca,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,franco,1,36,alto,seca,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,arenoso_franco,4,36,alto,seca,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,franco,5,36,alto,seca,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,franco,1,36,alto,seca,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,franco,2,36,alto,seca,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,siembra,11.7,55.0,37.7,67.8,29.0,5.8,47.2,arenoso_franco,3,36,alto,seca,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,franco_humifero,6,54,alto,seca,2400,si,alto,bajo,Cafe,alta,Regar por la manana y verificar humedad del suelo.
+Perote,Capital,Tomate,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,franco,3,54,alto,seca,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,franco,2,54,alto,seca,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,arenoso_franco,5,54,alto,seca,2400,si,alto,bajo,Papa,alta,Regar por la manana y verificar humedad del suelo.
+Perote,Capital,Aguacate,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,franco,6,54,alto,seca,2400,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Perote,Capital,Cilantro,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,franco,2,54,alto,seca,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,franco,3,54,alto,seca,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,crecimiento,14.7,55.5,38.8,11.7,29.7,5.0,37.28,arenoso_franco,4,54,alto,seca,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,franco_humifero,5,72,alto,seca,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,franco,2,72,alto,seca,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,franco,1,72,alto,seca,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,arenoso_franco,4,72,alto,seca,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,franco,6,72,alto,seca,2400,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Perote,Capital,Cilantro,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,franco,1,72,alto,seca,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,franco,2,72,alto,seca,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,crecimiento,17.3,49.2,42.9,33.4,9.3,7.5,41.01,arenoso_franco,3,72,alto,seca,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,franco_humifero,4,90,alto,lluvias,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,franco,1,90,alto,lluvias,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,franco,1,90,alto,lluvias,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,arenoso_franco,3,90,alto,lluvias,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,franco,4,90,alto,lluvias,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,franco,1,90,alto,lluvias,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,franco,1,90,alto,lluvias,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,crecimiento,15.8,64.7,94.8,133.9,23.6,9.5,70.5,arenoso_franco,2,90,alto,lluvias,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,franco_humifero,4,108,alto,lluvias,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,franco,1,108,alto,lluvias,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,franco,1,108,alto,lluvias,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,arenoso_franco,3,108,alto,lluvias,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,franco,4,108,alto,lluvias,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,franco,1,108,alto,lluvias,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,franco,1,108,alto,lluvias,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,floracion,18.2,69.3,66.5,117.7,18.8,4.0,69.19,arenoso_franco,2,108,alto,lluvias,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,franco_humifero,4,126,alto,lluvias,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,franco,1,126,alto,lluvias,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,franco,1,126,alto,lluvias,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,arenoso_franco,3,126,alto,lluvias,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,franco,5,126,alto,lluvias,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,franco,1,126,alto,lluvias,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,franco,1,126,alto,lluvias,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,floracion,17.7,69.3,65.2,108.1,10.7,6.0,67.46,arenoso_franco,2,126,alto,lluvias,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,franco_humifero,4,144,alto,lluvias,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,franco,1,144,alto,lluvias,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,franco,1,144,alto,lluvias,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,arenoso_franco,3,144,alto,lluvias,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,franco,4,144,alto,lluvias,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,franco,1,144,alto,lluvias,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,franco,1,144,alto,lluvias,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,fructificacion,18.6,65.2,56.9,144.7,29.7,8.2,72.62,arenoso_franco,2,144,alto,lluvias,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,franco_humifero,4,162,alto,lluvias,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,franco,1,162,alto,lluvias,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,franco,1,162,alto,lluvias,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,arenoso_franco,3,162,alto,lluvias,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,franco,5,162,alto,lluvias,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,franco,1,162,alto,lluvias,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,franco,1,162,alto,lluvias,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,siembra,14.2,63.4,75.6,97.7,13.8,6.9,63.53,arenoso_franco,2,162,alto,lluvias,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,franco_humifero,4,180,alto,lluvias,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,franco,1,180,alto,lluvias,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,franco,1,180,alto,lluvias,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,arenoso_franco,3,180,alto,lluvias,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,franco,4,180,alto,lluvias,2400,no,alto,bajo,Aguacate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cilantro,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,franco,1,180,alto,lluvias,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,franco,1,180,alto,lluvias,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,siembra,13.9,70.7,58.4,204.6,31.7,7.9,85.32,arenoso_franco,2,180,alto,lluvias,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,franco_humifero,5,198,alto,seca,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,franco,2,198,alto,seca,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,franco,1,198,alto,seca,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,arenoso_franco,4,198,alto,seca,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,franco,6,198,alto,seca,2400,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Perote,Capital,Cilantro,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,franco,1,198,alto,seca,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,franco,2,198,alto,seca,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,siembra,14.7,53.4,23.8,30.4,26.9,4.7,40.47,arenoso_franco,3,198,alto,seca,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Cafe,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,franco_humifero,5,216,alto,seca,2400,no,alto,bajo,Cafe,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Tomate,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,franco,2,216,alto,seca,2400,no,alto,bajo,Tomate,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Lechuga,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,franco,1,216,alto,seca,2400,no,alto,bajo,Lechuga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Papa,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,arenoso_franco,4,216,alto,seca,2400,no,alto,bajo,Papa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Aguacate,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,franco,6,216,alto,seca,2400,si,alto,bajo,Aguacate,alta,Regar por la manana y verificar humedad del suelo.
+Perote,Capital,Cilantro,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,franco,1,216,alto,seca,2400,no,alto,bajo,Cilantro,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Acelga,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,franco,2,216,alto,seca,2400,no,alto,bajo,Acelga,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Perote,Capital,Zanahoria,siembra,13.8,54.7,30.1,52.6,21.1,7.1,44.47,arenoso_franco,3,216,alto,seca,2400,no,alto,bajo,Zanahoria,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,siembra,17.7,74.6,36.2,16.4,9.5,6.9,44.81,franco_arcilloso,8,18,alto,seca,1340,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Huatusco,Montanas,Fresa,siembra,17.7,74.6,36.2,16.4,9.5,6.9,44.81,franco_humifero,3,18,alto,seca,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,siembra,17.7,74.6,36.2,16.4,9.5,6.9,44.81,franco_humifero,4,18,alto,seca,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,siembra,15.9,70.4,16.7,34.7,20.4,7.9,46.64,franco_arcilloso,8,36,alto,seca,1340,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Huatusco,Montanas,Fresa,siembra,15.9,70.4,16.7,34.7,20.4,7.9,46.64,franco_humifero,2,36,alto,seca,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,siembra,15.9,70.4,16.7,34.7,20.4,7.9,46.64,franco_humifero,3,36,alto,seca,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,crecimiento,18.4,77.5,15.1,40.3,28.8,6.3,50.13,franco_arcilloso,8,54,alto,seca,1340,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Huatusco,Montanas,Fresa,crecimiento,18.4,77.5,15.1,40.3,28.8,6.3,50.13,franco_humifero,2,54,alto,seca,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,crecimiento,18.4,77.5,15.1,40.3,28.8,6.3,50.13,franco_humifero,3,54,alto,seca,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,crecimiento,22.4,78.9,19.7,13.1,31.4,7.5,45.72,franco_arcilloso,8,72,alto,seca,1340,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Huatusco,Montanas,Fresa,crecimiento,22.4,78.9,19.7,13.1,31.4,7.5,45.72,franco_humifero,3,72,alto,seca,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,crecimiento,22.4,78.9,19.7,13.1,31.4,7.5,45.72,franco_humifero,4,72,alto,seca,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,crecimiento,22.6,89.2,92.0,177.1,22.5,9.8,86.85,franco_arcilloso,6,90,alto,lluvias,1340,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Fresa,crecimiento,22.6,89.2,92.0,177.1,22.5,9.8,86.85,franco_humifero,1,90,alto,lluvias,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,crecimiento,22.6,89.2,92.0,177.1,22.5,9.8,86.85,franco_humifero,2,90,alto,lluvias,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,floracion,22.1,84.8,67.8,185.0,18.2,8.8,86.73,franco_arcilloso,6,108,alto,lluvias,1340,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Fresa,floracion,22.1,84.8,67.8,185.0,18.2,8.8,86.73,franco_humifero,1,108,alto,lluvias,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,floracion,22.1,84.8,67.8,185.0,18.2,8.8,86.73,franco_humifero,2,108,alto,lluvias,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,floracion,21.0,92.7,56.7,153.0,31.5,10.6,83.73,franco_arcilloso,6,126,alto,lluvias,1340,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Fresa,floracion,21.0,92.7,56.7,153.0,31.5,10.6,83.73,franco_humifero,1,126,alto,lluvias,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,floracion,21.0,92.7,56.7,153.0,31.5,10.6,83.73,franco_humifero,2,126,alto,lluvias,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,fructificacion,22.6,87.6,80.5,107.4,11.4,8.3,73.74,franco_arcilloso,7,144,alto,lluvias,1340,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Fresa,fructificacion,22.6,87.6,80.5,107.4,11.4,8.3,73.74,franco_humifero,1,144,alto,lluvias,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,fructificacion,22.6,87.6,80.5,107.4,11.4,8.3,73.74,franco_humifero,2,144,alto,lluvias,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,siembra,20.5,84.7,56.4,223.9,21.6,8.2,92.0,franco_arcilloso,6,162,alto,lluvias,1340,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Fresa,siembra,20.5,84.7,56.4,223.9,21.6,8.2,92.0,franco_humifero,1,162,alto,lluvias,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,siembra,20.5,84.7,56.4,223.9,21.6,8.2,92.0,franco_humifero,2,162,alto,lluvias,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,siembra,20.4,87.7,93.0,207.0,17.6,8.5,91.7,franco_arcilloso,6,180,alto,lluvias,1340,no,alto,bajo,Cana de azucar,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Fresa,siembra,20.4,87.7,93.0,207.0,17.6,8.5,91.7,franco_humifero,1,180,alto,lluvias,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,siembra,20.4,87.7,93.0,207.0,17.6,8.5,91.7,franco_humifero,2,180,alto,lluvias,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,siembra,17.0,77.4,9.5,21.2,14.3,4.3,46.66,franco_arcilloso,8,198,alto,seca,1340,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Huatusco,Montanas,Fresa,siembra,17.0,77.4,9.5,21.2,14.3,4.3,46.66,franco_humifero,3,198,alto,seca,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,siembra,17.0,77.4,9.5,21.2,14.3,4.3,46.66,franco_humifero,4,198,alto,seca,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Cana de azucar,siembra,18.5,72.9,44.9,34.0,28.5,5.3,47.38,franco_arcilloso,8,216,alto,seca,1340,si,alto,bajo,Cana de azucar,alta,Regar por la manana y verificar humedad del suelo.
+Huatusco,Montanas,Fresa,siembra,18.5,72.9,44.9,34.0,28.5,5.3,47.38,franco_humifero,2,216,alto,seca,1340,no,alto,bajo,Fresa,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
+Huatusco,Montanas,Chayote,siembra,18.5,72.9,44.9,34.0,28.5,5.3,47.38,franco_humifero,3,216,alto,seca,1340,no,alto,bajo,Chayote,alta,Revisar enves de hojas y aplicar manejo integrado de plagas.
