@@ -1,21 +1,24 @@
 """
-Plagas Service — IA Endpoint: Detección de plagas.
+Plagas Service — IA Endpoint: Detección de plagas con YOLOv8n.
 
 POST /api/plagas/detectar
 
 Flujo:
-  1. Recibe imagen en base64 (o URL de imagen ya subida a Cloudinary).
-  2. Ejecuta el modelo YOLOv8n / CNN (.pt) sobre la imagen.
-     ↳ Mientras el modelo no esté disponible: devuelve mock con plaga
-       detectada y tratamientos ecológicos reales de Veracruz.
-  3. Cruza el resultado con la base de datos de tratamientos ecológicos.
-  4. Retorna: plaga detectada, confianza, severidad, y métodos ecológicos de mitigación.
+  1. Recibe URL de imagen ya subida a Cloudinary.
+  2. Descarga la imagen y ejecuta el modelo YOLOv8n entrenado (best.pt).
+     ↳ Modelo entrenado con dataset veracruz_real — 10 clases:
+       mosca_blanca, pulgon_verde, arana_roja, trips, minador,
+       gusano_cogollero, cochinilla, roya, mildiu, mancha_foliar
+  3. Cruza el resultado con la base de conocimiento de tratamientos ecológicos.
+  4. Retorna: plaga detectada, confianza, severidad y métodos de mitigación.
 
-Para conectar el modelo real:
-  - Coloca el archivo .pt en: plagas-service/app/models/ml/yolov8n_plagas.pt
-  - Descomenta la sección "MODELO REAL" y comenta el bloque "MOCK".
+Para activar el modelo real:
+  - Coloca best.pt en: plagas-service/app/models/ml/best.pt
+  - El endpoint lo detecta automáticamente y cambia de mock a modelo real.
 """
 
+import os
+import tempfile
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -23,6 +26,26 @@ from typing import Optional
 from shared.auth.dependencies import get_current_user
 
 router = APIRouter(prefix="/api/plagas", tags=["IA — Detección de Plagas"])
+
+
+# ---------------------------------------------------------------------------
+# Clases del modelo — data.yaml del entrenamiento de Gael
+# ---------------------------------------------------------------------------
+
+YOLO_CLASSES = {
+    0: "mosca_blanca",
+    1: "pulgon_verde",
+    2: "arana_roja",
+    3: "trips",
+    4: "minador",
+    5: "gusano_cogollero",
+    6: "cochinilla",
+    7: "roya",
+    8: "mildiu",
+    9: "mancha_foliar",
+}
+
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "ml", "best.pt")
 
 
 # ---------------------------------------------------------------------------
@@ -40,7 +63,7 @@ class DetectarRequest(BaseModel):
         "json_schema_extra": {
             "example": {
                 "imagen_url": "https://res.cloudinary.com/demo/image/upload/v1/plagas/muestra.jpg",
-                "huerto_id": "6a20978432614f95d7d91e5b",
+                "huerto_id": None,
                 "cultivo_id": None,
             }
         }
@@ -59,244 +82,196 @@ class TratamientoEcologico(BaseModel):
 class DeteccionResult(BaseModel):
     plaga: str
     nombre_cientifico: str
-    confianza: float = Field(description="Confianza del modelo (0.0 - 1.0)")
+    confianza: float
     severidad: str = Field(description="Baja | Media | Alta | Critica")
     descripcion_plaga: str
     cultivos_afectados: list[str]
     tratamientos_ecologicos: list[TratamientoEcologico]
     alerta_recomendada: bool
+    mitigacion_viable: bool
+    nota_mitigacion: Optional[str] = None
 
 
 class DetectarResponse(BaseModel):
     deteccion: DeteccionResult
     imagen_analizada: str
     modelo_version: str
-    modo: str = Field(description="'modelo_real' o 'mock'")
+    modo: str
     mensaje: str
-
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "deteccion": {
-                    "plaga": "Trips",
-                    "nombre_cientifico": "Frankliniella occidentalis",
-                    "confianza": 0.89,
-                    "severidad": "Media",
-                    "descripcion_plaga": "Insecto picador-chupador que daña flores y frutos.",
-                    "cultivos_afectados": ["Chile", "Jitomate", "Aguacate"],
-                    "tratamientos_ecologicos": [],
-                    "alerta_recomendada": True,
-                },
-                "imagen_analizada": "https://res.cloudinary.com/...",
-                "modelo_version": "mock-v1.0",
-                "modo": "mock",
-                "mensaje": "Detección completada. Modo mock activo hasta integración del modelo .pt.",
-            }
-        }
-    }
 
 
 # ---------------------------------------------------------------------------
-# Base de conocimiento: Plagas + Tratamientos ecológicos de Veracruz
+# Base de conocimiento — 10 plagas de Veracruz con tratamientos ecológicos
 # ---------------------------------------------------------------------------
 
 _TRATAMIENTOS_DB: dict[str, dict] = {
-    "Trips": {
-        "nombre_cientifico": "Frankliniella occidentalis",
-        "descripcion_plaga": (
-            "Insecto picador-chupador microscópico. Daña flores, frutos y hojas jóvenes "
-            "causando deformaciones y transmite virus como el TSWV."
-        ),
-        "cultivos_afectados": ["Chile", "Jitomate", "Aguacate", "Cebolla", "Fresa"],
-        "severidad_default": "Media",
-        "tratamientos": [
-            {
-                "nombre": "Beauveria bassiana",
-                "tipo": "biologico",
-                "descripcion": "Hongo entomopatógeno que parasita trips adultos y ninfas.",
-                "aplicacion": "Aspersión foliar en horas frescas (mañana o tarde)",
-                "frecuencia": "Cada 7 días durante infestación activa",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Aceite de Neem (Azadiractina)",
-                "tipo": "botanico",
-                "descripcion": "Inhibe la muda y alimentación de trips. Efecto repelente.",
-                "aplicacion": "Dilución 2–3 mL/L + jabón potásico. Aspersión foliar.",
-                "frecuencia": "Cada 5–7 días, 3 aplicaciones consecutivas",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Trampas azules adhesivas",
-                "tipo": "fisico",
-                "descripcion": "Los trips son atraídos por el color azul. Monitoreo y captura masiva.",
-                "aplicacion": "1 trampa cada 100 m², a nivel de dosel",
-                "frecuencia": "Permanente, revisar y cambiar cada 2-3 semanas",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Rotación de cultivos",
-                "tipo": "cultural",
-                "descripcion": "Rompe el ciclo de vida. Alternar con cultivos no hospederos.",
-                "aplicacion": "Planificación de siembra entre ciclos",
-                "frecuencia": "Por ciclo agrícola",
-                "disponible_veracruz": True,
-            },
-        ],
-    },
-    "Mosca Blanca": {
+    "mosca_blanca": {
         "nombre_cientifico": "Bemisia tabaci / Trialeurodes vaporariorum",
-        "descripcion_plaga": (
-            "Plaga clave en cultivos de Veracruz. Succiona savia y excreta melaza que "
-            "favorece la fumagina. Vectora de begomovirus graves."
-        ),
+        "descripcion_plaga": "Insecto chupador que coloniza el envés de las hojas. Excreta melaza que favorece la fumagina y transmite begomovirus.",
         "cultivos_afectados": ["Jitomate", "Chile", "Pepino", "Melón", "Frijol"],
         "severidad_default": "Alta",
+        "mitigacion_viable": True,
+        "nota_mitigacion": None,
         "tratamientos": [
-            {
-                "nombre": "Encarsia formosa (parasitoide)",
-                "tipo": "biologico",
-                "descripcion": "Avispa parasitoide específica de mosca blanca. Control biológico clásico.",
-                "aplicacion": "Liberación en invernadero o campo: 1 adulto/m²",
-                "frecuencia": "Liberaciones semanales por 4–6 semanas",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Jabón potásico",
-                "tipo": "botanico",
-                "descripcion": "Destruye la cutícula de ninfas y adultos por contacto.",
-                "aplicacion": "Solución 15 g/L, aspersión directa al envés de hojas",
-                "frecuencia": "Cada 4–5 días durante 3 semanas",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Trampas amarillas adhesivas",
-                "tipo": "fisico",
-                "descripcion": "Captura masiva de adultos. Indispensable para monitoreo.",
-                "aplicacion": "2–4 trampas por surco de 100 m",
-                "frecuencia": "Permanente durante el ciclo",
-                "disponible_veracruz": True,
-            },
+            {"nombre": "Encarsia formosa", "tipo": "biologico", "descripcion": "Avispa parasitoide específica de mosca blanca.", "aplicacion": "Liberación 1 adulto/m² en campo o invernadero", "frecuencia": "Semanal por 4–6 semanas", "disponible_veracruz": True},
+            {"nombre": "Jabón potásico", "tipo": "botanico", "descripcion": "Destruye la cutícula de ninfas y adultos por contacto directo.", "aplicacion": "15 g/L, aspersión directa al envés de hojas", "frecuencia": "Cada 4–5 días, 3 semanas", "disponible_veracruz": True},
+            {"nombre": "Trampas amarillas adhesivas", "tipo": "fisico", "descripcion": "Captura masiva de adultos. Herramienta clave de monitoreo.", "aplicacion": "2–4 trampas por cada 100 m²", "frecuencia": "Permanente, cambiar cada 2–3 semanas", "disponible_veracruz": True},
+            {"nombre": "Aceite de Neem (Azadiractina)", "tipo": "botanico", "descripcion": "Inhibe la muda y reproducción. Efecto repelente y ovicida.", "aplicacion": "2–3 mL/L + jabón potásico. Aspersión foliar.", "frecuencia": "Cada 7 días, 3 aplicaciones", "disponible_veracruz": True},
         ],
     },
-    "Roya": {
-        "nombre_cientifico": "Hemileia vastatrix (café) / Phakopsora pachyrhizi (soya)",
-        "descripcion_plaga": (
-            "Hongo foliar que produce pústulas de color naranja-café en el envés de hojas. "
-            "En Veracruz afecta principalmente café (Coatepec, Huatusco, Córdoba)."
-        ),
+    "pulgon_verde": {
+        "nombre_cientifico": "Myzus persicae / Aphis gossypii",
+        "descripcion_plaga": "Áfido verde que coloniza brotes y envés de hojas. Transmite virosis y produce melaza que atrae hormigas que los protegen.",
+        "cultivos_afectados": ["Chile", "Jitomate", "Pepino", "Maíz", "Limón"],
+        "severidad_default": "Media",
+        "mitigacion_viable": True,
+        "nota_mitigacion": None,
+        "tratamientos": [
+            {"nombre": "Chrysoperla carnea (crisopa)", "tipo": "biologico", "descripcion": "Larvas depredadoras vorazes. Consumen hasta 400 áfidos/día.", "aplicacion": "5,000 huevos o larvas/ha en liberación", "frecuencia": "Una liberación, evaluar a las 2 semanas", "disponible_veracruz": True},
+            {"nombre": "Extracto de ajo y chile", "tipo": "botanico", "descripcion": "Alicina y capsaicina repelen y dañan colonias de pulgón.", "aplicacion": "50 g ajo + 50 g chile / L agua. Macerar, filtrar, diluir 1:10.", "frecuencia": "Cada 5 días hasta eliminar colonias", "disponible_veracruz": True},
+            {"nombre": "Control de hormigas", "tipo": "cultural", "descripcion": "Las hormigas transportan y protegen a los pulgones. Eliminar nidos reduce la infestación.", "aplicacion": "Bandas de pegamento en tallos + eliminación de hormigueros", "frecuencia": "Control permanente durante el ciclo", "disponible_veracruz": True},
+            {"nombre": "Jabón potásico", "tipo": "botanico", "descripcion": "Contacto directo rompe la cutícula del áfido.", "aplicacion": "15 g/L. Aspersión directa sobre colonias.", "frecuencia": "Cada 3–4 días hasta desaparecer", "disponible_veracruz": True},
+        ],
+    },
+    "arana_roja": {
+        "nombre_cientifico": "Tetranychus urticae",
+        "descripcion_plaga": "Ácaro fitófago que succiona el contenido celular de las hojas. Produce un punteado amarillo fino. En infestaciones severas genera telarañas y defoliación. Se confunde visualmente con mancha foliar en etapas tempranas.",
+        "cultivos_afectados": ["Fresa", "Pepino", "Chile", "Jitomate", "Maíz", "Frijol"],
+        "severidad_default": "Alta",
+        "mitigacion_viable": True,
+        "nota_mitigacion": "Controlar en etapas tempranas. Alta resistencia a productos convencionales — rotar métodos.",
+        "tratamientos": [
+            {"nombre": "Phytoseiulus persimilis (ácaro depredador)", "tipo": "biologico", "descripcion": "Ácaro depredador específico de Tetranychus. Muy eficaz en invernadero.", "aplicacion": "50–100 adultos/m² sobre plantas infestadas", "frecuencia": "Liberación inicial, evaluar a los 10 días", "disponible_veracruz": True},
+            {"nombre": "Aceite de Neem", "tipo": "botanico", "descripcion": "Inhibe la reproducción y muda. Eficaz contra huevos y ninfas.", "aplicacion": "3–5 mL/L + jabón potásico. Aspersión foliar envés.", "frecuencia": "Cada 5–7 días, 4 aplicaciones mínimo", "disponible_veracruz": True},
+            {"nombre": "Azufre mojable", "tipo": "botanico", "descripcion": "Acaricida de contacto natural. Muy eficaz a temperaturas 20–32°C.", "aplicacion": "3 g/L. Aspersión foliar en horas frescas.", "frecuencia": "Cada 7–10 días. No aplicar con calor extremo.", "disponible_veracruz": True},
+            {"nombre": "Aumento de humedad", "tipo": "cultural", "descripcion": "La araña roja prolifera en ambiente seco. Humedad > 70% reduce su reproducción.", "aplicacion": "Riego por aspersión o nebulización sobre el dosel", "frecuencia": "Diario en época seca", "disponible_veracruz": True},
+        ],
+    },
+    "trips": {
+        "nombre_cientifico": "Frankliniella occidentalis / Thrips tabaci",
+        "descripcion_plaga": "Insecto picador-chupador microscópico. Daña flores, frutos y hojas jóvenes causando deformaciones plateadas. Transmite el virus TSWV.",
+        "cultivos_afectados": ["Chile", "Jitomate", "Aguacate", "Cebolla", "Fresa"],
+        "severidad_default": "Media",
+        "mitigacion_viable": True,
+        "nota_mitigacion": None,
+        "tratamientos": [
+            {"nombre": "Beauveria bassiana", "tipo": "biologico", "descripcion": "Hongo entomopatógeno que parasita trips adultos y ninfas.", "aplicacion": "Aspersión foliar en horas frescas (mañana o tarde)", "frecuencia": "Cada 7 días durante infestación activa", "disponible_veracruz": True},
+            {"nombre": "Aceite de Neem (Azadiractina)", "tipo": "botanico", "descripcion": "Inhibe la muda y alimentación. Efecto repelente.", "aplicacion": "2–3 mL/L + jabón potásico. Aspersión foliar.", "frecuencia": "Cada 5–7 días, 3 aplicaciones", "disponible_veracruz": True},
+            {"nombre": "Trampas azules adhesivas", "tipo": "fisico", "descripcion": "Los trips son fuertemente atraídos por el azul. Captura masiva y monitoreo.", "aplicacion": "1 trampa cada 100 m², a nivel de dosel", "frecuencia": "Permanente, cambiar cada 2–3 semanas", "disponible_veracruz": True},
+            {"nombre": "Rotación de cultivos", "tipo": "cultural", "descripcion": "Rompe el ciclo de vida del trips. Alternar con cultivos no hospederos.", "aplicacion": "Planificación entre ciclos agrícolas", "frecuencia": "Por ciclo", "disponible_veracruz": True},
+        ],
+    },
+    "minador": {
+        "nombre_cientifico": "Liriomyza trifolii / Liriomyza sativae",
+        "descripcion_plaga": "La larva excava galerías sinuosas dentro del tejido de la hoja (minas), reduciendo la fotosíntesis y favoreciendo infecciones secundarias.",
+        "cultivos_afectados": ["Jitomate", "Chile", "Apio", "Lechuga", "Frijol"],
+        "severidad_default": "Media",
+        "mitigacion_viable": True,
+        "nota_mitigacion": None,
+        "tratamientos": [
+            {"nombre": "Diglyphus isaea (parasitoide)", "tipo": "biologico", "descripcion": "Microavispa que parasita las larvas dentro de las galerías.", "aplicacion": "Liberación de adultos: 1 por m² en focos de infestación", "frecuencia": "Cada 2 semanas, 2–3 liberaciones", "disponible_veracruz": True},
+            {"nombre": "Trampas amarillas adhesivas", "tipo": "fisico", "descripcion": "Captura adultos antes de que ovipositen.", "aplicacion": "4–6 trampas por cada 100 m²", "frecuencia": "Permanente", "disponible_veracruz": True},
+            {"nombre": "Eliminación de hojas minadas", "tipo": "cultural", "descripcion": "Retirar y destruir hojas con galerías activas para reducir la población larval.", "aplicacion": "Poda y quema o bolsa sellada. No compostar.", "frecuencia": "Al detectar los primeros síntomas y semanalmente", "disponible_veracruz": True},
+            {"nombre": "Extracto de neem", "tipo": "botanico", "descripcion": "Efecto antialimentario y repelente sobre adultos.", "aplicacion": "3 mL/L. Aspersión foliar completa.", "frecuencia": "Cada 7 días", "disponible_veracruz": True},
+        ],
+    },
+    "gusano_cogollero": {
+        "nombre_cientifico": "Spodoptera frugiperda",
+        "descripcion_plaga": "Lepidóptero polífago de alta importancia en Veracruz. Las larvas atacan el cogollo del maíz causando daño severo. Una de las plagas más destructivas del estado.",
+        "cultivos_afectados": ["Maíz", "Sorgo", "Chile", "Jitomate", "Caña de Azúcar"],
+        "severidad_default": "Alta",
+        "mitigacion_viable": True,
+        "nota_mitigacion": "Actuar en los primeros 3 instares larvales. En poblaciones masivas la mitigación ecológica puede ser insuficiente.",
+        "tratamientos": [
+            {"nombre": "Bacillus thuringiensis (Bt)", "tipo": "biologico", "descripcion": "Bacteria que produce toxinas letales para larvas de lepidópteros. Específico e inocuo para otros organismos.", "aplicacion": "1–2 g/L. Aplicar directo al cogollo en horas frescas.", "frecuencia": "Cada 5–7 días mientras haya larvas jóvenes", "disponible_veracruz": True},
+            {"nombre": "Metarhizium anisopliae", "tipo": "biologico", "descripcion": "Hongo entomopatógeno eficaz contra larvas en suelo y planta.", "aplicacion": "Aspersión foliar y al suelo: 2–5 kg/ha de producto comercial", "frecuencia": "Cada 10–15 días", "disponible_veracruz": True},
+            {"nombre": "Arena o tierra de diatomeas en cogollo", "tipo": "fisico", "descripcion": "Abrasivo natural que daña la cutícula de larvas jóvenes.", "aplicacion": "Aplicar directamente en el cogollo con embudo o aspersor", "frecuencia": "Después de cada lluvia o riego", "disponible_veracruz": True},
+            {"nombre": "Trampas con feromonas", "tipo": "fisico", "descripcion": "Captura de adultos macho para reducir reproducción. Clave para monitoreo.", "aplicacion": "1 trampa/ha en campo abierto", "frecuencia": "Permanente, revisar semanalmente", "disponible_veracruz": True},
+        ],
+    },
+    "cochinilla": {
+        "nombre_cientifico": "Planococcus citri / Pseudococcus longispinus",
+        "descripcion_plaga": "Insecto escama harinoso que coloniza tallos, hojas y frutos. Produce melaza y cera blanca característica. Afecta especialmente cítricos en Veracruz.",
+        "cultivos_afectados": ["Limón Persa", "Naranja", "Plátano", "Aguacate", "Vainilla"],
+        "severidad_default": "Media",
+        "mitigacion_viable": True,
+        "nota_mitigacion": None,
+        "tratamientos": [
+            {"nombre": "Cryptolaemus montrouzieri (catarina depredadora)", "tipo": "biologico", "descripcion": "Coleóptero depredador especializado en cochinillas harinosas.", "aplicacion": "Liberación de adultos: 5–10 por planta infestada", "frecuencia": "Una liberación, evaluar a las 3 semanas", "disponible_veracruz": True},
+            {"nombre": "Alcohol isopropílico + jabón", "tipo": "fisico", "descripcion": "Elimina la cera protectora y deshidrata a las cochinillas por contacto.", "aplicacion": "Algodón empapado o aspersión localizada sobre colonias", "frecuencia": "Cada 5 días hasta eliminar colonias visibles", "disponible_veracruz": True},
+            {"nombre": "Aceite de Neem", "tipo": "botanico", "descripcion": "Penetra la cera y afecta la reproducción y muda.", "aplicacion": "5 mL/L + jabón potásico. Aspersión directa.", "frecuencia": "Cada 7 días, 3–4 aplicaciones", "disponible_veracruz": True},
+            {"nombre": "Poda de partes afectadas", "tipo": "cultural", "descripcion": "Eliminar ramas y frutos con colonias densas para reducir la fuente de infestación.", "aplicacion": "Corte limpio, desinfectar tijeras entre plantas", "frecuencia": "Al detectar focos severos", "disponible_veracruz": True},
+        ],
+    },
+    "roya": {
+        "nombre_cientifico": "Hemileia vastatrix (café) / Phakopsora pachyrhizi",
+        "descripcion_plaga": "Hongo foliar que produce pústulas de color naranja-café en el envés de hojas. En Veracruz afecta principalmente café en las zonas de Coatepec, Huatusco y Córdoba.",
         "cultivos_afectados": ["Café", "Frijol", "Soya", "Trigo"],
         "severidad_default": "Alta",
+        "mitigacion_viable": True,
+        "nota_mitigacion": "En cafetales con más del 30% de hojas infectadas, la mitigación ecológica debe complementarse con renovación de plantas.",
         "tratamientos": [
-            {
-                "nombre": "Caldo Bordelés (Sulfato de Cobre + Cal)",
-                "tipo": "botanico",
-                "descripcion": "Fungicida de contacto con cobre. Protector y curativo en etapas tempranas.",
-                "aplicacion": "Solución 1%: 10 g CuSO4 + 10 g cal / L agua. Aspersión foliar.",
-                "frecuencia": "Preventiva cada 15 días en temporada de lluvia",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Trichoderma harzianum",
-                "tipo": "biologico",
-                "descripcion": "Hongo antagonista que inhibe el desarrollo de la roya.",
-                "aplicacion": "Aspersión foliar con solución 10⁸ esporas/mL",
-                "frecuencia": "Cada 15 días como preventivo",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Poda sanitaria",
-                "tipo": "cultural",
-                "descripcion": "Eliminar y quemar ramas y hojas infectadas para reducir inóculo.",
-                "aplicacion": "Retirar material afectado en bolsas selladas",
-                "frecuencia": "Al detectar los primeros síntomas y después de cada lluvia fuerte",
-                "disponible_veracruz": True,
-            },
+            {"nombre": "Caldo Bordelés (sulfato de cobre + cal)", "tipo": "botanico", "descripcion": "Fungicida cúprico de contacto. Protector y curativo en etapas tempranas.", "aplicacion": "10 g CuSO4 + 10 g cal / L agua. Aspersión foliar completa.", "frecuencia": "Preventiva cada 15 días en temporada de lluvia", "disponible_veracruz": True},
+            {"nombre": "Trichoderma harzianum", "tipo": "biologico", "descripcion": "Hongo antagonista que compite e inhibe el desarrollo de la roya.", "aplicacion": "Aspersión foliar: solución 10⁸ esporas/mL", "frecuencia": "Cada 15 días como preventivo", "disponible_veracruz": True},
+            {"nombre": "Poda sanitaria", "tipo": "cultural", "descripcion": "Eliminar ramas y hojas infectadas para reducir la fuente de inóculo.", "aplicacion": "Retirar material en bolsas selladas. No compostar.", "frecuencia": "Al detectar primeros síntomas y tras lluvias fuertes", "disponible_veracruz": True},
+            {"nombre": "Variedades resistentes", "tipo": "cultural", "descripcion": "Renovar cafetales con variedades resistentes como Costa Rica 95 o Marsellesa.", "aplicacion": "Sustitución progresiva de plantas susceptibles", "frecuencia": "Por ciclo productivo", "disponible_veracruz": True},
         ],
     },
-    "Áfidos": {
-        "nombre_cientifico": "Myzus persicae / Aphis gossypii",
-        "descripcion_plaga": (
-            "Insectos pequeños que colonizan brotes y envés de hojas. "
-            "Transmiten virus y producen melaza que atrae hormigas."
-        ),
-        "cultivos_afectados": ["Chile", "Jitomate", "Pepino", "Limón", "Maíz"],
-        "severidad_default": "Baja",
+    "mildiu": {
+        "nombre_cientifico": "Plasmopara viticola / Peronospora spp.",
+        "descripcion_plaga": "Hongo oomiceto que produce manchas amarillas en el haz y moho blanco-grisáceo en el envés. Favorecido por alta humedad y temperaturas de 15–25°C.",
+        "cultivos_afectados": ["Pepino", "Lechuga", "Espinaca", "Albahaca", "Uva"],
+        "severidad_default": "Media",
+        "mitigacion_viable": True,
+        "nota_mitigacion": "Evitar riego nocturno. La humedad foliar prolongada es el principal factor de riesgo.",
         "tratamientos": [
-            {
-                "nombre": "Chrysoperla carnea (crisopa verde)",
-                "tipo": "biologico",
-                "descripcion": "Depredador voraz de áfidos. Las larvas consumen hasta 400 áfidos/día.",
-                "aplicacion": "Liberación de huevos o larvas: 5,000 unidades/ha",
-                "frecuencia": "Una liberación inicial, evaluar a las 2 semanas",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Extracto de ajo + chile",
-                "tipo": "botanico",
-                "descripcion": "Repelente natural. Capsaicina y alicina ahuyentan colonias de áfidos.",
-                "aplicacion": "Macerado: 50 g ajo + 50 g chile / L agua. Filtrar y diluir 1:10.",
-                "frecuencia": "Cada 5 días hasta eliminar colonias",
-                "disponible_veracruz": True,
-            },
-            {
-                "nombre": "Control de hormigas",
-                "tipo": "cultural",
-                "descripcion": "Las hormigas protegen a los áfidos. Eliminar hormigueros reduce infestación.",
-                "aplicacion": "Bandas de pegamento en tallos + eliminación de nidos",
-                "frecuencia": "Control permanente",
-                "disponible_veracruz": True,
-            },
+            {"nombre": "Caldo Bordelés", "tipo": "botanico", "descripcion": "Fungicida cúprico eficaz contra oomicetos. Protector preventivo.", "aplicacion": "10 g CuSO4 + 10 g cal / L. Aspersión al haz y envés.", "frecuencia": "Preventiva cada 10–14 días en temporada húmeda", "disponible_veracruz": True},
+            {"nombre": "Bicarbonato de sodio + jabón", "tipo": "botanico", "descripcion": "Altera el pH superficial de la hoja inhibiendo la germinación de esporas.", "aplicacion": "10 g bicarbonato + 5 mL jabón / L agua. Aspersión foliar.", "frecuencia": "Cada 5–7 días como preventivo", "disponible_veracruz": True},
+            {"nombre": "Mejora de ventilación", "tipo": "cultural", "descripcion": "Reducir la densidad de siembra y podar hojas basales para mejorar circulación de aire.", "aplicacion": "Poda de aclareo y distanciamiento entre plantas", "frecuencia": "Al inicio del ciclo y según crecimiento", "disponible_veracruz": True},
+            {"nombre": "Riego por goteo (no aspersión)", "tipo": "cultural", "descripcion": "Mantener el follaje seco reduce dramáticamente la incidencia de mildiu.", "aplicacion": "Cambiar de aspersión a goteo subterráneo o a la base", "frecuencia": "Permanente", "disponible_veracruz": True},
         ],
     },
-    "Sin Plaga": {
-        "nombre_cientifico": "N/A",
-        "descripcion_plaga": "No se detectó presencia de plaga en la imagen analizada.",
-        "cultivos_afectados": [],
+    "mancha_foliar": {
+        "nombre_cientifico": "Alternaria spp. / Cercospora spp. / Septoria spp.",
+        "descripcion_plaga": "Complejo de hongos que producen manchas necróticas de distintas formas y colores en hojas. Favorecido por humedad y heridas. Puede confundirse visualmente con araña roja en etapas tempranas.",
+        "cultivos_afectados": ["Jitomate", "Chile", "Maíz", "Frijol", "Café"],
         "severidad_default": "Baja",
+        "mitigacion_viable": True,
+        "nota_mitigacion": "Si el modelo indica mancha foliar pero los síntomas son punteado plateado fino con telarañas, revisar también araña roja (síntomas similares en foto).",
         "tratamientos": [
-            {
-                "nombre": "Monitoreo preventivo",
-                "tipo": "cultural",
-                "descripcion": "Continuar con revisiones periódicas cada 7 días.",
-                "aplicacion": "Inspección visual de hojas, tallos y frutos",
-                "frecuencia": "Semanal",
-                "disponible_veracruz": True,
-            }
+            {"nombre": "Trichoderma harzianum + Bacillus subtilis", "tipo": "biologico", "descripcion": "Antagonistas fúngicos que inhiben el crecimiento de patógenos foliares.", "aplicacion": "Aspersión foliar al atardecer. Mezcla comercial o casera.", "frecuencia": "Cada 10–15 días preventivo; cada 7 días en infección activa", "disponible_veracruz": True},
+            {"nombre": "Caldo Bordelés", "tipo": "botanico", "descripcion": "Fungicida cúprico de amplio espectro para hongos foliares.", "aplicacion": "10 g CuSO4 + 10 g cal / L. Aspersión completa.", "frecuencia": "Cada 10–14 días", "disponible_veracruz": True},
+            {"nombre": "Eliminación de hojas enfermas", "tipo": "cultural", "descripcion": "Retirar y destruir el material infectado para cortar el ciclo de esporas.", "aplicacion": "Poda con tijera desinfectada. Bolsa sellada para desecho.", "frecuencia": "Al detectar primeros síntomas y semanalmente", "disponible_veracruz": True},
+            {"nombre": "Extracto de cola de caballo", "tipo": "botanico", "descripcion": "Rico en sílice. Refuerza la pared celular de las hojas contra infecciones fúngicas.", "aplicacion": "Hervir 100 g en 1 L agua, diluir 1:5 y asperjar.", "frecuencia": "Cada 5–7 días como preventivo", "disponible_veracruz": True},
         ],
     },
 }
 
-# Lista de plagas para el mock (se rota para simular detecciones variadas)
-_PLAGAS_MOCK = ["Trips", "Mosca Blanca", "Roya", "Áfidos"]
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _get_severidad(confianza: float, plaga: str) -> str:
+    """Determina severidad combinando confianza del modelo y naturaleza de la plaga."""
+    plagas_alta = {"gusano_cogollero", "mosca_blanca", "roya", "arana_roja"}
+    plagas_media = {"trips", "pulgon_verde", "minador", "mildiu", "cochinilla"}
+    plagas_baja = {"mancha_foliar"}
+
+    if plaga in plagas_alta:
+        return "Alta" if confianza > 0.60 else "Media"
+    elif plaga in plagas_media:
+        return "Media" if confianza > 0.60 else "Baja"
+    else:
+        return "Baja"
 
 
-def _detectar_mock(imagen_url: str) -> dict:
-    """
-    Simula la salida del modelo YOLOv8n / CNN.
-    Selecciona una plaga basada en el hash de la URL para ser determinista.
-    """
-    # Determinista: misma URL → misma plaga (útil para demos)
-    idx = hash(imagen_url) % len(_PLAGAS_MOCK)
-    plaga_nombre = _PLAGAS_MOCK[idx]
-    datos = _TRATAMIENTOS_DB[plaga_nombre]
-
-    # Simular confianza y severidad
+def _detectar_mock(imagen_url: str) -> tuple[str, float]:
+    """Mock determinista: misma URL → misma plaga. Para demos."""
+    clases = list(YOLO_CLASSES.values())
+    idx = hash(imagen_url) % len(clases)
     confianza = round(0.72 + (hash(imagen_url + "conf") % 27) / 100, 2)
-    severidades = ["Baja", "Media", "Alta"]
-    severidad = severidades[hash(imagen_url + "sev") % 3]
-    alerta = severidad in ("Alta", "Critica")
-
-    return {
-        "plaga": plaga_nombre,
-        "nombre_cientifico": datos["nombre_cientifico"],
-        "confianza": confianza,
-        "severidad": severidad,
-        "descripcion_plaga": datos["descripcion_plaga"],
-        "cultivos_afectados": datos["cultivos_afectados"],
-        "tratamientos_ecologicos": datos["tratamientos"],
-        "alerta_recomendada": alerta,
-    }
+    return clases[idx], confianza
 
 
 # ---------------------------------------------------------------------------
@@ -313,65 +288,101 @@ async def detectar_plaga(
     current_user: dict = Depends(get_current_user),
 ):
     """
-    Analiza una imagen de cultivo y detecta la plaga presente.
+    Analiza una imagen de cultivo con YOLOv8n y detecta la plaga presente.
 
-    - **imagen_url**: URL de imagen previamente subida con `POST /api/plagas/upload-imagen`.
-    - Retorna la plaga detectada, nivel de confianza, severidad y **métodos ecológicos
-      de mitigación** específicos para la región de Veracruz.
-    - En modo mock: detección determinista basada en la URL de la imagen.
-    - Cuando el modelo `.pt` esté disponible, se cargará automáticamente desde
-      `plagas-service/app/models/ml/yolov8n_plagas.pt`.
+    - **imagen_url**: URL de imagen subida con `POST /api/plagas/upload-imagen`.
+    - Retorna la plaga detectada (de 10 clases entrenadas con datos de Veracruz),
+      confianza, severidad y **tratamientos ecológicos específicos**.
+    - Activa automáticamente el modelo real si `best.pt` existe en `/app/models/ml/`.
+    - En modo mock: detección determinista basada en hash de la URL.
+
+    **Clases del modelo:** mosca_blanca, pulgon_verde, arana_roja, trips,
+    minador, gusano_cogollero, cochinilla, roya, mildiu, mancha_foliar.
     """
     if not body.imagen_url:
         raise HTTPException(status_code=400, detail="Se requiere imagen_url.")
 
-    # === MODELO REAL (descomentar cuando tengas el .pt) ===
-    # import os
-    # MODEL_PATH = "app/models/ml/yolov8n_plagas.pt"
-    # if os.path.exists(MODEL_PATH):
-    #     from ultralytics import YOLO
-    #     model = YOLO(MODEL_PATH)
-    #     # Descargar imagen de la URL y procesarla
-    #     import httpx, tempfile
-    #     async with httpx.AsyncClient() as client:
-    #         img_resp = await client.get(body.imagen_url)
-    #     with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
-    #         f.write(img_resp.content)
-    #         tmp_path = f.name
-    #     results = model(tmp_path)
-    #     # Mapear resultados al diccionario de tratamientos
-    #     # plaga_nombre = results[0].names[results[0].probs.top1]
-    #     # confianza = float(results[0].probs.top1conf)
-    #     # datos = _TRATAMIENTOS_DB.get(plaga_nombre, _TRATAMIENTOS_DB["Sin Plaga"])
-    #     modo = "modelo_real"
-    #     modelo_version = "yolov8n-plagas-v1.0"
-
-    # === MOCK (activo hasta que llegue el .pt) ===
     modo = "mock"
     modelo_version = "mock-v1.0"
-    deteccion_raw = _detectar_mock(body.imagen_url)
+    plaga_nombre = ""
+    confianza = 0.0
 
-    # Construir respuesta
-    tratamientos = [TratamientoEcologico(**t) for t in deteccion_raw["tratamientos_ecologicos"]]
+    # ── MODELO REAL ──────────────────────────────────────────────────────────
+    model_path = os.path.abspath(MODEL_PATH)
+    if os.path.exists(model_path):
+        try:
+            from ultralytics import YOLO
+            import httpx
+
+            # Descargar imagen de la URL
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                img_resp = await client.get(body.imagen_url)
+                img_resp.raise_for_status()
+
+            with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
+                f.write(img_resp.content)
+                tmp_path = f.name
+
+            # Inferencia
+            model = YOLO(model_path)
+            results = model(tmp_path, verbose=False)
+            os.unlink(tmp_path)
+
+            if results and len(results) > 0:
+                result = results[0]
+                # Clasificación: top-1
+                if hasattr(result, "probs") and result.probs is not None:
+                    top1_idx = int(result.probs.top1)
+                    plaga_nombre = YOLO_CLASSES.get(top1_idx, "mancha_foliar")
+                    confianza = round(float(result.probs.top1conf), 2)
+                # Detección: caja con mayor confianza
+                elif hasattr(result, "boxes") and result.boxes is not None and len(result.boxes) > 0:
+                    best_box = max(result.boxes, key=lambda b: float(b.conf))
+                    plaga_nombre = YOLO_CLASSES.get(int(best_box.cls), "mancha_foliar")
+                    confianza = round(float(best_box.conf), 2)
+                else:
+                    plaga_nombre = "mancha_foliar"
+                    confianza = 0.51
+
+            modo = "modelo_real"
+            modelo_version = "yolov8n-veracruz-v1.0 (best.pt)"
+
+        except Exception as exc:
+            # Si falla la inferencia, caer al mock con nota
+            plaga_nombre, confianza = _detectar_mock(body.imagen_url)
+            modo = f"mock (error en modelo: {type(exc).__name__})"
+            modelo_version = "mock-v1.0"
+
+    # ── MOCK ─────────────────────────────────────────────────────────────────
+    if not plaga_nombre:
+        plaga_nombre, confianza = _detectar_mock(body.imagen_url)
+
+    # Obtener datos de la plaga
+    datos = _TRATAMIENTOS_DB.get(plaga_nombre, _TRATAMIENTOS_DB["mancha_foliar"])
+    severidad = _get_severidad(confianza, plaga_nombre)
+    alerta = severidad in ("Alta", "Critica")
+
+    tratamientos = [TratamientoEcologico(**t) for t in datos["tratamientos"]]
 
     return DetectarResponse(
         deteccion=DeteccionResult(
-            plaga=deteccion_raw["plaga"],
-            nombre_cientifico=deteccion_raw["nombre_cientifico"],
-            confianza=deteccion_raw["confianza"],
-            severidad=deteccion_raw["severidad"],
-            descripcion_plaga=deteccion_raw["descripcion_plaga"],
-            cultivos_afectados=deteccion_raw["cultivos_afectados"],
+            plaga=plaga_nombre.replace("_", " ").title(),
+            nombre_cientifico=datos["nombre_cientifico"],
+            confianza=confianza,
+            severidad=severidad,
+            descripcion_plaga=datos["descripcion_plaga"],
+            cultivos_afectados=datos["cultivos_afectados"],
             tratamientos_ecologicos=tratamientos,
-            alerta_recomendada=deteccion_raw["alerta_recomendada"],
+            alerta_recomendada=alerta,
+            mitigacion_viable=datos["mitigacion_viable"],
+            nota_mitigacion=datos.get("nota_mitigacion"),
         ),
         imagen_analizada=body.imagen_url,
         modelo_version=modelo_version,
         modo=modo,
         mensaje=(
-            "Detección completada en modo mock. "
-            "Integra el modelo .pt en plagas-service/app/models/ml/ para activar la IA real."
-            if modo == "mock"
-            else "Detección completada con modelo real."
+            "Modelo YOLOv8n activo — dataset veracruz_real (10 clases)."
+            if modo == "modelo_real"
+            else "Modo mock activo. Coloca best.pt en plagas-service/app/models/ml/ para activar el modelo real."
         ),
     )

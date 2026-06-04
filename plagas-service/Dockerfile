@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY shared/ /app/shared/
 
+RUN apt-get update && apt-get install -y libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev libxcb1 && rm -rf /var/lib/apt/lists/*
+
 COPY plagas-service/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
