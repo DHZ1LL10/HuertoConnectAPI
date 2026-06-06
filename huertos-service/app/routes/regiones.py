@@ -62,7 +62,7 @@ async def get_region(region_id: str, request: Request, current_user: dict = Depe
 async def create_region(
     body: RegionCreate,
     request: Request,
-    current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
+    current_user: dict = Depends(require_roles(["Admin", "Tecnico", "Usuario"])),
 ):
     """Create a new region."""
     db = request.app.state.mongodb
