@@ -55,7 +55,7 @@ async def list_cultivos(
 async def create_cultivo(
     body: CultivoCreate,
     request: Request,
-    current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
+    current_user: dict = Depends(require_roles(["Admin", "Tecnico", "Usuario"])),
 ):
     """Create a new cultivo."""
     db = request.app.state.mongodb
