@@ -18,3 +18,9 @@ build/
 .idea/
 *.swp
 *.swo
+
+# Agent Service — base de datos SQLite (runtime, no va al repo)
+*.db
+*.db-shm
+*.db-wal
+agent-service/data/

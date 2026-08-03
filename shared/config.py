@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     PLAGAS_SERVICE_URL: str = "http://plagas-service:8003"
     CHAT_SERVICE_URL: str = "http://chat-service:8004"
     REPORTES_SERVICE_URL: str = "http://reportes-service:8005"
+    AGENT_SERVICE_URL: str = "http://agent-service:8006"
 
     # --- OpenWeather ---
     OPENWEATHER_API_KEY: str = ""
