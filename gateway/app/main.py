@@ -35,6 +35,7 @@ SERVICE_MAP = {
     "/api/chatbot": settings.CHAT_SERVICE_URL,
     "/api/reportes": settings.REPORTES_SERVICE_URL,
     "/api/auditoria": settings.REPORTES_SERVICE_URL,
+    "/api/agent": settings.AGENT_SERVICE_URL,
 }
 
 # Services for documentation aggregation
@@ -44,6 +45,14 @@ SERVICES = {
     "plagas": {"url": settings.PLAGAS_SERVICE_URL, "label": "Plagas/IA Service"},
     "chat": {"url": settings.CHAT_SERVICE_URL, "label": "Chat Service"},
     "reportes": {"url": settings.REPORTES_SERVICE_URL, "label": "Reportes Service"},
+    "agent": {"url": settings.AGENT_SERVICE_URL, "label": "Agent IA Service"},
+}
+
+# Prefixes to strip before forwarding to the target service.
+# Use this for services whose internal routes don't include the gateway prefix.
+# Example: gateway receives /api/agent/v1/chat -> forwards /v1/chat to agent-service
+STRIP_PREFIX_MAP: dict[str, str] = {
+    "/api/agent": "/api/agent",
 }
 
 SWAGGER_UI_PARAMS = {
@@ -66,7 +75,16 @@ async def lifespan(app: FastAPI):
     """Startup and shutdown for HTTP client."""
     global _http_client
     print("🚀 API Gateway starting...")
-    _http_client = httpx.AsyncClient(timeout=30.0)
+    # Default timeout 30s for all services; agent gets a per-request override
+    # because Ollama inference on CPU can take several minutes.
+    _http_client = httpx.AsyncClient(
+        timeout=httpx.Timeout(
+            connect=10.0,    # tiempo para establecer conexión
+            read=310.0,      # tiempo de lectura — cubre gemma3:4b en CPU (OLLAMA_TIMEOUT_SECONDS=300 + margen)
+            write=10.0,      # tiempo para enviar la petición
+            pool=5.0,        # tiempo para obtener conexión del pool
+        )
+    )
     print(f"✅ Gateway ready on port {settings.API_PORT}")
     print(f"📖 Swagger UI: http://localhost:{settings.API_PORT}/docs")
     print(f"📖 ReDoc:      http://localhost:{settings.API_PORT}/redoc")
@@ -121,7 +139,8 @@ async def unified_openapi():
                 "- Huertos (regiones, huertos, cultivos, usuarios, notificaciones)\n"
                 "- Plagas/IA (detecciones, alertas, modelos IA, predicciones, dashboard)\n"
                 "- Chat (conversaciones, mensajes, métricas)\n"
-                "- Reportes (reportes, auditoría)\n\n"
+                "- Reportes (reportes, auditoría)\n"
+                "- Agent IA (chat con Brot, historial de conversaciones, Ollama local)\n\n"
                 "**Autenticación:** Usa `Bearer <JWT_TOKEN>` en el header Authorization.\n\n"
                 "**Roles:** `Admin`, `Usuario`, `Tecnico`"
             ),
@@ -297,8 +316,18 @@ async def proxy(request: Request, path: str):
             content={"detail": f"No service found for path: {full_path}"},
         )
 
-    # Build target URL
-    target_url = f"{service_url}{full_path}"
+    # Build target URL — strip gateway prefix for services that manage their own routing
+    matched_prefix = next(
+        (prefix for prefix in sorted(SERVICE_MAP.keys(), key=len, reverse=True)
+         if full_path.startswith(prefix)),
+        None,
+    )
+    strip = STRIP_PREFIX_MAP.get(matched_prefix, "") if matched_prefix else ""
+    forwarded_path = full_path[len(strip):] if strip and full_path.startswith(strip) else full_path
+    if not forwarded_path:
+        forwarded_path = "/"
+
+    target_url = f"{service_url}{forwarded_path}"
     if request.url.query:
         target_url += f"?{request.url.query}"
 

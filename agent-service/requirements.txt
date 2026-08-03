@@ -1,0 +1,15 @@
+# Huerto Connect — Agent Service Dependencies
+
+# Servidor web y framework
+fastapi>=0.115,<1
+uvicorn[standard]>=0.30,<1
+
+# Cliente HTTP asíncrono para comunicarse con la API de Ollama
+httpx>=0.27,<1
+
+# Manejo seguro de variables de entorno y configuración
+pydantic-settings>=2.6,<3
+
+# ORM síncrono ejecutado en hilos (no bloquea FastAPI)
+# Por defecto usa SQLite; cambia DATABASE_URL para PostgreSQL
+SQLAlchemy>=2.0,<3

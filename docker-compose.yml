@@ -138,9 +138,43 @@ services:
     networks:
       - huerto-network
 
+  # =================== AGENT SERVICE (IA Local - Ollama) ===================
+  agent-service:
+    build:
+      context: .
+      dockerfile: agent-service/Dockerfile
+    container_name: huerto-agent
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # host.docker.internal resuelve a la IP del host Windows — permite que el
+      # contenedor se comunique con el servicio Ollama corriendo localmente.
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "gemma3:4b"
+      OLLAMA_TIMEOUT_SECONDS: "300"
+      DATABASE_URL: "sqlite:////app/data/agent_conversations.db"
+      APP_API_KEY: "development-only-change-this-api-key-1234567890"
+      ALLOWED_ORIGINS: "http://localhost:8000,http://localhost:4200"
+      ALLOWED_HOSTS: "*"
+      ENVIRONMENT: "development"
+      LOG_LEVEL: "INFO"
+    ports:
+      - "8006:8006"
+    volumes:
+      - agent_data:/app/data
+    networks:
+      - huerto-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8006/health/live')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
 volumes:
   mongo_data:
   postgres_data:
+  agent_data:
 
 
 networks:
