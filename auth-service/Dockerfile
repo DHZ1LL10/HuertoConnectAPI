@@ -7,7 +7,7 @@ COPY shared/ /app/shared/
 
 # Copy service requirements and install
 COPY auth-service/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --default-timeout=600 -r requirements.txt
 
 # Copy service code
 COPY auth-service/app/ /app/app/
