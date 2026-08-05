@@ -133,6 +133,7 @@ def create_app(settings: Settings | None = None, provider: OllamaProvider | None
     async def conversation_not_found(_request: Request, _exc: ConversationNotFoundError):
         return JSONResponse(status_code=404, content={"detail": "Conversación no encontrada"})
 
+    @app.get("/api/health", response_model=HealthResponse, tags=["health"])
     @app.get("/health/live", response_model=HealthResponse, tags=["health"])
     async def live() -> HealthResponse:
         return HealthResponse(

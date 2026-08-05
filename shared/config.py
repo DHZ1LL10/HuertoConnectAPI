@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     API_PUBLIC_URL: str = "http://localhost:8001"
 
     # --- MongoDB ---
-    MONGO_URI: str = "mongodb://huerto_admin:huerto_secret_2026@mongodb:27017/huerto_connect?authSource=admin"
+    MONGO_URI: str = "mongodb://mongo:WnitVsCGPRoeRVKJTFvrtelStnCXLzBa@mongodb:27017/?authSource=admin"
     MONGO_DB: str = "huerto_connect"
 
     # --- PostgreSQL ---
@@ -63,6 +63,10 @@ class Settings(BaseSettings):
     CHAT_SERVICE_URL: str = "http://chat-service:8004"
     REPORTES_SERVICE_URL: str = "http://reportes-service:8005"
     AGENT_SERVICE_URL: str = "http://agent-service:8006"
+
+    # Internal API key that the gateway injects when forwarding requests to agent-service.
+    # Must match APP_API_KEY in docker-compose.yml for agent-service.
+    AGENT_API_KEY: str = "development-only-change-this-api-key-1234567890"
 
     # --- OpenWeather ---
     OPENWEATHER_API_KEY: str = ""

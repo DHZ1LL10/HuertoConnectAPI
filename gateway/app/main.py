@@ -2,11 +2,18 @@
 API Gateway — Reverse proxy to all Huerto Connect microservices.
 Single entry point for the frontend.
 Unified Swagger UI at /docs with all services' endpoints.
+
+Authentication for /api/agent/* routes:
+  - Validates Bearer JWT (same token used for all other services)
+  - Extracts user_id from the token 'sub' claim
+  - Automatically injects X-User-ID + X-API-Key before forwarding to agent-service
+  - Users never need to know about the internal X-API-Key
 """
 
 from contextlib import asynccontextmanager
 
 import httpx
+import jwt as pyjwt
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
@@ -38,22 +45,56 @@ SERVICE_MAP = {
     "/api/agent": settings.AGENT_SERVICE_URL,
 }
 
-# Services for documentation aggregation
+# Services for documentation aggregation and health checks
 SERVICES = {
-    "auth": {"url": settings.AUTH_SERVICE_URL, "label": "Auth Service"},
-    "huertos": {"url": settings.HUERTOS_SERVICE_URL, "label": "Huertos Service"},
-    "plagas": {"url": settings.PLAGAS_SERVICE_URL, "label": "Plagas/IA Service"},
-    "chat": {"url": settings.CHAT_SERVICE_URL, "label": "Chat Service"},
-    "reportes": {"url": settings.REPORTES_SERVICE_URL, "label": "Reportes Service"},
-    "agent": {"url": settings.AGENT_SERVICE_URL, "label": "Agent IA Service"},
+    "auth": {
+        "url": settings.AUTH_SERVICE_URL,
+        "label": "Auth Service",
+        "health_path": "/api/health",
+    },
+    "huertos": {
+        "url": settings.HUERTOS_SERVICE_URL,
+        "label": "Huertos Service",
+        "health_path": "/api/health",
+    },
+    "plagas": {
+        "url": settings.PLAGAS_SERVICE_URL,
+        "label": "Plagas/IA Service",
+        "health_path": "/api/health",
+    },
+    "chat": {
+        "url": settings.CHAT_SERVICE_URL,
+        "label": "Chat Service",
+        "health_path": "/api/health",
+    },
+    "reportes": {
+        "url": settings.REPORTES_SERVICE_URL,
+        "label": "Reportes Service",
+        "health_path": "/api/health",
+    },
+    "agent": {
+        "url": settings.AGENT_SERVICE_URL,
+        "label": "Agent IA Service",
+        "health_path": "/health/live",
+    },
 }
 
 # Prefixes to strip before forwarding to the target service.
-# Use this for services whose internal routes don't include the gateway prefix.
 # Example: gateway receives /api/agent/v1/chat -> forwards /v1/chat to agent-service
 STRIP_PREFIX_MAP: dict[str, str] = {
     "/api/agent": "/api/agent",
 }
+
+# Path prefix to ADD when merging a service's OpenAPI paths into the unified spec.
+# This ensures that Swagger UI "Try it out" sends requests to the correct gateway URL.
+# Only needed for services whose internal routes don't start with /api/<service>.
+PATH_PREFIX_IN_DOCS: dict[str, str] = {
+    "agent": "/api/agent",
+}
+
+# Routes that require JWT validation at the gateway level before forwarding.
+# The gateway will extract user_id from the JWT and inject X-User-ID automatically.
+AGENT_ROUTE_PREFIX = "/api/agent"
 
 SWAGGER_UI_PARAMS = {
     "persistAuthorization": True,
@@ -123,6 +164,50 @@ def _find_service_url(path: str) -> str | None:
     return None
 
 
+# ===================== JWT HELPERS (Gateway-level) =====================
+
+def _decode_jwt_payload(token: str) -> dict | None:
+    """
+    Decode a JWT token and return its payload without full session validation.
+    The gateway only needs the 'sub' (user_id) to forward to the agent-service.
+    Full session validation is done by each individual service.
+    """
+    try:
+        payload = pyjwt.decode(
+            token,
+            settings.JWT_SECRET,
+            algorithms=[settings.JWT_ALGORITHM],
+        )
+        return payload
+    except pyjwt.ExpiredSignatureError:
+        return None
+    except pyjwt.InvalidTokenError:
+        return None
+
+
+def _extract_bearer_token(request: Request) -> str | None:
+    """Extract the Bearer token from the Authorization header."""
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        return auth_header[7:].strip()
+    return None
+
+
+def _get_user_id_from_request(request: Request) -> str | None:
+    """
+    Extract and validate the JWT from the request, returning the user_id (sub).
+    Returns None if token is missing or invalid.
+    """
+    token = _extract_bearer_token(request)
+    if not token:
+        return None
+    payload = _decode_jwt_payload(token)
+    if not payload:
+        return None
+    user_id = payload.get("sub")
+    return str(user_id).strip() if user_id else None
+
+
 # ===================== UNIFIED OPENAPI =====================
 
 @app.get("/openapi.json", include_in_schema=False)
@@ -142,6 +227,7 @@ async def unified_openapi():
                 "- Reportes (reportes, auditoría)\n"
                 "- Agent IA (chat con Brot, historial de conversaciones, Ollama local)\n\n"
                 "**Autenticación:** Usa `Bearer <JWT_TOKEN>` en el header Authorization.\n\n"
+                "El gateway extrae automáticamente tu identidad del token para el Agent IA.\n\n"
                 "**Roles:** `Admin`, `Usuario`, `Tecnico`"
             ),
             "version": "1.0.0",
@@ -149,7 +235,17 @@ async def unified_openapi():
         "paths": {},
         "components": {
             "schemas": {},
-            "securitySchemes": {},
+            "securitySchemes": {
+                "HTTPBearer": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "bearerFormat": "JWT",
+                    "description": (
+                        "Token JWT obtenido al hacer login. "
+                        "Se usa para autenticar todos los servicios de la API."
+                    ),
+                }
+            },
         },
     }
 
@@ -159,31 +255,43 @@ async def unified_openapi():
             if resp.status_code == 200:
                 spec = resp.json()
 
+                # Path prefix to add in the unified docs (e.g. /api/agent for agent-service)
+                path_prefix = PATH_PREFIX_IN_DOCS.get(name, "")
+
                 # Merge paths
                 for path, methods in spec.get("paths", {}).items():
+                    # Skip internal health paths for services that get a prefix,
+                    # to avoid confusing duplicates like /api/agent/api/health
+                    if path_prefix and path in {"/api/health", "/health/live", "/health/ready"}:
+                        continue
                     # Tag all operations with service name
                     for method, operation in methods.items():
                         if isinstance(operation, dict):
                             tags = operation.get("tags", [])
                             # Prefix tags with service label for grouping
                             operation["tags"] = [f"{svc['label']} — {t}" for t in tags] if tags else [svc["label"]]
-                    merged["paths"][path] = methods
+                            # Normalize all security requirements to HTTPBearer so single Authorize button works
+                            if operation.get("security"):
+                                operation["security"] = [{"HTTPBearer": []}]
+                            elif name == "agent" and not path.startswith("/health"):
+                                operation["security"] = [{"HTTPBearer": []}]
+
+                    # Rewrite path so Swagger UI "Try it out" hits the correct gateway route
+                    merged_path = f"{path_prefix}{path}" if path_prefix else path
+                    merged["paths"][merged_path] = methods
 
                 # Merge schemas (prefix to avoid collisions)
                 for schema_name, schema_def in spec.get("components", {}).get("schemas", {}).items():
-                    # Use service prefix if there's a collision
                     key = schema_name
                     if key in merged["components"]["schemas"]:
                         key = f"{name}_{schema_name}"
                     merged["components"]["schemas"][key] = schema_def
 
-                # Merge security schemes so Swagger "Authorize" works in unified docs
-                for scheme_name, scheme_def in spec.get("components", {}).get("securitySchemes", {}).items():
-                    existing = merged["components"]["securitySchemes"].get(scheme_name)
-                    if existing is None:
-                        merged["components"]["securitySchemes"][scheme_name] = scheme_def
-                    elif existing != scheme_def:
-                        merged["components"]["securitySchemes"][f"{name}_{scheme_name}"] = scheme_def
+                # Merge additional security schemes if any (skip agent-specific X-API-Key)
+                if name != "agent":
+                    for scheme_name, scheme_def in spec.get("components", {}).get("securitySchemes", {}).items():
+                        if scheme_name not in ("HTTPBearer", "BearerAuth"):
+                            merged["components"]["securitySchemes"][scheme_name] = scheme_def
 
         except Exception as e:
             print(f"[DOCS] Could not fetch spec from {name}: {e}")
@@ -281,16 +389,39 @@ async def docs_index():
 
 @app.get("/api/health")
 async def gateway_health():
-    """Gateway health check — checks all services."""
+    """Comprueba el estado de todos los microservicios."""
+
     services_status = {}
+
     for name, svc in SERVICES.items():
+        health_path = svc.get("health_path", "/api/health")
+        health_url = f"{svc['url']}{health_path}"
+
         try:
-            resp = await _http_client.get(f"{svc['url']}/api/health", timeout=5.0)
-            services_status[name] = "ok" if resp.status_code == 200 else "error"
-        except Exception:
+            response = await _http_client.get(
+                health_url,
+                timeout=5.0,
+            )
+
+            services_status[name] = (
+                "ok" if response.status_code == 200 else "error"
+            )
+
+        except httpx.ConnectError:
             services_status[name] = "unreachable"
 
-    all_ok = all(s == "ok" for s in services_status.values())
+        except httpx.TimeoutException:
+            services_status[name] = "timeout"
+
+        except Exception as exc:
+            print(f"[HEALTH] Error comprobando {name}: {exc}")
+            services_status[name] = "error"
+
+    all_ok = all(
+        status == "ok"
+        for status in services_status.values()
+    )
+
     return {
         "status": "ok" if all_ok else "degraded",
         "service": "gateway",
@@ -316,6 +447,31 @@ async def proxy(request: Request, path: str):
             content={"detail": f"No service found for path: {full_path}"},
         )
 
+    # ── Agent-service JWT authentication ─────────────────────────────────────
+    # For /api/agent/* routes we validate the JWT at the gateway level and
+    # inject X-User-ID (from the token 'sub') + X-API-Key so the agent-service
+    # can identify the user without the frontend ever needing to know the
+    # internal API key. This keeps each user's conversations fully isolated.
+    agent_injected_headers: dict[str, str] = {}
+    if full_path.startswith(AGENT_ROUTE_PREFIX):
+        # OPTIONS (CORS preflight) passes through without auth
+        if request.method != "OPTIONS":
+            user_id = _get_user_id_from_request(request)
+            if user_id is None:
+                return JSONResponse(
+                    status_code=401,
+                    content={
+                        "detail": (
+                            "Token de autenticación requerido para el Agent IA. "
+                            "Incluye el header: Authorization: Bearer <tu_jwt_token>"
+                        )
+                    },
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            # Inject the internal headers — never exposed to the end user
+            agent_injected_headers["X-User-ID"] = user_id
+            agent_injected_headers["X-API-Key"] = settings.AGENT_API_KEY
+
     # Build target URL — strip gateway prefix for services that manage their own routing
     matched_prefix = next(
         (prefix for prefix in sorted(SERVICE_MAP.keys(), key=len, reverse=True)
@@ -334,6 +490,8 @@ async def proxy(request: Request, path: str):
     # Forward headers (including Authorization)
     headers = dict(request.headers)
     headers.pop("host", None)
+    # Apply agent-specific injected headers (overrides anything the client sent)
+    headers.update(agent_injected_headers)
 
     # Forward body
     body = await request.body()
