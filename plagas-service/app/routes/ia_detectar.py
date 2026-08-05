@@ -4,8 +4,8 @@ Plagas Service — IA Endpoint: Detección de plagas con YOLOv8n.
 POST /api/plagas/detectar
 
 Flujo:
-  1. Recibe URL de imagen ya subida a Cloudinary.
-  2. Descarga la imagen y ejecuta el modelo YOLOv8n entrenado (best.pt).
+  1. Recibe la imagen directamente como archivo de imagen (multipart/form-data).
+  2. Ejecuta el modelo YOLOv8n entrenado (best.pt) directamente sobre la imagen subida.
      ↳ Modelo entrenado con dataset veracruz_real — 10 clases:
        mosca_blanca, pulgon_verde, arana_roja, trips, minador,
        gusano_cogollero, cochinilla, roya, mildiu, mancha_foliar
@@ -17,9 +17,10 @@ Para activar el modelo real:
   - El endpoint lo detecta automáticamente y cambia de mock a modelo real.
 """
 
+import hashlib
 import os
 import tempfile
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -51,24 +52,6 @@ MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "ml", "best
 # ---------------------------------------------------------------------------
 # Request / Response schemas
 # ---------------------------------------------------------------------------
-
-class DetectarRequest(BaseModel):
-    imagen_url: str = Field(
-        description="URL de la imagen ya subida (usar POST /api/plagas/upload-imagen primero)",
-    )
-    huerto_id: Optional[str] = Field(default=None)
-    cultivo_id: Optional[str] = Field(default=None)
-
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "imagen_url": "https://res.cloudinary.com/demo/image/upload/v1/plagas/muestra.jpg",
-                "huerto_id": None,
-                "cultivo_id": None,
-            }
-        }
-    }
-
 
 class TratamientoEcologico(BaseModel):
     nombre: str
@@ -266,11 +249,13 @@ def _get_severidad(confianza: float, plaga: str) -> str:
         return "Baja"
 
 
-def _detectar_mock(imagen_url: str) -> tuple[str, float]:
-    """Mock determinista: misma URL → misma plaga. Para demos."""
+def _detectar_mock(image_bytes: bytes) -> tuple[str, float]:
+    """Mock determinista: mismos bytes → misma plaga. Para demos sin modelo."""
     clases = list(YOLO_CLASSES.values())
-    idx = hash(imagen_url) % len(clases)
-    confianza = round(0.72 + (hash(imagen_url + "conf") % 27) / 100, 2)
+    digest = hashlib.sha256(image_bytes).hexdigest()
+    idx = int(digest, 16) % len(clases)
+    conf_seed = int(hashlib.sha256(image_bytes + b"conf").hexdigest(), 16)
+    confianza = round(0.72 + (conf_seed % 27) / 100, 2)
     return clases[idx], confianza
 
 
@@ -284,43 +269,66 @@ def _detectar_mock(imagen_url: str) -> tuple[str, float]:
     summary="IA — Detecta plaga en imagen y devuelve tratamientos ecológicos",
 )
 async def detectar_plaga(
-    body: DetectarRequest,
+    imagen: UploadFile = File(
+        ...,
+        description="Archivo de imagen del cultivo (JPG, PNG o WebP). Máximo 10 MB.",
+    ),
+    huerto_id: Optional[str] = Form(default=None, description="ID del huerto (opcional)"),
+    cultivo_id: Optional[str] = Form(default=None, description="ID del cultivo (opcional)"),
     current_user: dict = Depends(get_current_user),
 ):
     """
-    Analiza una imagen de cultivo con YOLOv8n y detecta la plaga presente.
+    Analiza un archivo de imagen de cultivo con YOLOv8n y detecta la plaga presente.
 
-    - **imagen_url**: URL de imagen subida con `POST /api/plagas/upload-imagen`.
+    Envía la imagen directamente como **multipart/form-data** (campo `imagen`).
+    No requiere subir previamente la imagen a una URL externa.
+
+    - **imagen**: Archivo de imagen adjunto (multipart/form-data).
     - Retorna la plaga detectada (de 10 clases entrenadas con datos de Veracruz),
       confianza, severidad y **tratamientos ecológicos específicos**.
     - Activa automáticamente el modelo real si `best.pt` existe en `/app/models/ml/`.
-    - En modo mock: detección determinista basada en hash de la URL.
+    - En modo mock: detección determinista basada en el hash del contenido del archivo.
 
     **Clases del modelo:** mosca_blanca, pulgon_verde, arana_roja, trips,
     minador, gusano_cogollero, cochinilla, roya, mildiu, mancha_foliar.
+
+    **Formatos aceptados:** JPG, JPEG, PNG, WebP (máx. 10 MB).
     """
-    if not body.imagen_url:
-        raise HTTPException(status_code=400, detail="Se requiere imagen_url.")
+    content_type = (imagen.content_type or "").lower()
+    ALLOWED_TYPES = {"image/jpeg", "image/jpg", "image/png", "image/webp"}
+    if content_type and content_type not in ALLOWED_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Formato no soportado: '{content_type}'. Formatos permitidos: JPG, PNG, WebP.",
+        )
+
+    image_bytes = await imagen.read()
+    if not image_bytes:
+        raise HTTPException(status_code=400, detail="El archivo de imagen está vacío.")
+
+    if len(image_bytes) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="La imagen excede el límite máximo de 10 MB.")
 
     modo = "mock"
     modelo_version = "mock-v1.0"
     plaga_nombre = ""
     confianza = 0.0
+    nombre_archivo = imagen.filename or "imagen_subida"
 
     # ── MODELO REAL ──────────────────────────────────────────────────────────
     model_path = os.path.abspath(MODEL_PATH)
     if os.path.exists(model_path):
         try:
             from ultralytics import YOLO
-            import httpx
 
-            # Descargar imagen de la URL
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                img_resp = await client.get(body.imagen_url)
-                img_resp.raise_for_status()
+            ext = ".jpg"
+            if "png" in content_type:
+                ext = ".png"
+            elif "webp" in content_type:
+                ext = ".webp"
 
-            with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
-                f.write(img_resp.content)
+            with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as f:
+                f.write(image_bytes)
                 tmp_path = f.name
 
             # Inferencia
@@ -330,12 +338,10 @@ async def detectar_plaga(
 
             if results and len(results) > 0:
                 result = results[0]
-                # Clasificación: top-1
                 if hasattr(result, "probs") and result.probs is not None:
                     top1_idx = int(result.probs.top1)
                     plaga_nombre = YOLO_CLASSES.get(top1_idx, "mancha_foliar")
                     confianza = round(float(result.probs.top1conf), 2)
-                # Detección: caja con mayor confianza
                 elif hasattr(result, "boxes") and result.boxes is not None and len(result.boxes) > 0:
                     best_box = max(result.boxes, key=lambda b: float(b.conf))
                     plaga_nombre = YOLO_CLASSES.get(int(best_box.cls), "mancha_foliar")
@@ -348,14 +354,13 @@ async def detectar_plaga(
             modelo_version = "yolov8n-veracruz-v1.0 (best.pt)"
 
         except Exception as exc:
-            # Si falla la inferencia, caer al mock con nota
-            plaga_nombre, confianza = _detectar_mock(body.imagen_url)
+            plaga_nombre, confianza = _detectar_mock(image_bytes)
             modo = f"mock (error en modelo: {type(exc).__name__})"
             modelo_version = "mock-v1.0"
 
     # ── MOCK ─────────────────────────────────────────────────────────────────
     if not plaga_nombre:
-        plaga_nombre, confianza = _detectar_mock(body.imagen_url)
+        plaga_nombre, confianza = _detectar_mock(image_bytes)
 
     # Obtener datos de la plaga
     datos = _TRATAMIENTOS_DB.get(plaga_nombre, _TRATAMIENTOS_DB["mancha_foliar"])
@@ -377,7 +382,7 @@ async def detectar_plaga(
             mitigacion_viable=datos["mitigacion_viable"],
             nota_mitigacion=datos.get("nota_mitigacion"),
         ),
-        imagen_analizada=body.imagen_url,
+        imagen_analizada=nombre_archivo,
         modelo_version=modelo_version,
         modo=modo,
         mensaje=(
