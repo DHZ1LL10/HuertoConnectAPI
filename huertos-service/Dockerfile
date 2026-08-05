@@ -5,7 +5,7 @@ WORKDIR /app
 COPY shared/ /app/shared/
 
 COPY huertos-service/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --default-timeout=600 -r requirements.txt
 
 COPY huertos-service/app/ /app/app/
 
