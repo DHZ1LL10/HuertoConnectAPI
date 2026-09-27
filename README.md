@@ -26,13 +26,13 @@ El sistema está desplegado en producción sobre una instancia **Amazon EC2 (Ubu
 
 | | |
 |---|---|
-| **URL Base Pública** | `http://3.17.60.253:8000` |
+| **Endpoint público** | Omitido del repositorio; disponible bajo solicitud |
 | **Proveedor** | Amazon Web Services (AWS EC2) |
 | **SO** | Ubuntu 22.04 LTS |
 | **Orquestación** | Docker Compose (5 microservicios) |
 | **Memoria** | 1GB RAM + 2GB Swap |
 
-> ⚠️ **ARQUITECTURA IMPORTANTE:** El **API Gateway (puerto 8000) ES EL ÚNICO PUNTO DE ENTRADA PÚBLICO**. Toda petición (`/api/auth`, `/api/huertos`, `/api/plagas`, etc.) pasa por el puerto `8000`. Los microservicios internos (puertos 8001, 8002, 8003) están aislados en la red interna de Docker por seguridad y **no deben ser consumidos directamente**.
+> ⚠️ **ARQUITECTURA IMPORTANTE:** El **API Gateway (puerto 8000) es el punto de entrada previsto para producción**. Toda petición de aplicación pasa por el gateway. Los servicios se comunican mediante la red interna de Docker. El `docker-compose.yml` conserva puertos de servicios individuales para desarrollo/diagnóstico local; en un despliegue público esos puertos deben quedar bloqueados por Security Groups/firewall y no exponerse directamente a Internet.
 
 ---
 
@@ -114,7 +114,7 @@ sudo docker compose up -d --build
 - Timing-Attack safe con `crypto.timingSafeEqual`.
 - Rate Limiting en endpoints de OTP (máx. 5 intentos).
 - Contraseñas con `scrypt` + Salt Individual + Pepper de servidor.
-- Microservicios aislados en red bridge privada de Docker (no accesibles desde internet).
+- Comunicación interna mediante red bridge de Docker; en producción los puertos de microservicios deben restringirse con Security Groups/firewall y exponer únicamente el gateway.
 
 ---
 
