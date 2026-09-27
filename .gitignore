@@ -10,8 +10,11 @@ __pycache__/
 dist/
 build/
 
-# Entorno
+# Environment / secrets
 .env
+.env.*
+!.env.example
+!**/.env.example
 
 # Editors
 .vscode/
@@ -19,7 +22,7 @@ build/
 *.swp
 *.swo
 
-# Agent Service — base de datos SQLite (runtime, no va al repo)
+# Agent Service — SQLite runtime data
 *.db
 *.db-shm
 *.db-wal
