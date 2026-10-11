@@ -1,0 +1,26 @@
+name: huerto-huertos-test
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "127.0.0.1:27029:27017"
+    volumes:
+      - mongo_test:/data/db
+  huertos:
+    build:
+      context: ..
+      dockerfile: huertos-service/Dockerfile
+    environment:
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: huertos_smoke
+      JWT_SECRET: huertos-test-only-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      OTP_HASH_SECRET: huertos-test-only-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      AGENT_API_KEY: huertos-test-only-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      ENVIRONMENT: testing
+      SMTP_APP_PASSWORD: ""
+    ports:
+      - "127.0.0.1:18002:8002"
+    depends_on:
+      - mongodb
+volumes:
+  mongo_test:

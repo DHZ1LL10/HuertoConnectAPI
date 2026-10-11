@@ -29,10 +29,11 @@ from app.models.schemas import (
 )
 from shared.auth.dependencies import get_current_user, require_roles
 from shared.config import settings
+from shared.ownership import require_huerto_access, object_id
 
 logger = logging.getLogger(__name__)
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt_sha256", "bcrypt"], deprecated="auto")
 
 
 def _clean_mail_header(value: str) -> str:
@@ -153,10 +154,10 @@ async def create_contacto(body: ContactoCreate, request: Request):
             {"$set": {"email_notificado": True, "email_notificado_at": datetime.now(timezone.utc)}},
         )
     except Exception as exc:
-        logger.exception("No se pudo enviar correo de contacto para mensaje %s", str(doc["_id"]))
+        logger.warning("contact_mail_failed error=%s", type(exc).__name__)
         await db.contacto_mensajes.update_one(
             {"_id": doc["_id"]},
-            {"$set": {"email_notificacion_error": str(exc)[:500]}},
+            {"$set": {"email_notificacion_error": type(exc).__name__}},
         )
 
     return ContactoResponse(
@@ -210,6 +211,10 @@ async def create_usuario(
     db = request.app.state.mongodb
     now = datetime.now(timezone.utc)
 
+    from shared.regions import resolve_region
+    selected = await resolve_region(db, body.region or body.region_id) if body.region or body.region_id else None
+    if body.region and body.region_id and str(selected["_id"]) != body.region_id:
+        raise HTTPException(422, "region y region_id no coinciden")
     email = body.email.lower().strip()
     existing = await db.usuarios.find_one({"email": email, "deleted_at": None})
     if existing:
@@ -222,7 +227,7 @@ async def create_usuario(
         "nombre": body.nombre.strip(),
         "apellidos": body.apellidos.strip(),
         "email": email,
-        "password_hash": pwd_context.hash(body.password),
+        "password_hash": await asyncio.to_thread(pwd_context.hash, body.password),
         "rol": rol,
         "role": rol,
         "estado": estado,
@@ -230,7 +235,8 @@ async def create_usuario(
         "auth_provider": "email",
         "google_id": None,
         "profile_picture": None,
-        "region_id": body.region_id,
+        "region_id": str(selected["_id"]) if selected else None,
+        "region": selected["nombre"] if selected else None,
         "ultima_actividad": now,
         "created_at": now,
         "updated_at": now,
@@ -243,6 +249,7 @@ async def create_usuario(
 
     return UsuarioAdminResponse(
         id=str(created["_id"]),
+        profile_picture=created.get("profile_picture"),
         nombre=created["nombre"],
         apellidos=created.get("apellidos", ""),
         email=created["email"],
@@ -250,6 +257,7 @@ async def create_usuario(
         estado=created["estado"],
         email_verificado=created.get("email_verificado", False),
         region_id=str(created["region_id"]) if created.get("region_id") else None,
+        region=created.get("region"),
         ultima_actividad=created.get("ultima_actividad", "").isoformat() if created.get("ultima_actividad") else None,
         created_at=created.get("created_at", "").isoformat() if created.get("created_at") else None,
     )
@@ -280,13 +288,15 @@ async def list_usuarios(
     return [
         UsuarioAdminResponse(
             id=str(u["_id"]),
-            nombre=u["nombre"],
+            profile_picture=u.get("profile_picture"),
+            nombre=u.get("nombre", "Usuario"),
             apellidos=u.get("apellidos", ""),
             email=u["email"],
             rol=_doc_role(u),
             estado=u["estado"],
             email_verificado=u.get("email_verificado", False),
             region_id=str(u["region_id"]) if u.get("region_id") else None,
+            region=u.get("region"),
             ultima_actividad=u.get("ultima_actividad", "").isoformat() if u.get("ultima_actividad") else None,
             created_at=u.get("created_at", "").isoformat() if u.get("created_at") else None,
         )
@@ -312,13 +322,15 @@ async def get_usuario(
 
     return UsuarioAdminResponse(
         id=str(u["_id"]),
-        nombre=u["nombre"],
+        profile_picture=u.get("profile_picture"),
+        nombre=u.get("nombre", "Usuario"),
         apellidos=u.get("apellidos", ""),
         email=u["email"],
         rol=_doc_role(u),
         estado=u["estado"],
         email_verificado=u.get("email_verificado", False),
         region_id=str(u["region_id"]) if u.get("region_id") else None,
+        region=u.get("region"),
         ultima_actividad=u.get("ultima_actividad", "").isoformat() if u.get("ultima_actividad") else None,
         created_at=u.get("created_at", "").isoformat() if u.get("created_at") else None,
     )
@@ -347,6 +359,11 @@ async def update_usuario(
         raise HTTPException(status_code=400, detail="No data to update")
 
     if "email" in update_data:
+        existing_user = await db.usuarios.find_one({"_id": object_id(user_id), "deleted_at": None})
+        if not existing_user:
+            raise HTTPException(404, "Usuario no encontrado")
+        if str(update_data["email"]).lower().strip() != existing_user["email"].lower():
+            raise HTTPException(409, "El cambio de correo requiere un flujo de verificación en Auth")
         new_email = str(update_data["email"]).lower().strip()
         existing = await db.usuarios.find_one(
             {
@@ -359,6 +376,13 @@ async def update_usuario(
             raise HTTPException(status_code=409, detail="Ya existe un usuario con ese correo")
         update_data["email"] = new_email
 
+    if body.region or body.region_id:
+        from shared.regions import resolve_region
+        selected = await resolve_region(db, body.region or body.region_id)
+        if body.region and body.region_id and str(selected["_id"]) != body.region_id:
+            raise HTTPException(422, "region y region_id no coinciden")
+        update_data.update(region_id=str(selected["_id"]), region=selected["nombre"])
+
     if "rol" in update_data:
         update_data["role"] = update_data["rol"]
 
@@ -370,13 +394,15 @@ async def update_usuario(
     u = await db.usuarios.find_one({"_id": ObjectId(user_id)})
     return UsuarioAdminResponse(
         id=str(u["_id"]),
-        nombre=u["nombre"],
+        profile_picture=u.get("profile_picture"),
+        nombre=u.get("nombre", "Usuario"),
         apellidos=u.get("apellidos", ""),
         email=u["email"],
         rol=_doc_role(u),
         estado=u["estado"],
         email_verificado=u.get("email_verificado", False),
         region_id=str(u["region_id"]) if u.get("region_id") else None,
+        region=u.get("region"),
         ultima_actividad=u.get("ultima_actividad", "").isoformat() if u.get("ultima_actividad") else None,
         created_at=u.get("created_at", "").isoformat() if u.get("created_at") else None,
     )
@@ -435,12 +461,15 @@ async def update_foto_perfil(
             detail=f"Formato no permitido '{ext}'. Usa JPG, PNG o WebP.",
         )
 
-    file_bytes = await foto.read()
+    file_bytes = await foto.read(MAX_BYTES + 1)
     if len(file_bytes) > MAX_BYTES:
         raise HTTPException(
             status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
             detail="El archivo supera el límite de 5 MB.",
         )
+
+    from app.services.images import validate_image
+    await asyncio.to_thread(validate_image, file_bytes, content_type)
 
     # Verificar que el usuario existe
     db = request.app.state.mongodb
@@ -450,12 +479,9 @@ async def update_foto_perfil(
 
     # Subir a Cloudinary
     try:
-        from shared.services.cloudinary_service import upload_image, delete_image
+        from shared.services.image_storage import upload_image
 
-        # Eliminar foto anterior si tiene public_id guardado
-        old_pid = u.get("profile_picture_public_id")
-        if old_pid:
-            await delete_image(old_pid)
+        # Keep the old image if the replacement upload fails.
 
         cloud_result = await upload_image(
             file_bytes,
@@ -465,8 +491,8 @@ async def update_foto_perfil(
         secure_url = cloud_result["secure_url"]
         public_id  = cloud_result["public_id"]
 
-    except RuntimeError as exc:
-        raise HTTPException(status_code=502, detail=str(exc))
+    except RuntimeError:
+        raise HTTPException(status_code=502, detail="No fue posible almacenar la imagen")
 
     # Actualizar en MongoDB
     now = datetime.now(timezone.utc)
@@ -482,13 +508,15 @@ async def update_foto_perfil(
     u = await db.usuarios.find_one({"_id": ObjectId(user_id)})
     return UsuarioAdminResponse(
         id=str(u["_id"]),
-        nombre=u["nombre"],
+        profile_picture=u.get("profile_picture"),
+        nombre=u.get("nombre", "Usuario"),
         apellidos=u.get("apellidos", ""),
         email=u["email"],
         rol=_doc_role(u),
         estado=u["estado"],
         email_verificado=u.get("email_verificado", False),
         region_id=str(u["region_id"]) if u.get("region_id") else None,
+        region=u.get("region"),
         ultima_actividad=u.get("ultima_actividad", "").isoformat() if u.get("ultima_actividad") else None,
         created_at=u.get("created_at", "").isoformat() if u.get("created_at") else None,
     )
@@ -641,9 +669,14 @@ async def upload_dataset_image(
 ):
     """Upload an image to the training dataset."""
     db = request.app.state.mongodb
+    if body.huerto_id:
+        await require_huerto_access(db, body.huerto_id, current_user)
+    if body.cultivo_id and not await db.cultivos.find_one({"_id": object_id(body.cultivo_id)}):
+        raise HTTPException(404, "Cultivo no encontrado")
     now = datetime.now(timezone.utc)
     doc = {
         "imagen_url": body.imagen_url,
+        "usuario_id": current_user["id"],
         "huerto_id": body.huerto_id,
         "cultivo_id": body.cultivo_id,
         "etiqueta_plaga": body.etiqueta_plaga,
@@ -678,7 +711,9 @@ async def list_dataset_images(
 ):
     """List dataset images with optional filtering."""
     db = request.app.state.mongodb
-    query = {}
+    owned = await db.huertos.find({"usuario_id": {"$in": [current_user["id"], object_id(current_user["id"])]}, "deleted_at": None}).to_list(None)
+    ids = [str(h["_id"]) for h in owned]
+    query = {"$or": [{"huerto_id": {"$in": ids}}, {"huerto_id": None, "usuario_id": current_user["id"]}]}
     if validada is not None:
         query["validada"] = validada
 

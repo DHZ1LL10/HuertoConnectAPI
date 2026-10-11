@@ -4,7 +4,12 @@ Huertos Service — Pydantic schemas for requests/responses.
 
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
+from datetime import date
+
+
+class InputModel(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
 
 # ===================== REGIONES =====================
@@ -17,7 +22,7 @@ class RegionCreate(BaseModel):
     model_config = {
         "json_schema_extra": {
             "example": {
-                "nombre": "Bajio Norte",
+                "nombre": "Capital",
                 "actividad": "Alta",
                 "priorizada": True,
             }
@@ -50,10 +55,11 @@ class RegionResponse(BaseModel):
 
 # ===================== HUERTOS =====================
 
-class HuertoCreate(BaseModel):
+class HuertoCreate(InputModel):
     nombre: str = Field(..., min_length=1)
     municipio: str = ""
     region_id: Optional[str] = None
+    region: Optional[str] = Field(default=None, description="Nombre de la región de Veracruz, por ejemplo Capital")
     estado: str = Field(default="Optimo", pattern=r"^(Optimo|Atencion|Critico)$")
     salud: int = Field(default=100, ge=0, le=100)
 
@@ -61,8 +67,8 @@ class HuertoCreate(BaseModel):
         "json_schema_extra": {
             "example": {
                 "nombre": "Huerto La Esperanza",
-                "municipio": "Irapuato",
-                "region_id": "65f2d6ea9f3d2a3e8a7b9d01",
+                "municipio": "Xalapa",
+                "region": "Capital",
                 "estado": "Optimo",
                 "salud": 92,
             }
@@ -70,12 +76,13 @@ class HuertoCreate(BaseModel):
     }
 
 
-class HuertoUpdate(BaseModel):
-    nombre: Optional[str] = None
+class HuertoUpdate(InputModel):
+    nombre: Optional[str] = Field(default=None, min_length=1, max_length=200)
     municipio: Optional[str] = None
     region_id: Optional[str] = None
-    estado: Optional[str] = None
-    salud: Optional[int] = None
+    region: Optional[str] = Field(default=None, description="Nombre de la región de Veracruz")
+    estado: Optional[str] = Field(default=None, pattern=r"^(Optimo|Atencion|Critico)$")
+    salud: Optional[int] = Field(default=None, ge=0, le=100)
 
     model_config = {
         "json_schema_extra": {
@@ -93,6 +100,7 @@ class HuertoResponse(BaseModel):
     usuario_id: str
     municipio: str
     region_id: Optional[str] = None
+    region: Optional[str] = None
     estado: str
     salud: int
     created_at: Optional[str] = None
@@ -100,7 +108,7 @@ class HuertoResponse(BaseModel):
 
 # ===================== CULTIVOS =====================
 
-class CultivoCreate(BaseModel):
+class CultivoCreate(InputModel):
     nombre: str = Field(..., min_length=1)
     temporada: str = ""
     dificultad: str = Field(default="Media", pattern=r"^(Baja|Media|Alta)$")
@@ -122,10 +130,10 @@ class CultivoCreate(BaseModel):
     }
 
 
-class CultivoUpdate(BaseModel):
-    nombre: Optional[str] = None
+class CultivoUpdate(InputModel):
+    nombre: Optional[str] = Field(default=None, min_length=1, max_length=200)
     temporada: Optional[str] = None
-    dificultad: Optional[str] = None
+    dificultad: Optional[str] = Field(default=None, pattern=r"^(Baja|Media|Alta)$")
     riego: Optional[str] = None
     fertilizacion: Optional[str] = None
     activo: Optional[bool] = None
@@ -153,11 +161,18 @@ class CultivoResponse(BaseModel):
 
 # ===================== HUERTO CULTIVOS =====================
 
-class HuertoCultivoCreate(BaseModel):
+class HuertoCultivoCreate(InputModel):
     huerto_id: str
     cultivo_id: str
     fecha_siembra: Optional[str] = None
     estado: str = Field(default="Activo", pattern=r"^(Activo|Cosechado|Perdido)$")
+
+    @field_validator("fecha_siembra")
+    @classmethod
+    def valid_date(cls, value):
+        if value is not None:
+            return date.fromisoformat(value).isoformat()
+        return value
 
     model_config = {
         "json_schema_extra": {
@@ -371,6 +386,7 @@ class UsuarioAdminUpdate(BaseModel):
     rol: Optional[str] = None
     estado: Optional[str] = None
     region_id: Optional[str] = None
+    region: Optional[str] = Field(default=None, description="Nombre de región oficial de Veracruz")
 
     model_config = {
         "json_schema_extra": {
@@ -378,7 +394,7 @@ class UsuarioAdminUpdate(BaseModel):
                 "nombre": "Ana",
                 "rol": "Tecnico",
                 "estado": "Activo",
-                "region_id": "65f2d6ea9f3d2a3e8a7b9d01",
+                "region": "Capital",
             }
         }
     }
@@ -392,6 +408,7 @@ class UsuarioAdminCreate(BaseModel):
     rol: str = Field(default="Usuario")
     estado: str = Field(default="Activo")
     region_id: Optional[str] = None
+    region: Optional[str] = Field(default=None, description="Nombre de región oficial de Veracruz")
 
     model_config = {
         "json_schema_extra": {
@@ -402,7 +419,7 @@ class UsuarioAdminCreate(BaseModel):
                 "password": "PassTecnico2026!",
                 "rol": "Tecnico",
                 "estado": "Activo",
-                "region_id": "65f2d6ea9f3d2a3e8a7b9d01",
+                "region": "Capital",
             }
         }
     }
@@ -410,6 +427,7 @@ class UsuarioAdminCreate(BaseModel):
 
 class UsuarioAdminResponse(BaseModel):
     id: str
+    profile_picture: Optional[str] = None
     nombre: str
     apellidos: str
     email: str
@@ -417,6 +435,7 @@ class UsuarioAdminResponse(BaseModel):
     estado: str
     email_verificado: bool
     region_id: Optional[str] = None
+    region: Optional[str] = Field(default=None, description="Nombre de región oficial de Veracruz")
     ultima_actividad: Optional[str] = None
     created_at: Optional[str] = None
 

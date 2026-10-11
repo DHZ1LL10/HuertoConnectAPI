@@ -16,6 +16,7 @@ from app.models.schemas import (
     MessageResponse,
 )
 from shared.auth.dependencies import get_current_user, require_roles
+from shared.ownership import require_huerto_access, object_id
 
 router = APIRouter(prefix="/api/cultivos", tags=["Cultivos"])
 
@@ -121,6 +122,8 @@ async def delete_cultivo(
 ):
     """Delete a cultivo."""
     db = request.app.state.mongodb
+    if await db.huerto_cultivos.find_one({"cultivo_id": {"$in": [cultivo_id, object_id(cultivo_id)]}}):
+        raise HTTPException(409, "El cultivo tiene siembras asociadas; puedes desactivarlo")
     result = await db.cultivos.delete_one({"_id": ObjectId(cultivo_id)})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Cultivo no encontrado")
@@ -137,6 +140,10 @@ async def create_siembra(
 ):
     """Link a cultivo to a huerto (siembra)."""
     db = request.app.state.mongodb
+    await require_huerto_access(db, body.huerto_id, current_user)
+    cultivo = await db.cultivos.find_one({"_id": object_id(body.cultivo_id), "activo": {"$ne": False}})
+    if not cultivo:
+        raise HTTPException(404, "Cultivo inexistente o inactivo")
     now = datetime.now(timezone.utc)
     doc = {
         "huerto_id": body.huerto_id,
@@ -165,6 +172,7 @@ async def list_siembras(
 ):
     """List all siembras (huerto-cultivo links) for a huerto."""
     db = request.app.state.mongodb
+    await require_huerto_access(db, huerto_id, current_user)
     items = await db.huerto_cultivos.find({"huerto_id": huerto_id}).to_list(100)
     return [
         HuertoCultivoResponse(

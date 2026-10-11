@@ -15,6 +15,8 @@ from app.models.schemas import (
     RegionUpdate,
 )
 from shared.auth.dependencies import get_current_user, require_roles
+from shared.ownership import object_id
+from shared.regions import resolve_region, VERACRUZ_REGIONS
 
 router = APIRouter(prefix="/api/regiones", tags=["Regiones"])
 
@@ -28,7 +30,7 @@ async def list_regiones(
 ):
     """List all regiones."""
     db = request.app.state.mongodb
-    cursor = db.regiones.find().skip(skip).limit(limit)
+    cursor = db.regiones.find({"nombre": {"$in": list(VERACRUZ_REGIONS)}}).sort("nombre", 1).skip(skip).limit(limit)
     regiones = await cursor.to_list(limit)
     return [
         RegionResponse(
@@ -42,11 +44,11 @@ async def list_regiones(
     ]
 
 
-@router.get("/{region_id}", response_model=RegionResponse)
-async def get_region(region_id: str, request: Request, current_user: dict = Depends(get_current_user)):
-    """Get a specific region."""
+@router.get("/{region}", response_model=RegionResponse)
+async def get_region(region: str, request: Request, current_user: dict = Depends(get_current_user)):
+    """Consultar por nombre (Capital, Las Montañas, etc.); se aceptan IDs anteriores."""
     db = request.app.state.mongodb
-    r = await db.regiones.find_one({"_id": ObjectId(region_id)})
+    r = await resolve_region(db, region)
     if not r:
         raise HTTPException(status_code=404, detail="Región no encontrada")
     return RegionResponse(
@@ -67,6 +69,11 @@ async def create_region(
     """Create a new region."""
     db = request.app.state.mongodb
 
+    from shared.regions import region_key
+    canonical = next((n for n in VERACRUZ_REGIONS if region_key(n) == region_key(body.nombre)), None)
+    if not canonical:
+        raise HTTPException(422, "Usa una de las diez regiones oficiales de Veracruz")
+    body.nombre = canonical
     existing = await db.regiones.find_one({"nombre": body.nombre})
     if existing:
         raise HTTPException(status_code=409, detail="Ya existe una región con ese nombre")
@@ -91,19 +98,23 @@ async def create_region(
     )
 
 
-@router.put("/{region_id}", response_model=RegionResponse)
+@router.put("/{region}", response_model=RegionResponse)
 async def update_region(
-    region_id: str,
+    region: str,
     body: RegionUpdate,
     request: Request,
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """Update a region."""
     db = request.app.state.mongodb
+    selected = await resolve_region(db, region)
+    region_id = str(selected["_id"])
     update_data = {k: v for k, v in body.model_dump().items() if v is not None}
     if not update_data:
         raise HTTPException(status_code=400, detail="No se proporcionaron datos para actualizar")
 
+    if "nombre" in update_data and update_data["nombre"] != selected["nombre"]:
+        raise HTTPException(422, "No se puede renombrar una región oficial")
     update_data["updated_at"] = datetime.now(timezone.utc)
     result = await db.regiones.update_one({"_id": ObjectId(region_id)}, {"$set": update_data})
     if result.matched_count == 0:
@@ -119,32 +130,42 @@ async def update_region(
     )
 
 
-@router.delete("/{region_id}", response_model=MessageResponse)
+@router.delete("/{region}", response_model=MessageResponse)
 async def delete_region(
-    region_id: str,
+    region: str,
     request: Request,
     current_user: dict = Depends(require_roles(["Admin"])),
 ):
     """Delete a region."""
     db = request.app.state.mongodb
+    selected = await resolve_region(db, region)
+    region_id = str(selected["_id"])
+    if await db.huertos.find_one({"region_id": {"$in": [region_id, object_id(region_id)]}}):
+        raise HTTPException(409, "La región tiene huertos asociados")
+    if selected["nombre"] in VERACRUZ_REGIONS:
+        raise HTTPException(409, "El catálogo oficial de Veracruz no se puede eliminar")
     result = await db.regiones.delete_one({"_id": ObjectId(region_id)})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Región no encontrada")
     return MessageResponse(message="Región eliminada")
 
 
-@router.get("/{region_id}/plantios", response_model=list[PlantioResponse])
+@router.get("/{region}/plantios", response_model=list[PlantioResponse])
 async def get_plantios_by_region(
-    region_id: str,
+    region: str,
     request: Request,
     current_user: dict = Depends(get_current_user),
 ):
     """Get all plantíos within a region (via huertos)."""
     db = request.app.state.mongodb
 
+    selected = await resolve_region(db, region)
+    region_id = str(selected["_id"])
+
     # Find huertos in this region
     huertos = await db.huertos.find(
-        {"region_id": region_id, "deleted_at": None}
+        {"region_id": {"$in": [region_id, object_id(region_id)]}, "deleted_at": None,
+         "usuario_id": {"$in": [current_user["id"], object_id(current_user["id"])]}}
     ).to_list(500)
     huerto_ids = [str(h["_id"]) for h in huertos]
 
