@@ -19,4 +19,4 @@ requests>=2.31.0
 # Utils
 python-dotenv>=1.0.0
 apscheduler>=3.10.0
-sqlalchemy>=2.0.0
+sqlalchemy[asyncio]>=2.0.0

@@ -742,7 +742,7 @@ certificados de diagnóstico ni tratamientos garantizados.
 
 | Módulo | Versión de API | Etiqueta de entrega |
 |---|---|---|
-| Auth | 1.0.0 | `auth-service/v1.0.0` |
+| Auth | 1.0.1 | `auth-service/v1.0.1` |
 | Huertos y Comunidad | 1.0.0 | `huertos-service/v1.0.0` |
 | Plagas e inferencia V6 | 1.0.0 | `plagas-service/v1.0.0` |
 | Chat | 1.0.0 | `chat-service/v1.0.0` |
@@ -750,5 +750,7 @@ certificados de diagnóstico ni tratamientos garantizados.
 | Reportes | 1.0.0 | `reportes-service/v1.0.0` |
 | Gateway | 1.0.0 | `gateway/v1.0.0` |
 
-Las etiquetas identifican el mismo conjunto integrado de código. Las versiones
+Las etiquetas identifican las entregas integradas de cada módulo. Las versiones
 de API son independientes de la versión V6 de los artefactos de inferencia.
+Auth 1.0.1 incorpora la dependencia de SQLAlchemy asíncrono requerida por su
+validación en un entorno limpio, sin cambiar los contratos de autenticación.
