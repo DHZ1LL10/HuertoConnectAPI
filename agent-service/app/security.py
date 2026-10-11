@@ -28,7 +28,7 @@ DOMAIN_TERMS = {
     "jitomate", "tomate", "chile", "maiz", "frijol", "cilantro", "lechuga", "calabaza",
     "pepino", "limon", "naranja", "cafe", "cana", "mango", "aguacate", "platano",
     "composta", "compost", "abono", "fertilidad", "vivero", "agricola", "agricultura",
-    "veracruz", "cordoba", "orizaba", "xalapa", "coatepec", "papantla", "huatusco",
+    "veracruz", "cordoba", "orizaba", "xalapa", "coatepec", "papantla", "huatusco", "hlb", "citricos",
     "amarilla", "amarillas", "marchita", "marchitas", "mancha", "manchas", "enrollada",
     "enrolladas", "seca", "secas", "podrida", "podridas", "brotar", "crecer", "crecimiento",
 }
@@ -181,6 +181,8 @@ def _cap_words(answer: str, max_words: int) -> str:
 
 def evaluate_output(answer: str, user_message: str, max_words: int) -> SafetyDecision:
     clean = EMOJI_PATTERN.sub("", answer).strip()
+    if not clean:
+        return SafetyDecision(False, "blocked", "empty_output", "No pude generar una respuesta útil. Describe el cultivo y los síntomas para intentarlo de nuevo.")
     text = normalize(clean)
 
     if any(pattern in text for pattern in LEAK_PATTERNS):

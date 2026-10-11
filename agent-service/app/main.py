@@ -1,263 +1,126 @@
-from __future__ import annotations
-
-import hashlib
+"""Internal stateless Agent. Public conversations remain in Chat/MongoDB."""
 import logging
 import re
 import secrets
-import uuid
 from contextlib import asynccontextmanager
+from time import perf_counter
+from uuid import uuid4
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
 from starlette.middleware.trustedhost import TrustedHostMiddleware
-
 from app.config import Settings, get_settings
-from app.db import Database
-from app.locks import ConversationLockManager
 from app.providers.ollama import OllamaProvider, OllamaTimeoutError, OllamaUnavailableError
 from app.rate_limit import InMemoryRateLimiter
-from app.repository import ConversationNotFoundError, ConversationRepository
-from app.schemas import (
-    ChatRequest,
-    ChatResponse,
-    ConversationMessagesResponse,
-    DeleteConversationResponse,
-    HealthResponse,
-    MessageResponse,
-)
-from app.service import ChatService
+from app.schemas import GenerateRequest, GenerateResponse, HealthResponse
+from app.service import GenerationService, GenerationBusyError
 
-USER_ID_PATTERN = re.compile(r"^[A-Za-z0-9._:@-]+$")
-api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
-logger = logging.getLogger("huerto-connect-agent")
+logger = logging.getLogger("huerto.agent")
+key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
 
-def configure_logging(settings: Settings) -> None:
-    logging.basicConfig(
-        level=getattr(logging, settings.log_level.upper(), logging.INFO),
-        format="%(asctime)s %(levelname)s %(name)s %(message)s",
-    )
-
-
-def create_app(settings: Settings | None = None, provider: OllamaProvider | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, provider=None):
     settings = settings or get_settings()
-    configure_logging(settings)
 
     @asynccontextmanager
-    async def lifespan(app: FastAPI):
-        database = Database(settings)
-        await database.create_schema()
-        actual_provider = provider or OllamaProvider(settings)
-        repository = ConversationRepository(database.session_factory)
-
-        app.state.settings = settings
-        app.state.database = database
-        app.state.provider = actual_provider
-        app.state.repository = repository
-        app.state.chat_service = ChatService(
-            settings,
-            actual_provider,
-            repository,
-            ConversationLockManager(),
-        )
-        app.state.rate_limiter = InMemoryRateLimiter(
-            settings.rate_limit_requests,
-            settings.rate_limit_window_seconds,
-        )
-        yield
-        await actual_provider.close()
-        await database.close()
-
-    app = FastAPI(
-        title=settings.app_name,
-        version=settings.app_version,
-        description=(
-            "Agente seguro para Huerto Connect con Ollama, historial en servidor "
-            "y aislamiento de conversaciones por usuario."
-        ),
-        lifespan=lifespan,
-    )
-
-    app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.hosts)
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.origins,
-        allow_credentials=False,
-        allow_methods=["GET", "POST", "DELETE"],
-        allow_headers=["Content-Type", "X-API-Key", "X-User-ID"],
-    )
-
-    async def require_api_key(
-        request: Request,
-        supplied_key: str | None = Depends(api_key_header),
-    ) -> None:
-        configured = request.app.state.settings.app_api_key.get_secret_value()
-        if not supplied_key or not secrets.compare_digest(supplied_key, configured):
-            raise HTTPException(status_code=401, detail="API key inválida")
-
-    async def require_user_id(
-        request: Request,
-        x_user_id: str | None = Header(default=None, alias="X-User-ID"),
-    ) -> str:
-        if not x_user_id:
-            raise HTTPException(status_code=401, detail="Falta X-User-ID")
-        user_id = x_user_id.strip()
-        max_length = request.app.state.settings.max_user_id_length
-        if not user_id or len(user_id) > max_length or not USER_ID_PATTERN.fullmatch(user_id):
-            raise HTTPException(status_code=400, detail="X-User-ID inválido")
-        return user_id
-
-    def get_client_ip(request: Request) -> str:
-        settings_local = request.app.state.settings
-        if settings_local.trust_proxy_headers:
-            forwarded = request.headers.get("x-forwarded-for")
-            if forwarded:
-                return forwarded.split(",")[0].strip()
-        return request.client.host if request.client else "unknown"
-
-    async def enforce_rate_limit(
-        request: Request,
-        user_id: str = Depends(require_user_id),
-    ) -> None:
-        key = f"{user_id}:{get_client_ip(request)}"
-        allowed = await request.app.state.rate_limiter.allow(key)
-        if not allowed:
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail="Demasiadas solicitudes. Intenta nuevamente más tarde.",
-            )
-
-    @app.exception_handler(ConversationNotFoundError)
-    async def conversation_not_found(_request: Request, _exc: ConversationNotFoundError):
-        return JSONResponse(status_code=404, content={"detail": "Conversación no encontrada"})
-
-    @app.get("/api/health", response_model=HealthResponse, tags=["health"])
-    @app.get("/health/live", response_model=HealthResponse, tags=["health"])
-    async def live() -> HealthResponse:
-        return HealthResponse(
-            status="ok",
-            service=settings.app_name,
-            version=settings.app_version,
-            model=settings.ollama_model,
-        )
-
-    @app.get("/health/ready", response_model=HealthResponse, tags=["health"])
-    async def ready(request: Request) -> HealthResponse:
-        database_ok = await request.app.state.database.health()
-        ollama_ok = await request.app.state.provider.health()
-        if not (database_ok and ollama_ok):
-            raise HTTPException(
-                status_code=503,
-                detail={"database": database_ok, "ollama": ollama_ok},
-            )
-        return HealthResponse(
-            status="ok",
-            service=settings.app_name,
-            version=settings.app_version,
-            model=settings.ollama_model,
-            database=True,
-            ollama=True,
-        )
-
-    @app.post(
-        "/v1/chat",
-        response_model=ChatResponse,
-        dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
-        tags=["chat"],
-    )
-    async def chat(
-        payload: ChatRequest,
-        request: Request,
-        user_id: str = Depends(require_user_id),
-    ):
-        request_id = str(uuid.uuid4())
-        user_fingerprint = hashlib.sha256(user_id.encode("utf-8")).hexdigest()[:12]
+    async def lifespan(app):
+        logging.basicConfig(level=settings.log_level.upper(), format="%(asctime)s %(levelname)s %(name)s %(message)s")
+        app.state.provider = provider or OllamaProvider(settings)
+        if provider is None:
+            await app.state.provider.warm()
+        app.state.generator = GenerationService(settings, app.state.provider)
+        app.state.limiter = InMemoryRateLimiter(settings.rate_limit_requests, settings.rate_limit_window_seconds, settings.rate_limit_max_users)
         try:
-            result = await request.app.state.chat_service.chat(
-                user_id=user_id,
-                message=payload.message,
-                conversation_id=payload.conversation_id,
-            )
-            logger.info(
-                "chat_completed request_id=%s user=%s conversation=%s status=%s reason=%s",
-                request_id,
-                user_fingerprint,
-                result.conversation_id,
-                result.status,
-                result.safety_reason,
-            )
-            return ChatResponse(
-                answer=result.answer,
-                conversation_id=result.conversation_id,
-                status=result.status,
-                safety_reason=result.safety_reason,
-                request_id=request_id,
-                model=result.model,
-            )
+            yield
+        finally:
+            await app.state.provider.close()
+
+    app = FastAPI(title=settings.app_name, version=settings.app_version,
+                  description="Servicio interno de generación con Ollama. El historial pertenece a Chat.",
+                  lifespan=lifespan)
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.hosts)
+
+    @app.middleware("http")
+    async def request_context(request, call_next):
+        request.state.request_id = str(uuid4())
+        start = perf_counter()
+        # Buffer a bounded request, including chunked clients, before JSON parsing.
+        try:
+            body = bytearray()
+            async for chunk in request.stream():
+                body.extend(chunk)
+                if len(body) > settings.max_request_bytes:
+                    return JSONResponse({"detail": "Solicitud demasiado grande", "request_id": request.state.request_id}, status_code=413)
+            request._body = bytes(body)
+            response = await call_next(request)
+        except Exception as exc:
+            logger.error("request_failed request_id=%s error=%s", request.state.request_id, type(exc).__name__)
+            response = JSONResponse({"detail": "Error interno del agente", "request_id": request.state.request_id}, status_code=500)
+        response.headers["X-Request-ID"] = request.state.request_id
+        logger.info("request_id=%s method=%s endpoint=%s status=%s duration_ms=%.1f",
+                    request.state.request_id, request.method, getattr(request.scope.get("route"), "path", "unmatched"),
+                    response.status_code, (perf_counter()-start)*1000)
+        return response
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(request, exc):
+        # FastAPI defaults echo the invalid input, which can contain private history.
+        errors = [{"loc": e["loc"], "msg": e["msg"], "type": e["type"]} for e in exc.errors()]
+        return JSONResponse({"detail": errors, "request_id": request.state.request_id}, status_code=422)
+
+    async def authorize(supplied: str | None = Depends(key_header)):
+        if not supplied or not secrets.compare_digest(supplied, settings.app_api_key.get_secret_value()):
+            raise HTTPException(401, "API key inválida")
+
+    async def user_identity(x_user_id: str | None = Header(None)):
+        if not x_user_id:
+            raise HTTPException(401, "Falta X-User-ID")
+        if len(x_user_id) > settings.max_user_id_length or not re.fullmatch(r"[A-Za-z0-9._:@-]+", x_user_id):
+            raise HTTPException(422, "X-User-ID inválido")
+        return x_user_id
+
+    def health_payload(available=None):
+        return {"status": "unavailable" if available is False else "ok", "service": settings.app_name,
+                "version": settings.app_version, "model": settings.ollama_model, "ollama": available}
+
+    @app.get("/api/health", response_model=HealthResponse, tags=["Health"])
+    @app.get("/health/live", response_model=HealthResponse, tags=["Health"])
+    async def live():
+        return health_payload()
+
+    @app.get("/health", response_model=HealthResponse, tags=["Health"])
+    @app.get("/health/ready", response_model=HealthResponse, tags=["Health"])
+    async def ready(request: Request):
+        available = await request.app.state.provider.health()
+        return JSONResponse(health_payload(available), status_code=200 if available else 503)
+
+    @app.post("/v1/generate", response_model=GenerateResponse, dependencies=[Depends(authorize)],
+              responses={401: {"description": "Credencial interna inválida"}, 413: {"description": "Cuerpo demasiado grande"},
+                         422: {"description": "Mensaje inválido"}, 429: {"description": "Límite o saturación"},
+                         503: {"description": "Ollama no disponible"}, 504: {"description": "Tiempo agotado"}},
+              tags=["Generación"])
+    async def generate(body: GenerateRequest, request: Request, user: str = Depends(user_identity)):
+        if len(body.message) > settings.max_message_length:
+            raise HTTPException(422, f"El mensaje admite hasta {settings.max_message_length} caracteres")
+        if not await request.app.state.limiter.allow(user):
+            raise HTTPException(429, "Demasiadas solicitudes", headers={"Retry-After": str(settings.rate_limit_window_seconds)})
+        try:
+            result = await request.app.state.generator.generate(body.message, body.history)
+            return GenerateResponse(**result, request_id=request.state.request_id)
+        except GenerationBusyError:
+            raise HTTPException(429, "El agente está ocupado. Intenta de nuevo.", headers={"Retry-After": "2"})
         except OllamaTimeoutError:
-            response = ChatResponse(
-                answer="El modelo tardó demasiado en responder. Intenta nuevamente en unos momentos.",
-                conversation_id=payload.conversation_id,
-                status="error",
-                safety_reason="provider_timeout",
-                request_id=request_id,
-                model=settings.ollama_model,
-            )
-            return JSONResponse(status_code=504, content=response.model_dump())
-        except OllamaUnavailableError as exc:
-            logger.warning("ollama_unavailable request_id=%s error=%s", request_id, str(exc))
-            response = ChatResponse(
-                answer=(
-                    "El asistente no está disponible temporalmente. No apliques productos nuevos "
-                    "mientras no se confirme el problema del cultivo."
-                ),
-                conversation_id=payload.conversation_id,
-                status="error",
-                safety_reason="provider_unavailable",
-                request_id=request_id,
-                model=settings.ollama_model,
-            )
-            return JSONResponse(status_code=503, content=response.model_dump())
+            raise HTTPException(504, "Ollama excedió el tiempo de respuesta")
+        except OllamaUnavailableError:
+            raise HTTPException(503, "Ollama no disponible")
 
-    @app.get(
-        "/v1/conversations/{conversation_id}/messages",
-        response_model=ConversationMessagesResponse,
-        dependencies=[Depends(require_api_key)],
-        tags=["conversations"],
-    )
-    async def conversation_messages(
-        conversation_id: str,
-        request: Request,
-        user_id: str = Depends(require_user_id),
-    ) -> ConversationMessagesResponse:
-        messages = await request.app.state.repository.list_messages(
-            conversation_id,
-            user_id,
-            limit=100,
-        )
-        return ConversationMessagesResponse(
-            conversation_id=conversation_id,
-            messages=[
-                MessageResponse(role=item.role, content=item.content, created_at=item.created_at)
-                for item in messages
-            ],
-        )
-
-    @app.delete(
-        "/v1/conversations/{conversation_id}",
-        response_model=DeleteConversationResponse,
-        dependencies=[Depends(require_api_key)],
-        tags=["conversations"],
-    )
-    async def delete_conversation(
-        conversation_id: str,
-        request: Request,
-        user_id: str = Depends(require_user_id),
-    ) -> DeleteConversationResponse:
-        deleted = await request.app.state.repository.delete_owned(conversation_id, user_id)
-        return DeleteConversationResponse(deleted=deleted, conversation_id=conversation_id)
+    @app.post("/v1/chat", deprecated=True, dependencies=[Depends(authorize)], tags=["Compatibilidad"])
+    @app.get("/v1/conversations/{conversation_id}/messages", deprecated=True, dependencies=[Depends(authorize)], tags=["Compatibilidad"])
+    @app.delete("/v1/conversations/{conversation_id}", deprecated=True, dependencies=[Depends(authorize)], tags=["Compatibilidad"])
+    async def legacy():
+        raise HTTPException(410, "El historial ahora pertenece a Chat. Utiliza /api/agent/v1/chat y /api/agent/v1/conversations desde el Gateway.")
 
     return app
 

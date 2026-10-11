@@ -1,81 +1,45 @@
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from app.config import Settings
-from app.locks import ConversationLockManager
-from app.providers.ollama import OllamaProvider
-from app.repository import ConversationRepository
+"""Stateless response generation; Chat supplies and owns conversation history."""
+import asyncio
+from app.providers.ollama import OllamaTimeoutError
 from app.security import evaluate_input, evaluate_output
 
 
-@dataclass
-class ServiceResult:
-    answer: str
-    conversation_id: str | None
-    status: str
-    safety_reason: str | None
-    model: str | None = None
+class GenerationBusyError(RuntimeError):
+    pass
 
 
-class ChatService:
-    def __init__(
-        self,
-        settings: Settings,
-        provider: OllamaProvider,
-        repository: ConversationRepository,
-        locks: ConversationLockManager,
-    ) -> None:
+class GenerationService:
+    def __init__(self, settings, provider):
         self.settings = settings
         self.provider = provider
-        self.repository = repository
-        self.locks = locks
+        self.slots = asyncio.Semaphore(settings.max_concurrent_generations)
 
-    async def chat(self, user_id: str, message: str, conversation_id: str | None) -> ServiceResult:
-        has_context = conversation_id is not None
+    def context(self, history):
+        """Keep the newest bounded context without persisting it."""
+        selected, count = [], 0
+        for item in reversed(history[-self.settings.max_history_messages:]):
+            if count + len(item.content) > self.settings.max_history_characters:
+                break
+            selected.append(item.model_dump())
+            count += len(item.content)
+        return list(reversed(selected))
 
-        # Si el cliente intenta continuar una conversación, validar la propiedad
-        # antes de procesar incluso solicitudes bloqueadas o fuera de tema.
-        if conversation_id is not None:
-            await self.repository.get_owned(conversation_id, user_id)
-
-        input_decision = evaluate_input(
-            message,
-            self.settings.max_message_length,
-            has_context=has_context,
-        )
-        if not input_decision.allowed:
-            return ServiceResult(
-                answer=input_decision.answer or "Solicitud bloqueada.",
-                conversation_id=conversation_id,
-                status=input_decision.status,
-                safety_reason=input_decision.reason,
-            )
-
-        if conversation_id is None:
-            conversation = await self.repository.create(user_id)
-            conversation_id = conversation.id
-
-        async with self.locks.get(conversation_id):
-            # Verificar nuevamente después de esperar el bloqueo.
-            await self.repository.get_owned(conversation_id, user_id)
-            history = await self.repository.load_history(
-                conversation_id,
-                self.settings.max_history_messages,
-            )
-            raw_answer, model = await self.provider.chat(message, history)
-            output_decision = evaluate_output(
-                raw_answer,
-                user_message=message,
-                max_words=self.settings.max_response_words,
-            )
-            answer = output_decision.answer or "No fue posible generar una respuesta segura."
-            await self.repository.add_exchange(conversation_id, message, answer)
-
-        return ServiceResult(
-            answer=answer,
-            conversation_id=conversation_id,
-            status=output_decision.status,
-            safety_reason=output_decision.reason,
-            model=model,
-        )
+    async def generate(self, message, history):
+        history = self.context(history)
+        decision = evaluate_input(message, self.settings.max_message_length, has_context=bool(history))
+        if not decision.allowed:
+            return {"answer": decision.answer, "status": decision.status, "safety_reason": decision.reason, "model": None}
+        try:
+            await asyncio.wait_for(self.slots.acquire(), timeout=self.settings.queue_timeout_seconds)
+        except TimeoutError as exc:
+            raise GenerationBusyError() from exc
+        try:
+            try:
+                async with asyncio.timeout(self.settings.ollama_timeout_seconds):
+                    answer, model = await self.provider.chat(message, history)
+            except TimeoutError as exc:
+                raise OllamaTimeoutError("Generation deadline exceeded") from exc
+            decision = evaluate_output(answer, user_message=message, max_words=self.settings.max_response_words)
+            return {"answer": decision.answer, "status": decision.status, "safety_reason": decision.reason, "model": model}
+        finally:
+            self.slots.release()
