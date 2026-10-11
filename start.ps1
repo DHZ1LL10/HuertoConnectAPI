@@ -19,6 +19,7 @@ $gatewayRoutes = @(
     [PSCustomObject]@{ Name = "Huertos";             Path = "/api/huertos" },
     [PSCustomObject]@{ Name = "Regiones";            Path = "/api/regiones" },
     [PSCustomObject]@{ Name = "Cultivos";            Path = "/api/cultivos" },
+    [PSCustomObject]@{ Name = "Comunidad";           Path = "/api/comunidad" },
     [PSCustomObject]@{ Name = "Publico";             Path = "/api/public" },
     [PSCustomObject]@{ Name = "Notificaciones";      Path = "/api/notificaciones" },
     [PSCustomObject]@{ Name = "Dataset Imagenes";    Path = "/api/datasets/imagenes" },

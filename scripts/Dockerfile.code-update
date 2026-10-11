@@ -1,0 +1,8 @@
+# Optional offline code-only update. The base must be a locally built service image.
+# Do NOT use when adding/upgrading runtime dependencies; use Compose build instead.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+ARG SERVICE_DIR
+COPY shared/ /app/shared/
+COPY ${SERVICE_DIR}/app/ /app/app/
+COPY scripts/migrate_veracruz_regions.py /app/scripts/migrate_veracruz_regions.py

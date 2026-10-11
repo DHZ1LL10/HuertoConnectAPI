@@ -1,3 +1,9 @@
+x-service-environment: &service-environment
+  MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/?authSource=admin
+  MONGO_DB: ${MONGO_DB}
+  POSTGRES_URI: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:4200}
+
 services:
   # ===================== DATABASES =====================
   mongodb:
@@ -42,6 +48,13 @@ services:
 
   # ===================== MICROSERVICES =====================
   auth-service:
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health/ready', timeout=15)"]
+      interval: 15s
+      timeout: 20s
+      retries: 12
+      start_period: 60s
+    environment: *service-environment
     build:
       context: .
       dockerfile: auth-service/Dockerfile
@@ -57,6 +70,13 @@ services:
       - huerto-network
 
   huertos-service:
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health/ready', timeout=15)"]
+      interval: 15s
+      timeout: 20s
+      retries: 12
+      start_period: 60s
+    environment: *service-environment
     build:
       context: .
       dockerfile: huertos-service/Dockerfile
@@ -72,6 +92,21 @@ services:
       - huerto-network
 
   plagas-service:
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8003/health/ready', timeout=15)"]
+      interval: 15s
+      timeout: 20s
+      retries: 12
+      start_period: 60s
+    environment:
+      <<: *service-environment
+      PLAGUE_MODEL_PATH: /models/vision/yolo_plagas_veracruz_v6.pt
+      DISEASE_MODEL_PATH: /models/vision/yolo_enfermedades_veracruz_v6.pt
+      RF_MODEL_PATH: /models/random_forest/random_forest_veracruz.joblib
+      AI_DEVICE: ${AI_DEVICE:-cpu}
+    volumes:
+      - ./plagas-service/app/models/ml:/models/vision:ro
+      - ./huertos-service/app/models/ml:/models/random_forest:ro
     build:
       context: .
       dockerfile: plagas-service/Dockerfile
@@ -79,7 +114,7 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - "8003:8003"
+      - "127.0.0.1:8003:8003"
     depends_on:
       postgres:
         condition: service_healthy
@@ -89,6 +124,13 @@ services:
       - huerto-network
 
   chat-service:
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/health/ready', timeout=15)"]
+      interval: 15s
+      timeout: 20s
+      retries: 12
+      start_period: 60s
+    environment: *service-environment
     build:
       context: .
       dockerfile: chat-service/Dockerfile
@@ -98,12 +140,21 @@ services:
     ports:
       - "8004:8004"
     depends_on:
+      agent-service:
+        condition: service_healthy
       mongodb:
         condition: service_healthy
     networks:
       - huerto-network
 
   reportes-service:
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8005/health/ready', timeout=15)"]
+      interval: 15s
+      timeout: 20s
+      retries: 12
+      start_period: 60s
+    environment: *service-environment
     build:
       context: .
       dockerfile: reportes-service/Dockerfile
@@ -121,6 +172,13 @@ services:
       - huerto-network
 
   gateway:
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health', timeout=15)"]
+      interval: 15s
+      timeout: 20s
+      retries: 12
+      start_period: 60s
+    environment: *service-environment
     build:
       context: .
       dockerfile: gateway/Dockerfile
@@ -130,16 +188,24 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - auth-service
-      - huertos-service
-      - plagas-service
-      - chat-service
-      - reportes-service
+      auth-service:
+        condition: service_healthy
+      huertos-service:
+        condition: service_healthy
+      plagas-service:
+        condition: service_healthy
+      chat-service:
+        condition: service_healthy
+      reportes-service:
+        condition: service_healthy
     networks:
       - huerto-network
 
   # =================== AGENT SERVICE (IA Local - Ollama) ===================
   agent-service:
+    depends_on:
+      ollama-init:
+        condition: service_completed_successfully
     build:
       context: .
       dockerfile: agent-service/Dockerfile
@@ -147,34 +213,57 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      # host.docker.internal resuelve a la IP del host Windows — permite que el
-      # contenedor se comunique con el servicio Ollama corriendo localmente.
-      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
-      OLLAMA_MODEL: "gemma3:4b"
-      OLLAMA_TIMEOUT_SECONDS: "300"
-      DATABASE_URL: "sqlite:////app/data/agent_conversations.db"
-      APP_API_KEY: "development-only-change-this-api-key-1234567890"
-      ALLOWED_ORIGINS: "http://localhost:8000,http://localhost:4200"
-      ALLOWED_HOSTS: "*"
-      ENVIRONMENT: "development"
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-gemma3:1b}
+      OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-120}
+      OLLAMA_CONTEXT_WINDOW: ${OLLAMA_CONTEXT_WINDOW:-2048}
+      OLLAMA_MAX_OUTPUT_TOKENS: ${OLLAMA_MAX_OUTPUT_TOKENS:-180}
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-30m}
+      APP_API_KEY: ${AGENT_API_KEY:?Define AGENT_API_KEY}
+      ALLOWED_HOSTS: "localhost,127.0.0.1,agent-service,agent,huerto-agent"
+      ENVIRONMENT: ${ENVIRONMENT:-development}
       LOG_LEVEL: "INFO"
     ports:
-      - "8006:8006"
-    volumes:
-      - agent_data:/app/data
+      - "127.0.0.1:8006:8006"
     networks:
       - huerto-network
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8006/health/live')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8006/health/ready', timeout=5)"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 15s
+      start_period: 180s
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - huerto-network
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  ollama-init:
+    image: ollama/ollama:latest
+    restart: "no"
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-gemma3:1b}
+    entrypoint: ["/bin/sh", "-c"]
+    command: ['ollama show "$$OLLAMA_MODEL" >/dev/null 2>&1 || ollama pull "$$OLLAMA_MODEL"']
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - huerto-network
 
 volumes:
+  ollama_data:
   mongo_data:
   postgres_data:
-  agent_data:
 
 
 networks:
