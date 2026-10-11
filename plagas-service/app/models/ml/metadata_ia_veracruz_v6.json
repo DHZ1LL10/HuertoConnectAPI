@@ -1,0 +1,147 @@
+{
+  "version": "definitiva_v6_desde_cero_200",
+  "random_forest": "random_forest_veracruz.joblib",
+  "yolo_plagas": "yolo_plagas_veracruz_v6.pt",
+  "yolo_enfermedades": "yolo_enfermedades_veracruz_v6.pt",
+  "plagas": [
+    {
+      "clase": "arana_roja",
+      "nombre": "Araña roja"
+    },
+    {
+      "clase": "mosca_blanca",
+      "nombre": "Mosca blanca"
+    },
+    {
+      "clase": "pulgones",
+      "nombre": "Pulgones"
+    },
+    {
+      "clase": "gallina_ciega",
+      "nombre": "Gallina ciega"
+    },
+    {
+      "clase": "cochinillas",
+      "nombre": "Cochinillas"
+    },
+    {
+      "clase": "escamas",
+      "nombre": "Escamas"
+    },
+    {
+      "clase": "minador_de_la_hoja",
+      "nombre": "Minador de la hoja"
+    },
+    {
+      "clase": "hormiga_arriera",
+      "nombre": "Hormiga arriera"
+    },
+    {
+      "clase": "caracoles",
+      "nombre": "Caracoles"
+    },
+    {
+      "clase": "babosas",
+      "nombre": "Babosas"
+    },
+    {
+      "clase": "trips",
+      "nombre": "Trips"
+    },
+    {
+      "clase": "orugas_defoliadoras",
+      "nombre": "Orugas defoliadoras"
+    },
+    {
+      "clase": "gusano_cogollero",
+      "nombre": "Gusano cogollero"
+    },
+    {
+      "clase": "chinches_fitofagas",
+      "nombre": "Chinches fitófagas"
+    },
+    {
+      "clase": "gusanos_masticadores",
+      "nombre": "Gusanos masticadores"
+    },
+    {
+      "clase": "escarabajos_mayates",
+      "nombre": "Escarabajos (Mayates)"
+    },
+    {
+      "clase": "picudos",
+      "nombre": "Picudos"
+    }
+  ],
+  "enfermedades": [
+    {
+      "clase": "roya_del_cafeto",
+      "nombre": "Roya del Cafeto",
+      "agente": "Hemileia vastatrix"
+    },
+    {
+      "clase": "tizon_tardio",
+      "nombre": "Tizón Tardío",
+      "agente": "Phytophthora infestans"
+    },
+    {
+      "clase": "ojo_de_gallo",
+      "nombre": "Ojo de Gallo",
+      "agente": "Mycena citricolor"
+    },
+    {
+      "clase": "mancha_bacteriana",
+      "nombre": "Mancha Bacteriana",
+      "agente": "Xanthomonas spp."
+    },
+    {
+      "clase": "hlb",
+      "nombre": "HLB (Huanglongbing)",
+      "agente": "Candidatus Liberibacter spp."
+    },
+    {
+      "clase": "gomosis",
+      "nombre": "Gomosis",
+      "agente": "Phytophthora spp."
+    },
+    {
+      "clase": "antracnosis",
+      "nombre": "Antracnosis",
+      "agente": "Colletotrichum spp."
+    },
+    {
+      "clase": "virus_rizado_amarillo",
+      "nombre": "Virus del Rizado Amarillo (TYLCV)",
+      "agente": "Tomato yellow leaf curl virus"
+    },
+    {
+      "clase": "marchitez_bacteriana",
+      "nombre": "Marchitez Bacteriana",
+      "agente": "Ralstonia solanacearum"
+    },
+    {
+      "clase": "virus_mosaico",
+      "nombre": "Virus del Mosaico (TMV)",
+      "agente": "Tobacco mosaic virus"
+    },
+    {
+      "clase": "sigatoka_negra",
+      "nombre": "Sigatoka Negra",
+      "agente": "Pseudocercospora fijiensis"
+    },
+    {
+      "clase": "pudricion_del_cuello",
+      "nombre": "Pudrición del Cuello (Damping-off)",
+      "agente": "Pythium/Rhizoctonia/Phytophthora spp."
+    },
+    {
+      "clase": "cenicilla",
+      "nombre": "Cenicilla",
+      "agente": "Erysiphales / Oidium spp."
+    }
+  ],
+  "umbral_plaga": 0.7,
+  "umbral_enfermedad": 0.7,
+  "margen": 0.12,
+  "raw_policy": "Las fuentes RAW no se eliminan automáticamente."
+}

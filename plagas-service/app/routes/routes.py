@@ -42,9 +42,20 @@ from app.models.schemas import (
 from shared.auth.dependencies import get_current_user, require_roles
 
 
-async def get_db(request: Request) -> AsyncSession:
+def parse_uuid(value):
+    try:
+        return uuid.UUID(value)
+    except (ValueError, TypeError, AttributeError):
+        raise HTTPException(422, "Identificador UUID inválido")
+
+
+async def get_db(request: Request, user: dict = Depends(get_current_user)) -> AsyncSession:
     """Get database session from request state."""
     async with request.app.state.session_factory() as session:
+        from shared.sql_ownership import restrict_session
+        from shared.ownership import owned_huerto_ids
+        ids = await owned_huerto_ids(request.app.state.mongodb, user)
+        restrict_session(session, [(model, "huerto_id", ids) for model in (PlagaDeteccion, Alerta, Prediccion, RecomendacionCultivo)])
         yield session
 
 
@@ -169,10 +180,10 @@ async def upload_plaga_imagen(
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """
-    Sube una imagen de plaga a Cloudinary y devuelve la URL y el public_id.
+    Sube una imagen de plaga a ImageKit y devuelve la URL y el fileId como public_id.
 
     Usa la URL devuelta como ``imagen_url`` al crear un registro en
-    ``POST /api/plagas``. El ``public_id`` permite transformaciones y borrado.
+    ``POST /api/plagas``. El ``public_id`` identifica el archivo en ImageKit.
 
     - Formatos permitidos: JPG, PNG, WebP (máx 5 MB).
     - Acceso: Admin o Técnico.
@@ -191,23 +202,27 @@ async def upload_plaga_imagen(
             detail=f"Formato no permitido '{ext}'. Usa JPG, PNG o WebP.",
         )
 
-    file_bytes = await imagen.read()
+    file_bytes = await imagen.read(MAX_BYTES + 1)
     if len(file_bytes) > MAX_BYTES:
         raise HTTPException(
             status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
             detail="El archivo supera el límite de 5 MB.",
         )
 
+    from app.routes.ai import decode_image
+    from starlette.concurrency import run_in_threadpool
+    verified = await run_in_threadpool(decode_image, file_bytes, content_type)
+    verified.close()
     try:
-        from shared.services.cloudinary_service import upload_image
+        from shared.services.image_storage import upload_image
         uid = str(uuid.uuid4())[:8]
         cloud_result = await upload_image(
             file_bytes,
             folder="huerto-connect/plagas",
             public_id=f"plaga_{uid}",
         )
-    except RuntimeError as exc:
-        raise HTTPException(status_code=502, detail=str(exc))
+    except RuntimeError:
+        raise HTTPException(status_code=502, detail="No fue posible almacenar la imagen")
 
     return ImageUploadResponse(
         secure_url=cloud_result["secure_url"],
@@ -224,7 +239,7 @@ async def update_plaga(
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """Update a plaga detection."""
-    result = await db.execute(select(PlagaDeteccion).where(PlagaDeteccion.id == uuid.UUID(plaga_id)))
+    result = await db.execute(select(PlagaDeteccion).where(PlagaDeteccion.id == parse_uuid(plaga_id)))
     det = result.scalar_one_or_none()
     if not det:
         raise HTTPException(status_code=404, detail="Detección no encontrada")
@@ -252,7 +267,7 @@ async def delete_plaga(
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """Delete a plaga detection."""
-    result = await db.execute(delete(PlagaDeteccion).where(PlagaDeteccion.id == uuid.UUID(plaga_id)))
+    result = await db.execute(delete(PlagaDeteccion).where(PlagaDeteccion.id == parse_uuid(plaga_id)))
     if (result.rowcount or 0) == 0:
         raise HTTPException(status_code=404, detail="Detección no encontrada")
     await db.commit()
@@ -347,7 +362,7 @@ async def update_alerta(
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """Update an alerta."""
-    result = await db.execute(select(Alerta).where(Alerta.id == uuid.UUID(alerta_id)))
+    result = await db.execute(select(Alerta).where(Alerta.id == parse_uuid(alerta_id)))
     alerta = result.scalar_one_or_none()
     if not alerta:
         raise HTTPException(status_code=404, detail="Alerta no encontrada")
@@ -406,7 +421,7 @@ async def delete_alerta(
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """Delete an alerta."""
-    result = await db.execute(delete(Alerta).where(Alerta.id == uuid.UUID(alerta_id)))
+    result = await db.execute(delete(Alerta).where(Alerta.id == parse_uuid(alerta_id)))
     if (result.rowcount or 0) == 0:
         raise HTTPException(status_code=404, detail="Alerta no encontrada")
     await db.commit()
@@ -558,7 +573,7 @@ async def create_prediccion(
 ):
     """Record a prediction from an AI model."""
     pred = Prediccion(
-        modelo_id=uuid.UUID(body.modelo_id),
+        modelo_id=parse_uuid(body.modelo_id),
         imagen_url=body.imagen_url, huerto_id=body.huerto_id,
         cultivo_id=body.cultivo_id, plaga_predicha=body.plaga_predicha,
         confianza=body.confianza, severidad_predicha=body.severidad_predicha,
@@ -586,7 +601,7 @@ async def feedback_prediccion(
     current_user: dict = Depends(require_roles(["Admin", "Tecnico"])),
 ):
     """Provide feedback on a prediction (feedback loop)."""
-    result = await db.execute(select(Prediccion).where(Prediccion.id == uuid.UUID(pred_id)))
+    result = await db.execute(select(Prediccion).where(Prediccion.id == parse_uuid(pred_id)))
     pred = result.scalar_one_or_none()
     if not pred:
         raise HTTPException(status_code=404, detail="Predicción no encontrada")
@@ -691,7 +706,7 @@ async def create_recomendacion(
     """Create an AI recommendation."""
     rec = RecomendacionCultivo(
         huerto_id=body.huerto_id, cultivo_id=body.cultivo_id,
-        modelo_id=uuid.UUID(body.modelo_id) if body.modelo_id else None,
+        modelo_id=parse_uuid(body.modelo_id) if body.modelo_id else None,
         tipo_recomendacion=body.tipo_recomendacion,
         descripcion=body.descripcion, confianza=body.confianza,
         parametros_entrada_json=body.parametros_entrada_json,
@@ -718,7 +733,7 @@ async def aceptar_recomendacion(
 ):
     """Accept or reject an AI recommendation."""
     result = await db.execute(
-        select(RecomendacionCultivo).where(RecomendacionCultivo.id == uuid.UUID(rec_id))
+        select(RecomendacionCultivo).where(RecomendacionCultivo.id == parse_uuid(rec_id))
     )
     rec = result.scalar_one_or_none()
     if not rec:

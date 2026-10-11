@@ -34,10 +34,10 @@ class PlagaDeteccionCreate(BaseModel):
 
 
 class PlagaDeteccionUpdate(BaseModel):
-    plaga: Optional[str] = None
-    confianza: Optional[float] = None
-    severidad: Optional[str] = None
-    estado: Optional[str] = None
+    plaga: Optional[str] = Field(default=None, min_length=1, max_length=200)
+    confianza: Optional[float] = Field(default=None, ge=0, le=100)
+    severidad: Optional[str] = Field(default=None, pattern=r"^(Baja|Media|Alta)$")
+    estado: Optional[str] = Field(default=None, pattern=r"^(Pendiente|Confirmada|Descartada)$")
 
     model_config = {
         "json_schema_extra": {
@@ -85,9 +85,9 @@ class AlertaCreate(BaseModel):
 
 
 class AlertaUpdate(BaseModel):
-    titulo: Optional[str] = None
-    severidad: Optional[str] = None
-    estado: Optional[str] = None
+    titulo: Optional[str] = Field(default=None, min_length=1, max_length=300)
+    severidad: Optional[str] = Field(default=None, pattern=r"^(Seguro|Advertencia|Critico)$")
+    estado: Optional[str] = Field(default=None, pattern=r"^(Abierta|En Proceso|Resuelta)$")
     responsable_id: Optional[str] = None
 
     model_config = {

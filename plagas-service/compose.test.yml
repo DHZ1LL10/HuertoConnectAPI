@@ -1,0 +1,21 @@
+name: huerto-plagas-test
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "127.0.0.1:27028:27017"
+    volumes:
+      - mongo_test:/data/db
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: plagas_test
+      POSTGRES_PASSWORD: local-test-only
+      POSTGRES_DB: plagas_test
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - postgres_test:/var/lib/postgresql/data
+volumes:
+  mongo_test:
+  postgres_test:
