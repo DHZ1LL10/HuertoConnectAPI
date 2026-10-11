@@ -23,8 +23,9 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 from bson import ObjectId
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
-from pydantic import BaseModel, EmailStr, Field
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
+from pydantic import BaseModel, EmailStr, Field, AliasChoices
+from pymongo.errors import DuplicateKeyError
 
 from app.core.config import settings
 from app.core.database import get_db
@@ -39,6 +40,8 @@ from app.models import (
 from app.services import google_service, otp_service
 from app.services.mail_adapter import send_otp_background
 from app.services.mail_service import mask_email
+from app.routers.dependencies import get_current_user
+from starlette.concurrency import run_in_threadpool
 
 router = APIRouter(prefix="/auth", tags=["Auth Google & Password"])
 
@@ -67,6 +70,7 @@ async def _open_session(db, user_id: str, request: Request) -> tuple[str, str]:
     token = create_access_token({"sub": user_id, "jti": jti})
 
     await db.sesiones.insert_one({
+        "token_hash": _hash_token(token),
         "user_id": user_id,
         "jti": jti,
         "ip": request.client.host if request.client else None,
@@ -89,6 +93,8 @@ class GoogleLoginRequest(BaseModel):
     credential: str = Field(
         ...,
         min_length=1,
+        max_length=16384,
+        validation_alias=AliasChoices("credential", "idToken", "id_token"),
         description="Google ID token (JWT) recibido desde Google Sign-In.",
         examples=["eyJhbGciOiJSUzI1NiIsImtpZCI6IjE2OTM4In0.eyJpc3MiOiJodHRwcy4uLg.signature"],
     )
@@ -135,6 +141,7 @@ class ForgotPasswordRequest(BaseModel):
 
 
 class ForgotPasswordOut(BaseModel):
+    dev_otp_code: str | None = Field(default=None, alias="devOtpCode")
     message: str
     challenge_id: str = Field(default="", alias="challengeId")
     expires_at: str = Field(default="", alias="expiresAt")
@@ -210,9 +217,18 @@ async def google_login(
     is_new = False
 
     # 2. Buscar usuario por email (incluyendo soft-delete)
-    user = await db.usuarios.find_one({"email": info["email"]})
+    user = await db.usuarios.find_one({"google_id": info["google_id"]})
+    if not user:
+        user = await db.usuarios.find_one({"email": info["email"]})
 
     if user:
+        if user.get("deleted_at") is not None or user.get("estado") != "Activo":
+            raise HTTPException(403, "Cuenta inactiva, suspendida o eliminada")
+        if user.get("google_id") and user["google_id"] != info["google_id"]:
+            raise HTTPException(409, "La cuenta está vinculada a otra identidad Google")
+        authoritative_email = info["email"].endswith("@gmail.com") or bool(payload.get("hd"))
+        if not user.get("google_id") and not authoritative_email:
+            raise HTTPException(409, "Inicia sesión con contraseña y OTP antes de vincular esta cuenta Google")
         was_soft_deleted = user.get("deleted_at") is not None
 
         # Cuentas inactivas/suspendidas activas (no borradas) siguen bloqueadas.
@@ -260,7 +276,10 @@ async def google_login(
             "updated_at": now,
             "deleted_at": None,
         }
-        result = await db.usuarios.insert_one(new_user)
+        try:
+            result = await db.usuarios.insert_one(new_user)
+        except DuplicateKeyError:
+            raise HTTPException(409, "La cuenta ya existe. Intenta iniciar sesión de nuevo.")
         user_id = str(result.inserted_id)
         is_new = True
 
@@ -275,6 +294,26 @@ async def google_login(
         userId=user_id,
         isNewUser=is_new,
     )
+
+
+@router.get("/google/config", summary="Configuración pública de Google Sign-In")
+async def google_config():
+    return {"enabled": bool(settings.GOOGLE_CLIENT_ID), "clientId": settings.GOOGLE_CLIENT_ID}
+
+
+@router.post("/google/link", summary="Vincula Google a una sesión autenticada")
+async def link_google(body: GoogleLoginRequest, user=Depends(get_current_user)):
+    payload = await google_service.verify_google_token(body.credential)
+    info = google_service.extract_google_user_info(payload)
+    if info["email"] != user["email"].lower() or not user.get("email_verificado"):
+        raise HTTPException(409, "El correo verificado debe coincidir con tu cuenta")
+    if user.get("google_id") and user["google_id"] != info["google_id"]:
+        raise HTTPException(409, "La cuenta ya está vinculada a otra identidad Google")
+    try:
+        await get_db().usuarios.update_one({"_id": user["_id"]}, {"$set": {"google_id": info["google_id"], "profile_picture": info["picture"], "updated_at": datetime.now(timezone.utc)}})
+    except DuplicateKeyError:
+        raise HTTPException(409, "Esta identidad Google ya está vinculada")
+    return {"message": "Cuenta Google vinculada correctamente"}
 
 
 # ---------------------------------------------------------------------------
@@ -297,7 +336,7 @@ async def forgot_password(
     """
     db = get_db()
     now = datetime.now(timezone.utc)
-    expires_at = now + timedelta(minutes=5)
+    expires_at = now + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)
 
     user = await db.usuarios.find_one({
         "email": body.email.lower(),
@@ -308,7 +347,7 @@ async def forgot_password(
     if not user:
         return ForgotPasswordOut(
             message="Si el correo está registrado, recibirás un código para cambiar tu contraseña.",
-            challengeId="",
+            challengeId=str(ObjectId()),
             expiresAt=expires_at.isoformat(),
             maskedEmail=mask_email(body.email),
         )
@@ -337,13 +376,13 @@ async def forgot_password(
     )
 
     out = ForgotPasswordOut(
-        message="Código para cambio de contraseña enviado al correo electrónico.",
+        message="Si el correo está registrado, recibirás un código para cambiar tu contraseña.",
         challengeId=challenge_id,
         expiresAt=expires_at.isoformat(),
         maskedEmail=mask_email(user["email"]),
     )
     if getattr(settings, "OTP_EXPOSE_CODE_IN_RESPONSE", False):
-        out.__dict__["devOtpCode"] = otp_code
+        out.dev_otp_code = otp_code
 
     return out
 
@@ -377,10 +416,11 @@ async def reset_password(body: ResetPasswordRequest):
     db = get_db()
     now = datetime.now(timezone.utc)
 
-    reset_doc = await db[_RESET_COLLECTION].find_one({
+    reset_doc = await db[_RESET_COLLECTION].find_one_and_update({
         "token_hash": token_hash,
         "used_at": None,
-    })
+        "expires_at": {"$gt": now},
+    }, {"$set": {"used_at": now}})
 
     if not reset_doc:
         raise HTTPException(
@@ -399,7 +439,7 @@ async def reset_password(body: ResetPasswordRequest):
         )
 
     # Actualizar contraseña (bcrypt hash — single string)
-    new_hash = hash_password(body.new_password)
+    new_hash = await run_in_threadpool(hash_password, body.new_password)
     user_oid = reset_doc["user_id"] if isinstance(reset_doc["user_id"], ObjectId) \
         else ObjectId(reset_doc["user_id"])
     await db.usuarios.update_one(

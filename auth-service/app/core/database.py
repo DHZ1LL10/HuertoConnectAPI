@@ -45,7 +45,7 @@ async def connect_db() -> None:
     await _client.admin.command("ping")
 
     _db = _client[settings.DB_NAME]
-    print(f"✅ MongoDB conectado — base de datos: '{settings.DB_NAME}'")
+    print(f"MongoDB conectado — base de datos: '{settings.DB_NAME}'")
 
 
 async def close_db() -> None:
@@ -60,7 +60,7 @@ async def close_db() -> None:
         _client.close()
         _client = None
         _db = None
-        print("🔌 MongoDB desconectado.")
+        print("MongoDB desconectado.")
 
 
 def get_db() -> AsyncIOMotorDatabase:

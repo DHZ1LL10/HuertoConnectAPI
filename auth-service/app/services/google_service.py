@@ -1,102 +1,38 @@
-"""
-Auth Service — Google OAuth2 ID Token verification.
-
-Verifica tokens de Google Sign-In usando la librería oficial ``google-auth``.
-No hace solicitudes externas más allá de la validación del token JWT
-firmado por Google (usa las claves públicas de Google con caché automático).
-"""
-
-import httpx
+"""Verify Google ID tokens with bounded network calls outside the event loop."""
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
-
-from fastapi import HTTPException, status
-
+from google.auth.exceptions import TransportError, GoogleAuthError
+from fastapi import HTTPException
+from starlette.concurrency import run_in_threadpool
 from app.core.config import settings
 
+class TimedRequest(google_requests.Request):
+    def __call__(self, *args, **kwargs):
+        kwargs["timeout"] = settings.GOOGLE_TIMEOUT_SECONDS
+        return super().__call__(*args, **kwargs)
 
-# ---------------------------------------------------------------------------
-# Transport singleton (reutiliza la sesión HTTP)
-# ---------------------------------------------------------------------------
-
-_transport = google_requests.Request()
-
-
-# ---------------------------------------------------------------------------
-# Verificación del token
-# ---------------------------------------------------------------------------
+def _verify(credential):
+    import requests
+    with requests.Session() as session:
+        return id_token.verify_oauth2_token(credential, TimedRequest(session=session), audience=settings.GOOGLE_CLIENT_ID)
 
 async def verify_google_token(credential: str) -> dict:
-    """
-    Verifica un Google ID token y devuelve el payload.
-
-    Args:
-        credential: Token JWT emitido por Google Sign-In (``credential``
-                    de la respuesta de ``google.accounts.id.initialize``).
-
-    Returns:
-        Diccionario con los claims del token. Los campos más relevantes son:
-        - ``sub``     → Google user ID único
-        - ``email``   → correo electrónico verificado
-        - ``name``    → nombre completo
-        - ``given_name`` / ``family_name``
-        - ``picture`` → URL de la foto de perfil
-
-    Raises:
-        HTTPException 401: Si el token es inválido, expirado, o no corresponde
-                           al ``GOOGLE_CLIENT_ID`` configurado.
-        HTTPException 400: Si el token no contiene email verificado.
-    """
     if not settings.GOOGLE_CLIENT_ID:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Google Sign-In no está configurado en este entorno.",
-        )
-
+        raise HTTPException(503, "Google Sign-In no está configurado")
     try:
-        payload = id_token.verify_oauth2_token(
-            credential,
-            _transport,
-            audience=settings.GOOGLE_CLIENT_ID,
-        )
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Token de Google inválido o expirado: {exc}",
-        )
-
-    # Validar que el email esté verificado por Google
-    if not payload.get("email_verified", False):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El correo de la cuenta de Google no está verificado.",
-        )
-
+        payload = await run_in_threadpool(_verify, credential)
+    except TransportError:
+        raise HTTPException(503, "No se pudo contactar con Google. Intenta de nuevo.")
+    except (ValueError, GoogleAuthError, KeyError):
+        raise HTTPException(401, "Token de Google inválido, expirado o destinado a otro cliente")
+    if not payload.get("sub") or not payload.get("email"):
+        raise HTTPException(401, "El token no contiene una identidad válida")
+    if payload.get("email_verified") is not True:
+        raise HTTPException(401, "El correo de Google no está verificado")
     return payload
 
-
-def extract_google_user_info(payload: dict) -> dict:
-    """
-    Extrae los campos de usuario del payload del token de Google.
-
-    Returns:
-        Diccionario con: ``google_id``, ``email``, ``nombre``,
-        ``apellidos``, ``picture``.
-    """
+def extract_google_user_info(payload):
     full_name = payload.get("name", "")
-    given = payload.get("given_name", "")
+    given = payload.get("given_name", "") or full_name.split(" ", 1)[0]
     family = payload.get("family_name", "")
-
-    # Fallback: si no hay given/family, dividir el name
-    if not given and full_name:
-        parts = full_name.split(" ", 1)
-        given = parts[0]
-        family = parts[1] if len(parts) > 1 else ""
-
-    return {
-        "google_id": payload["sub"],
-        "email": payload["email"].lower(),
-        "nombre": given or full_name,
-        "apellidos": family,
-        "picture": payload.get("picture"),
-    }
+    return {"google_id": payload["sub"], "email": payload["email"].strip().lower(), "nombre": given, "apellidos": family, "picture": payload.get("picture")}

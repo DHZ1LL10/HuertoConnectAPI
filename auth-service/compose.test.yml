@@ -1,0 +1,28 @@
+# Isolated authentication smoke environment. No production DB or mail account.
+services:
+  mongodb:
+    image: mongo:7
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  auth:
+    build:
+      context: ..
+      dockerfile: auth-service/Dockerfile
+    environment:
+      ENVIRONMENT: testing
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: auth_smoke_test
+      JWT_SECRET: test-only-jwt-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      OTP_HASH_SECRET: test-only-otp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      OTP_DELIVERY_MODE: console
+      OTP_EXPOSE_CODE_IN_RESPONSE: "true"
+      ADMIN_PASSWORD: ""
+      CORS_ORIGINS: http://localhost:4200
+    ports:
+      - "127.0.0.1:18001:8001"
+    depends_on:
+      mongodb:
+        condition: service_healthy

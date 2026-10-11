@@ -57,9 +57,9 @@ async def cleanup_otp_challenges(db: AsyncIOMotorDatabase) -> None:
     })
     count = result.deleted_count
     if count:
-        logger.info("🧹 [OTP Cleanup] Eliminados %d challenge(s) expirado(s).", count)
+        logger.info("[OTP Cleanup] Eliminados %d challenge(s) expirado(s).", count)
     else:
-        logger.debug("✅ [OTP Cleanup] Sin registros expirados.")
+        logger.debug("[OTP Cleanup] Sin registros expirados.")
 
 
 async def cleanup_password_resets(db: AsyncIOMotorDatabase) -> None:
@@ -80,9 +80,9 @@ async def cleanup_password_resets(db: AsyncIOMotorDatabase) -> None:
     })
     count = result.deleted_count
     if count:
-        logger.info("🧹 [Reset Cleanup] Eliminados %d token(s) expirado(s)/usado(s).", count)
+        logger.info("[Reset Cleanup] Eliminados %d token(s) expirado(s)/usado(s).", count)
     else:
-        logger.debug("✅ [Reset Cleanup] Sin registros pendientes.")
+        logger.debug("[Reset Cleanup] Sin registros pendientes.")
 
 
 async def cleanup_inactive_sessions(db: AsyncIOMotorDatabase) -> None:
@@ -102,9 +102,9 @@ async def cleanup_inactive_sessions(db: AsyncIOMotorDatabase) -> None:
     })
     count = result.deleted_count
     if count:
-        logger.info("🧹 [Session Cleanup] Eliminadas %d sesión(es) inactiva(s).", count)
+        logger.info("[Session Cleanup] Eliminadas %d sesión(es) inactiva(s).", count)
     else:
-        logger.debug("✅ [Session Cleanup] Sin sesiones que limpiar.")
+        logger.debug("[Session Cleanup] Sin sesiones que limpiar.")
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +175,7 @@ def create_scheduler(db: AsyncIOMotorDatabase) -> AsyncIOScheduler:
     )
 
     logger.info(
-        "📅 Scheduler configurado: %d job(s) registrado(s).",
+        "Scheduler configurado: %d job(s) registrado(s).",
         len(scheduler.get_jobs()),
     )
     return scheduler

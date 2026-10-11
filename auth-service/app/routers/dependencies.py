@@ -18,6 +18,7 @@ Uso en un endpoint:
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError
+from datetime import datetime, timezone
 
 from app.core.database import get_db
 from app.core.security import decode_token
@@ -88,7 +89,7 @@ async def get_current_user(token: str = Depends(_extract_bearer_token)) -> dict:
     # Verificar sesión activa en MongoDB
     from bson import ObjectId
 
-    session = await db.sesiones.find_one({"jti": jti, "activa": True})
+    session = await db.sesiones.find_one({"jti": jti, "user_id": user_id, "activa": True, "expires_at": {"$gt": datetime.now(timezone.utc)}})
     if not session:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

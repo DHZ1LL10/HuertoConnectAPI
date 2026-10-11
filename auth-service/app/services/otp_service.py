@@ -1,215 +1,70 @@
-"""
-Auth Service — Servicio de OTP.
-
-Implementa generación, hasheo, verificación y control de intentos/reenvíos
-para el flujo de verificación en dos pasos (registro, login, reset-password).
-
-Todas las operaciones de BD reciben la instancia de Motor DB como parámetro
-para facilitar el testing y evitar estado global.
-"""
-
-import hashlib
+"""Persistent OTP challenges with atomic attempts, rotation and single-use consumption."""
+import hmac
 import secrets
 from datetime import datetime, timedelta, timezone
-
 from bson import ObjectId
-from fastapi import HTTPException, status
-from motor.motor_asyncio import AsyncIOMotorDatabase
-
+from fastapi import HTTPException
+from pymongo import ReturnDocument
 from app.core.config import settings
-from app.models import (
-    ChallengeTipo,
-    OtpChallenge,
-    OtpChallengeCreate,
-    OTP_MAX_VERIFY_ATTEMPTS,
-    OTP_MAX_RESENDS,
-)
 
-
-# ---------------------------------------------------------------------------
-# Constantes
-# ---------------------------------------------------------------------------
-
-OTP_EXPIRATION_MINUTES: int = getattr(settings, "OTP_EXPIRATION_MINUTES", 5)
 _COLLECTION = "otp_challenges"
 
-
-# ---------------------------------------------------------------------------
-# OTP — generación y hashing
-# ---------------------------------------------------------------------------
-
-def generate_otp() -> str:
-    """
-    Genera un código OTP de 6 dígitos criptográficamente seguro.
-
-    Usa ``secrets.randbelow`` para garantizar uniformidad estadística.
-    """
+def generate_otp():
     return f"{secrets.randbelow(1_000_000):06d}"
 
+def hash_otp(otp):
+    return hmac.new(settings.OTP_HASH_SECRET.encode(), otp.encode(), "sha256").hexdigest()
 
-def hash_otp(otp: str) -> str:
-    """
-    Devuelve el hash SHA-256 del código OTP.
-
-    El OTP nunca se almacena en claro; solo su hash viaja a MongoDB.
-    """
-    return hashlib.sha256(otp.encode()).hexdigest()
-
-
-def verify_otp(plain: str, hashed: str) -> bool:
-    """
-    Compara el código OTP en texto plano contra su hash almacenado.
-
-    Usa ``secrets.compare_digest`` para prevenir ataques de timing.
-    """
+def verify_otp(plain, hashed):
     return secrets.compare_digest(hash_otp(plain), hashed)
 
-
-# ---------------------------------------------------------------------------
-# Gestión de challenges en MongoDB
-# ---------------------------------------------------------------------------
-
-async def create_challenge(db: AsyncIOMotorDatabase, data: OtpChallengeCreate) -> str:
-    """
-    Inserta un nuevo ``OtpChallenge`` en MongoDB.
-
-    Returns:
-        El ID del documento insertado como string.
-    """
+async def create_challenge(db, data):
     now = datetime.now(timezone.utc)
-    expires_at = now + timedelta(minutes=OTP_EXPIRATION_MINUTES)
-
-    doc = {
-        "tipo": data.tipo,
-        "email": data.email,
-        "otp_hash": data.otp_hash,
-        "user_id": data.user_id,
-        "pending_user_data": data.pending_user_data,
-        "verify_attempts": 0,
-        "resend_count": 0,
-        "expires_at": expires_at,
-        "created_at": now,
-        "updated_at": now,
-    }
+    # A newly requested code supersedes older codes for the same flow.
+    await db[_COLLECTION].delete_many({"email": data.email, "tipo": data.tipo})
+    doc = {"tipo": data.tipo, "email": data.email, "otp_hash": data.otp_hash,
+           "user_id": data.user_id, "pending_user_data": data.pending_user_data,
+           "verify_attempts": 0, "resend_count": 0, "created_at": now, "updated_at": now,
+           "expires_at": now + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)}
     result = await db[_COLLECTION].insert_one(doc)
     return str(result.inserted_id)
 
-
-async def get_challenge(db: AsyncIOMotorDatabase, challenge_id: str) -> dict:
-    """
-    Recupera un challenge por su ID y valida que no esté expirado.
-
-    Raises:
-        HTTPException 404: challenge no encontrado.
-        HTTPException 410: challenge expirado.
-    """
-    try:
-        oid = ObjectId(challenge_id)
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Challenge ID inválido.",
-        )
-
-    doc = await db[_COLLECTION].find_one({"_id": oid})
+async def get_challenge(db, challenge_id, allow_expired=False):
+    if not ObjectId.is_valid(challenge_id):
+        raise HTTPException(400, "Challenge ID inválido")
+    doc = await db[_COLLECTION].find_one({"_id": ObjectId(challenge_id)})
     if not doc:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="El proceso de verificación no existe o ya expiró.",
-        )
-
-    if doc["expires_at"].replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="El código OTP expiró. Solicita uno nuevo.",
-        )
-
+        raise HTTPException(404, "El proceso de verificación no existe o ya expiró")
+    if not allow_expired and doc["expires_at"].replace(tzinfo=timezone.utc) <= datetime.now(timezone.utc):
+        raise HTTPException(410, "El código OTP expiró. Solicita uno nuevo.")
     return doc
 
-
-async def validate_and_consume_otp(
-    db: AsyncIOMotorDatabase, challenge_id: str, plain_otp: str
-) -> dict:
-    """
-    Verifica el OTP del challenge y lo consume (elimina) si es correcto.
-
-    Flujo:
-    1. Obtiene el challenge (valida existencia y expiración).
-    2. Comprueba límite de intentos.
-    3. Incrementa ``verify_attempts``.
-    4. Verifica el hash.
-    5. Si correcto → elimina el challenge y lo devuelve.
-
-    Returns:
-        El documento del challenge verificado.
-
-    Raises:
-        HTTPException 429: demasiados intentos.
-        HTTPException 401: código incorrecto.
-    """
-    doc = await get_challenge(db, challenge_id)
-    oid = doc["_id"]
-
-    # Bloqueo por intentos
-    if doc["verify_attempts"] >= OTP_MAX_VERIFY_ATTEMPTS:
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Superaste el límite de intentos. Solicita un nuevo código.",
-        )
-
-    # Incrementar intentos antes de verificar (previene timing attacks)
-    await db[_COLLECTION].update_one(
-        {"_id": oid},
-        {"$inc": {"verify_attempts": 1}, "$set": {"updated_at": datetime.now(timezone.utc)}},
-    )
-
-    if not verify_otp(plain_otp, doc["otp_hash"]):
-        remaining = max(0, OTP_MAX_VERIFY_ATTEMPTS - doc["verify_attempts"] - 1)
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Código OTP incorrecto. Intentos restantes: {remaining}",
-        )
-
-    # Eliminar challenge consumido
-    await db[_COLLECTION].delete_one({"_id": oid})
-    return doc
-
-
-async def regenerate_otp(db: AsyncIOMotorDatabase, challenge_id: str) -> tuple[str, str, datetime]:
-    """
-    Regenera el OTP para un challenge existente (resend).
-
-    Returns:
-        Tupla ``(otp_plain, challenge_id, new_expires_at)``.
-
-    Raises:
-        HTTPException 429: límite de reenvíos alcanzado.
-    """
-    doc = await get_challenge(db, challenge_id)
-    oid = doc["_id"]
-
-    if doc["resend_count"] >= OTP_MAX_RESENDS:
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Ya alcanzaste el límite de reenvíos. Inicia el proceso nuevamente.",
-        )
-
-    new_otp = generate_otp()
-    new_hash = hash_otp(new_otp)
+async def validate_and_consume_otp(db, challenge_id, plain_otp):
+    original = await get_challenge(db, challenge_id)
     now = datetime.now(timezone.utc)
-    new_expires = now + timedelta(minutes=OTP_EXPIRATION_MINUTES)
+    doc = await db[_COLLECTION].find_one_and_update(
+        {"_id": original["_id"], "expires_at": {"$gt": now}, "verify_attempts": {"$lt": settings.OTP_MAX_ATTEMPTS}},
+        {"$inc": {"verify_attempts": 1}, "$set": {"updated_at": now}}, return_document=ReturnDocument.AFTER)
+    if not doc:
+        raise HTTPException(429, "Código consumido o límite de intentos alcanzado")
+    if not verify_otp(plain_otp, doc["otp_hash"]):
+        raise HTTPException(401, "Código OTP incorrecto")
+    # Compare the hash again: a concurrent resend invalidates the old code.
+    consumed = await db[_COLLECTION].find_one_and_delete(
+        {"_id": doc["_id"], "otp_hash": doc["otp_hash"], "expires_at": {"$gt": datetime.now(timezone.utc)}})
+    if not consumed:
+        raise HTTPException(409, "El código ya fue utilizado o reemplazado")
+    return consumed
 
-    await db[_COLLECTION].update_one(
-        {"_id": oid},
-        {
-            "$set": {
-                "otp_hash": new_hash,
-                "verify_attempts": 0,
-                "expires_at": new_expires,
-                "updated_at": now,
-            },
-            "$inc": {"resend_count": 1},
-        },
-    )
-
-    return new_otp, str(oid), new_expires
+async def regenerate_otp(db, challenge_id):
+    doc = await get_challenge(db, challenge_id, allow_expired=True)
+    new_otp = generate_otp()
+    now = datetime.now(timezone.utc)
+    expires = now + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)
+    updated = await db[_COLLECTION].find_one_and_update(
+        {"_id": doc["_id"], "otp_hash": doc["otp_hash"], "resend_count": {"$lt": settings.OTP_MAX_RESENDS}},
+        {"$set": {"otp_hash": hash_otp(new_otp), "verify_attempts": 0, "expires_at": expires, "updated_at": now}, "$inc": {"resend_count": 1}},
+        return_document=ReturnDocument.AFTER)
+    if not updated:
+        raise HTTPException(429, "Límite de reenvíos alcanzado o código reemplazado")
+    return new_otp, str(doc["_id"]), expires

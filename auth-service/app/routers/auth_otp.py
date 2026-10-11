@@ -42,6 +42,7 @@ from app.models import (
 from app.services import otp_service
 from app.services.mail_adapter import send_otp_background
 from app.services.mail_service import mask_email
+from starlette.concurrency import run_in_threadpool
 
 router = APIRouter(prefix="/auth", tags=["Auth OTP"])
 
@@ -271,7 +272,7 @@ async def register(
 
     email = body.email.lower().strip()
     now = datetime.now(timezone.utc)
-    pw_hash = hash_password(body.password)
+    pw_hash = await run_in_threadpool(hash_password, body.password)
 
     existing = await db.usuarios.find_one({"email": email})
     if (
@@ -285,6 +286,8 @@ async def register(
         )
 
     if existing:
+        if existing.get("deleted_at") is not None or existing.get("estado") != "Activo":
+            raise HTTPException(403, "Cuenta inactiva, suspendida o eliminada")
         # Permite retomar registro de cuentas no verificadas.
         user_oid = existing["_id"]
         await db.usuarios.update_one(
@@ -329,7 +332,7 @@ async def register(
         tipo=ChallengeTipo.registro,
         email=email,
         otp_hash=otp_hash,
-        expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES),
         user_id=str(user_oid),
     )
     challenge_id = await otp_service.create_challenge(db, challenge_data)
@@ -343,14 +346,14 @@ async def register(
         tipo="registro",
         recipient_name=full_name,
         challenge_id=challenge_id,
-        expires_at=(datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+        expires_at=(datetime.now(timezone.utc) + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)).isoformat(),
     )
 
     # Exponer código en respuesta solo en modo dev
     response = ChallengeOut(
         message="Código de verificación enviado al correo electrónico.",
         challengeId=challenge_id,
-        expiresAt=(datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+        expiresAt=(datetime.now(timezone.utc) + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)).isoformat(),
         maskedEmail=_mask(body.email),
     )
     if settings.OTP_EXPOSE_CODE_IN_RESPONSE:
@@ -384,7 +387,7 @@ async def login(
     })
 
     # Mismo mensaje genérico para email no encontrado o contraseña incorrecta
-    if not user or not verify_password(body.password, user.get("password_hash", "")):
+    if not user or not await run_in_threadpool(verify_password, body.password, user.get("password_hash", "")):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Credenciales inválidas.",
@@ -410,7 +413,7 @@ async def login(
         tipo=ChallengeTipo.login,
         email=user["email"],
         otp_hash=otp_hash,
-        expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES),
         user_id=str(user["_id"]),
     )
     challenge_id = await otp_service.create_challenge(db, challenge_data)
@@ -425,13 +428,13 @@ async def login(
         tipo="login",
         recipient_name=full_name,
         challenge_id=challenge_id,
-        expires_at=(datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+        expires_at=(datetime.now(timezone.utc) + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)).isoformat(),
     )
 
     response = ChallengeOut(
         message="Código OTP enviado al correo electrónico.",
         challengeId=challenge_id,
-        expiresAt=(datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+        expiresAt=(datetime.now(timezone.utc) + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)).isoformat(),
         maskedEmail=_mask(user["email"]),
     )
     if settings.OTP_EXPOSE_CODE_IN_RESPONSE:
@@ -486,6 +489,10 @@ async def verify_otp(
     """
     db = get_db()
     challenge = await otp_service.validate_and_consume_otp(db, body.challenge_id, body.otp_code)
+    if challenge.get("user_id"):
+        account = await db.usuarios.find_one({"_id": ObjectId(challenge["user_id"]), "deleted_at": None, "estado": "Activo"})
+        if not account:
+            raise HTTPException(403, "Cuenta inactiva o eliminada")
 
     tipo = challenge["tipo"]
     now = datetime.now(timezone.utc)

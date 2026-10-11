@@ -17,7 +17,7 @@ from app.core.config import settings
 # Contexto de hashing — bcrypt con factor de coste por defecto (12)
 # ---------------------------------------------------------------------------
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt_sha256", "bcrypt"], deprecated="auto")
 
 
 def hash_password(plain: str) -> str:
