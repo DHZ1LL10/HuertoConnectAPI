@@ -10,6 +10,7 @@ Authentication for /api/agent/* routes:
   - Users never need to know about the internal X-API-Key
 """
 
+import asyncio
 from contextlib import asynccontextmanager
 
 import httpx
@@ -20,15 +21,18 @@ from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from shared.config import settings
+from starlette.middleware.gzip import GZipMiddleware
 
 
 # Service URL mapping
 SERVICE_MAP = {
+    "/ai": settings.PLAGAS_SERVICE_URL,
     "/api/auth": settings.AUTH_SERVICE_URL,
     "/api/usuarios": settings.HUERTOS_SERVICE_URL,
     "/api/huertos": settings.HUERTOS_SERVICE_URL,
     "/api/regiones": settings.HUERTOS_SERVICE_URL,
     "/api/cultivos": settings.HUERTOS_SERVICE_URL,
+    "/api/comunidad": settings.HUERTOS_SERVICE_URL,
     "/api/public": settings.HUERTOS_SERVICE_URL,
     "/api/notificaciones": settings.HUERTOS_SERVICE_URL,
     "/api/datasets/imagenes": settings.HUERTOS_SERVICE_URL,
@@ -42,7 +46,7 @@ SERVICE_MAP = {
     "/api/chatbot": settings.CHAT_SERVICE_URL,
     "/api/reportes": settings.REPORTES_SERVICE_URL,
     "/api/auditoria": settings.REPORTES_SERVICE_URL,
-    "/api/agent": settings.AGENT_SERVICE_URL,
+    "/api/agent": settings.CHAT_SERVICE_URL,
 }
 
 # Services for documentation aggregation and health checks
@@ -50,46 +54,44 @@ SERVICES = {
     "auth": {
         "url": settings.AUTH_SERVICE_URL,
         "label": "Auth Service",
-        "health_path": "/api/health",
+        "health_path": "/health/ready",
     },
     "huertos": {
         "url": settings.HUERTOS_SERVICE_URL,
         "label": "Huertos Service",
-        "health_path": "/api/health",
+        "health_path": "/health/ready",
     },
     "plagas": {
         "url": settings.PLAGAS_SERVICE_URL,
         "label": "Plagas/IA Service",
-        "health_path": "/api/health",
+        "health_path": "/health/ready",
     },
     "chat": {
         "url": settings.CHAT_SERVICE_URL,
         "label": "Chat Service",
-        "health_path": "/api/health",
+        "health_path": "/health/ready",
     },
     "reportes": {
         "url": settings.REPORTES_SERVICE_URL,
         "label": "Reportes Service",
-        "health_path": "/api/health",
+        "health_path": "/health/ready",
     },
     "agent": {
         "url": settings.AGENT_SERVICE_URL,
         "label": "Agent IA Service",
-        "health_path": "/health/live",
+        "health_path": "/health/ready",
     },
 }
 
 # Prefixes to strip before forwarding to the target service.
 # Example: gateway receives /api/agent/v1/chat -> forwards /v1/chat to agent-service
 STRIP_PREFIX_MAP: dict[str, str] = {
-    "/api/agent": "/api/agent",
 }
 
 # Path prefix to ADD when merging a service's OpenAPI paths into the unified spec.
 # This ensures that Swagger UI "Try it out" sends requests to the correct gateway URL.
 # Only needed for services whose internal routes don't start with /api/<service>.
 PATH_PREFIX_IN_DOCS: dict[str, str] = {
-    "agent": "/api/agent",
 }
 
 # Routes that require JWT validation at the gateway level before forwarding.
@@ -115,7 +117,7 @@ _http_client: httpx.AsyncClient | None = None
 async def lifespan(app: FastAPI):
     """Startup and shutdown for HTTP client."""
     global _http_client
-    print("🚀 API Gateway starting...")
+    print("API Gateway starting...")
     # Default timeout 30s for all services; agent gets a per-request override
     # because Ollama inference on CPU can take several minutes.
     _http_client = httpx.AsyncClient(
@@ -126,13 +128,13 @@ async def lifespan(app: FastAPI):
             pool=5.0,        # tiempo para obtener conexión del pool
         )
     )
-    print(f"✅ Gateway ready on port {settings.API_PORT}")
-    print(f"📖 Swagger UI: http://localhost:{settings.API_PORT}/docs")
-    print(f"📖 ReDoc:      http://localhost:{settings.API_PORT}/redoc")
+    print(f"Gateway ready on port {settings.API_PORT}")
+    print(f"Swagger UI: http://localhost:{settings.API_PORT}/docs")
+    print(f"ReDoc: http://localhost:{settings.API_PORT}/redoc")
     yield
     await _http_client.aclose()
     _http_client = None
-    print("🚀 API Gateway stopped.")
+    print("API Gateway stopped.")
 
 
 # Disable default docs, we provide our own
@@ -147,9 +149,10 @@ app = FastAPI(
 )
 
 # CORS
+app.add_middleware(GZipMiddleware, minimum_size=1024, compresslevel=5)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_ORIGIN, "http://localhost:4200", "*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -159,7 +162,7 @@ app.add_middleware(
 def _find_service_url(path: str) -> str | None:
     """Find the service URL for a given path by matching the longest prefix."""
     for prefix in sorted(SERVICE_MAP.keys(), key=len, reverse=True):
-        if path.startswith(prefix):
+        if path == prefix or path.startswith(prefix + "/"):
             return SERVICE_MAP[prefix]
     return None
 
@@ -222,7 +225,8 @@ async def unified_openapi():
                 "**Servicios:**\n"
                 "- Auth (login, registro, OTP, sesiones)\n"
                 "- Huertos (regiones, huertos, cultivos, usuarios, notificaciones)\n"
-                "- Plagas/IA (detecciones, alertas, modelos IA, predicciones, dashboard)\n"
+                "- Comunidad Agricultora (publicaciones, fotos originales, comentarios, me gusta y moderación)\n"
+                "- Plagas/IA (fotos: plagas y enfermedades; Random Forest: rendimiento y categorías admitidas; alertas y dashboard)\n"
                 "- Chat (conversaciones, mensajes, métricas)\n"
                 "- Reportes (reportes, auditoría)\n"
                 "- Agent IA (chat con Brot, historial de conversaciones, Ollama local)\n\n"
@@ -250,10 +254,20 @@ async def unified_openapi():
     }
 
     for name, svc in SERVICES.items():
+        if name == "agent":
+            continue
         try:
             resp = await _http_client.get(f"{svc['url']}/openapi.json", timeout=5.0)
             if resp.status_code == 200:
-                spec = resp.json()
+                def rename_refs(value):
+                    if isinstance(value, dict):
+                        return {k: (v.replace("#/components/schemas/", f"#/components/schemas/{name}_", 1) if k == "$ref" and isinstance(v, str) and v.startswith("#/components/schemas/") else rename_refs(v)) for k, v in value.items()}
+                    if isinstance(value, list):
+                        return [rename_refs(v) for v in value]
+                    return value
+                spec = rename_refs(resp.json())
+                from shared.openapi_uploads import normalize_upload_schemas
+                normalize_upload_schemas(spec)
 
                 # Path prefix to add in the unified docs (e.g. /api/agent for agent-service)
                 path_prefix = PATH_PREFIX_IN_DOCS.get(name, "")
@@ -282,9 +296,7 @@ async def unified_openapi():
 
                 # Merge schemas (prefix to avoid collisions)
                 for schema_name, schema_def in spec.get("components", {}).get("schemas", {}).items():
-                    key = schema_name
-                    if key in merged["components"]["schemas"]:
-                        key = f"{name}_{schema_name}"
+                    key = f"{name}_{schema_name}"
                     merged["components"]["schemas"][key] = schema_def
 
                 # Merge additional security schemes if any (skip agent-specific X-API-Key)
@@ -344,7 +356,7 @@ async def docs_index():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>🌿 Huerto Connect API</title>
+        <title>Huerto Connect API</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1b4332, #2d6a4f); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
@@ -362,19 +374,19 @@ async def docs_index():
     </head>
     <body>
         <div class="container">
-            <h1>🌿 Huerto Connect API</h1>
+            <h1>Huerto Connect API</h1>
             <p class="sub">Microservicios FastAPI · MongoDB · PostgreSQL</p>
             <div class="links">
                 <a href="/docs" class="btn swagger">
-                    📖 Swagger UI — Documentación interactiva
+                    Swagger UI — Documentación interactiva
                     <span class="badge">Probar API</span>
                 </a>
                 <a href="/redoc" class="btn redoc">
-                    📄 ReDoc — Documentación de referencia
+                    ReDoc — Documentación de referencia
                     <span class="badge">Leer</span>
                 </a>
                 <a href="/api/health" class="btn health">
-                    💚 Health Check — Estado de servicios
+                    Health Check — Estado de servicios
                     <span class="badge">JSON</span>
                 </a>
             </div>
@@ -391,42 +403,25 @@ async def docs_index():
 async def gateway_health():
     """Comprueba el estado de todos los microservicios."""
 
-    services_status = {}
-
-    for name, svc in SERVICES.items():
-        health_path = svc.get("health_path", "/api/health")
-        health_url = f"{svc['url']}{health_path}"
-
+    async def probe(name, svc):
         try:
             response = await _http_client.get(
-                health_url,
-                timeout=5.0,
-            )
-
-            services_status[name] = (
-                "ok" if response.status_code == 200 else "error"
-            )
-
-        except httpx.ConnectError:
-            services_status[name] = "unreachable"
-
+                f"{svc['url']}{svc['health_path']}", timeout=12.0)
+            return name, "ok" if response.status_code == 200 else "error"
         except httpx.TimeoutException:
-            services_status[name] = "timeout"
+            return name, "timeout"
+        except httpx.HTTPError:
+            return name, "unreachable"
 
-        except Exception as exc:
-            print(f"[HEALTH] Error comprobando {name}: {exc}")
-            services_status[name] = "error"
-
-    all_ok = all(
-        status == "ok"
-        for status in services_status.values()
-    )
-
-    return {
+    services_status = dict(await asyncio.gather(
+        *(probe(name, svc) for name, svc in SERVICES.items())))
+    all_ok = all(value == "ok" for value in services_status.values())
+    return JSONResponse({
         "status": "ok" if all_ok else "degraded",
         "service": "gateway",
         "services": services_status,
-    }
+    }, status_code=200 if all_ok else 503)
+
 
 
 # ===================== REVERSE PROXY =====================
@@ -438,7 +433,7 @@ async def gateway_health():
 )
 async def proxy(request: Request, path: str):
     """Reverse proxy — forward requests to the appropriate microservice."""
-    full_path = f"/api/{path}"
+    full_path = request.url.path
     service_url = _find_service_url(full_path)
 
     if not service_url:
@@ -489,7 +484,8 @@ async def proxy(request: Request, path: str):
 
     # Forward headers (including Authorization)
     headers = dict(request.headers)
-    headers.pop("host", None)
+    for key in ("host", "x-api-key", "x-user-id", "connection", "transfer-encoding", "content-length"):
+        headers.pop(key, None)
     # Apply agent-specific injected headers (overrides anything the client sent)
     headers.update(agent_injected_headers)
 
@@ -502,10 +498,11 @@ async def proxy(request: Request, path: str):
             url=target_url,
             headers=headers,
             content=body,
+            timeout=httpx.Timeout(settings.AGENT_TIMEOUT_SECONDS + 10 if full_path.startswith("/api/agent/") else 60, connect=5),
         )
 
         # Strip hop-by-hop headers
-        excluded_headers = {"transfer-encoding", "connection", "keep-alive"}
+        excluded_headers = {"transfer-encoding", "connection", "keep-alive", "content-encoding", "content-length"}
         response_headers = {
             k: v for k, v in response.headers.items()
             if k.lower() not in excluded_headers
@@ -530,5 +527,9 @@ async def proxy(request: Request, path: str):
     except Exception as e:
         return JSONResponse(
             status_code=502,
-            content={"detail": f"Gateway error: {str(e)}"},
+            content={"detail": "Error de comunicación con el servicio"},
         )
+
+
+app.add_api_route("/ai/{path:path}", proxy, methods=["GET", "POST", "OPTIONS"], include_in_schema=False)
+app.add_api_route("/health", gateway_health, methods=["GET"])
