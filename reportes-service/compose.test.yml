@@ -1,0 +1,43 @@
+name: huerto-reportes-test
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "127.0.0.1:27030:27017"
+    volumes:
+      - mongo_test:/data/db
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: reportes_test
+      POSTGRES_PASSWORD: local-test-only
+      POSTGRES_DB: reportes_test
+    volumes:
+      - postgres_test:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reportes_test -d reportes_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  reportes:
+    build:
+      context: ..
+      dockerfile: reportes-service/Dockerfile
+    environment:
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: reportes_smoke
+      POSTGRES_URI: postgresql://reportes_test:local-test-only@postgres:5432/reportes_test
+      JWT_SECRET: reportes-test-only-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      OTP_HASH_SECRET: reportes-test-only-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      AGENT_API_KEY: reportes-test-only-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      ENVIRONMENT: testing
+    ports:
+      - "127.0.0.1:18005:8005"
+    depends_on:
+      mongodb:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+volumes:
+  mongo_test:
+  postgres_test:

@@ -5,16 +5,21 @@ Uses PostgreSQL via SQLAlchemy async + MongoDB for auth session validation.
 """
 
 import uuid
+import asyncio
+import json
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl, field_validator
 from sqlalchemy import Column, DateTime, Integer, Numeric, String, Text, select, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
+from fastapi.responses import JSONResponse
 
 from shared.config import settings
 from shared.database import (
@@ -59,11 +64,19 @@ class AuditoriaLog(Base):
 # ===================== SCHEMAS =====================
 
 class ReporteCreate(BaseModel):
-    nombre: str = Field(..., min_length=1)
-    tipo: str
-    archivo_url: Optional[str] = None
+    nombre: str = Field(..., min_length=1, max_length=300)
+    tipo: str = Field(min_length=1, max_length=100)
+    archivo_url: Optional[HttpUrl] = None
+
+    @field_validator("archivo_url")
+    @classmethod
+    def no_credentials(cls, value):
+        if value and (value.username or value.password):
+            raise ValueError("La URL no debe contener credenciales")
+        return value
 
     model_config = {
+        "extra": "forbid", "str_strip_whitespace": True,
         "json_schema_extra": {
             "example": {
                 "nombre": "Reporte semanal de plagas - Zona Norte",
@@ -108,8 +121,10 @@ class MessageResponse(BaseModel):
 
 # ===================== DB SESSION =====================
 
-async def get_db(request: Request) -> AsyncSession:
+async def get_db(request: Request, user: dict = Depends(get_current_user)) -> AsyncSession:
     async with request.app.state.session_factory() as session:
+        from shared.sql_ownership import restrict_session
+        restrict_session(session, [(Reporte, "generado_por", [user["id"]])])
         yield session
 
 
@@ -154,10 +169,13 @@ async def create_reporte(
     """Create a new reporte."""
     reporte = Reporte(
         nombre=body.nombre, tipo=body.tipo,
-        archivo_url=body.archivo_url,
+        archivo_url=str(body.archivo_url) if body.archivo_url else None,
+        estado="Generado" if body.archivo_url else "En_proceso",
         generado_por=current_user["id"],
     )
     db.add(reporte)
+    await db.flush()
+    db.add(AuditoriaLog(actor_id=current_user["id"], accion="crear_reporte", modulo="reportes", detalle_json=json.dumps({"reporte_id": str(reporte.id)})))
     await db.commit()
     await db.refresh(reporte)
     return ReporteResponse(
@@ -170,16 +188,17 @@ async def create_reporte(
 
 @reportes_router.delete("/{reporte_id}", response_model=MessageResponse)
 async def delete_reporte(
-    reporte_id: str,
+    reporte_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_roles(["Admin"])),
 ):
     """Delete a reporte."""
-    result = await db.execute(select(Reporte).where(Reporte.id == uuid.UUID(reporte_id)))
+    result = await db.execute(select(Reporte).where(Reporte.id == reporte_id))
     reporte = result.scalar_one_or_none()
     if not reporte:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     await db.delete(reporte)
+    db.add(AuditoriaLog(actor_id=current_user["id"], accion="eliminar_reporte", modulo="reportes", detalle_json=json.dumps({"reporte_id": str(reporte_id)})))
     await db.commit()
     return MessageResponse(message="Reporte eliminado")
 
@@ -222,29 +241,19 @@ async def list_auditoria(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("📊 Reportes Service starting...")
-
-    # MongoDB for auth session validation
-    db = await connect_mongodb()
-    app.state.mongodb = db
-    print("  ✅ Connected to MongoDB (auth sessions)")
-
-    # PostgreSQL for reportes data
-    engine = get_postgres_engine()
-    app.state.engine = engine
-    app.state.session_factory = get_session_factory(engine)
-    await init_postgres_tables(engine)
-    print("  ✅ Connected to PostgreSQL (reportes data)")
-
-    port = 8005
-    print(f"  📖 Swagger UI: http://localhost:{port}/docs")
-    print(f"📊 Reportes Service ready on port {port}")
-
-    yield
-
-    await engine.dispose()
-    await close_mongodb()
-    print("📊 Reportes Service stopped.")
+    engine = None
+    try:
+        app.state.mongodb = await connect_mongodb()
+        await app.state.mongodb.reporte_exportaciones.create_index([("usuario_id", 1), ("huerto_id", 1), ("fecha", -1)])
+        engine = get_postgres_engine()
+        app.state.engine = engine
+        app.state.session_factory = get_session_factory(engine)
+        await init_postgres_tables(engine)
+        yield
+    finally:
+        if engine is not None:
+            await engine.dispose()
+        await close_mongodb()
 
 
 app = FastAPI(
@@ -256,16 +265,46 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_ORIGIN, "*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition", "X-Report-Total", "X-Report-Records", "X-Report-Truncated"],
 )
 
 app.include_router(reportes_router)
 app.include_router(auditoria_router)
+from app.export import router as export_router
+app.include_router(export_router)
+from shared.observability import install_observability
+install_observability(app, "reportes")
 
 
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "reportes-service"}
+
+@app.get("/health/live", tags=["Health"])
+async def live():
+    return {"status": "ok", "service": "reportes-service"}
+
+
+@app.get("/health/ready", tags=["Health"])
+async def ready():
+    checks = {"mongodb": False, "postgres": False}
+    try:
+        async with asyncio.timeout(5):
+            await app.state.mongodb.command("ping")
+            checks["mongodb"] = True
+            async with app.state.engine.connect() as connection:
+                await connection.execute(text("SELECT 1"))
+            checks["postgres"] = True
+    except Exception:
+        pass
+    ok = all(checks.values())
+    return JSONResponse({"status": "ok" if ok else "unavailable", "dependencies": checks}, status_code=200 if ok else 503)
+
+
+@app.exception_handler(IntegrityError)
+async def integrity_error(request, exc):
+    return JSONResponse({"detail": "Conflicto al guardar el reporte"}, status_code=409)
