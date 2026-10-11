@@ -6,6 +6,7 @@ Microservice for chatbot conversations, messages, and metrics.
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Optional
+import httpx
 
 from bson import ObjectId
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, Request
@@ -15,6 +16,7 @@ from pydantic import BaseModel, Field
 from shared.auth.dependencies import get_current_user, require_roles
 from shared.config import settings
 from shared.database import close_mongodb, connect_mongodb
+from shared.ownership import require_conversation_access
 
 
 # ===================== SCHEMAS =====================
@@ -42,7 +44,7 @@ class ConversacionResponse(BaseModel):
 
 class MensajeCreate(BaseModel):
     contenido: str = Field(..., min_length=1)
-    rol: str = Field(default="user", pattern=r"^(user|assistant|system)$")
+    rol: str = Field(default="user", pattern=r"^user$")
 
     model_config = {
         "json_schema_extra": {
@@ -97,8 +99,6 @@ async def list_conversaciones(
     """List conversations. Users see only their own."""
     db = request.app.state.mongodb
     query = {"usuario_id": current_user["id"]}
-    if current_user["rol"] in ["Admin", "Tecnico"]:
-        query = {}  # Admin/Tecnico see all
 
     cursor = db.chat_conversaciones.find(query).sort("fecha", -1).skip(skip).limit(limit)
     items = await cursor.to_list(limit)
@@ -152,6 +152,7 @@ async def list_mensajes(
 ):
     """List messages in a conversation."""
     db = request.app.state.mongodb
+    await require_conversation_access(db, conv_id, current_user)
     items = await db.chat_mensajes.find(
         {"conversacion_id": conv_id}
     ).sort("fecha", 1).to_list(200)
@@ -176,6 +177,9 @@ async def create_mensaje(
 ):
     """Add a message to a conversation."""
     db = request.app.state.mongodb
+    conversation = await require_conversation_access(db, conv_id, current_user)
+    if conversation.get("estado") == "Cerrada":
+        raise HTTPException(409, "Conversación cerrada")
     now = datetime.now(timezone.utc)
 
     msg_doc = {
@@ -209,6 +213,7 @@ async def close_conversacion(
 ):
     """Close a conversation."""
     db = request.app.state.mongodb
+    await require_conversation_access(db, conv_id, current_user)
     result = await db.chat_conversaciones.update_one(
         {"_id": ObjectId(conv_id)},
         {"$set": {"estado": "Cerrada", "updated_at": datetime.now(timezone.utc)}},
@@ -242,15 +247,19 @@ async def list_metricas(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("💬 Chat Service starting...")
+    print("Chat Service starting...")
     db = await connect_mongodb()
     app.state.mongodb = db
-    print(f"  ✅ Connected to MongoDB: {settings.MONGO_DB}")
-    print("  📖 Swagger UI: http://localhost:8004/docs")
-    print("💬 Chat Service ready on port 8004")
+    app.state.agent_client = httpx.AsyncClient(base_url=settings.AGENT_SERVICE_URL, timeout=httpx.Timeout(settings.AGENT_TIMEOUT_SECONDS, connect=5))
+    await db.chat_conversaciones.create_index([("usuario_id", 1), ("fecha", -1)])
+    await db.chat_mensajes.create_index([("conversacion_id", 1), ("fecha", 1)])
+    print(f"Connected to MongoDB: {settings.MONGO_DB}")
+    print("Swagger UI: http://localhost:8004/docs")
+    print("Chat Service ready on port 8004")
     yield
+    await app.state.agent_client.aclose()
     await close_mongodb()
-    print("💬 Chat Service stopped.")
+    print("Chat Service stopped.")
 
 
 app = FastAPI(
@@ -262,15 +271,25 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_ORIGIN, "*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(conversaciones_router)
+from app.generation import router as generation_router
+app.include_router(generation_router)
+from shared.observability import install_observability
+install_observability(app, "chat")
 
 
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "chat-service"}
+
+
+@app.get("/health/ready")
+async def ready():
+    from shared.readiness import dependency_readiness
+    return await dependency_readiness(app.state.mongodb, app.state.agent_client)
