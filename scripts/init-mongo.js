@@ -69,5 +69,13 @@ db.dataset_imagenes.createIndex({ "validada": 1 });
 // --- notificaciones_usuario ---
 db.notificaciones_usuario.createIndex({ "usuario_id": 1, "leida": 1, "fecha": -1 });
 
-print("✅ MongoDB indexes created successfully");
-print("📦 Database: huerto_connect");
+print("MongoDB indexes created successfully");
+print("Database: huerto_connect");
+
+// Official SEFIPLAN planning regions, no fictitious demo regions.
+["Huasteca Alta", "Huasteca Baja", "Totonaca", "Nautla", "Capital", "Las Montañas",
+ "Sotavento", "Papaloapan", "Los Tuxtlas", "Olmeca"].forEach(nombre => {
+  db.regiones.updateOne({nombre}, {$setOnInsert: {
+    nombre, actividad: "Media", priorizada: false, created_at: new Date(), updated_at: new Date()
+  }}, {upsert: true});
+});
