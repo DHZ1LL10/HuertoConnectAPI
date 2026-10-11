@@ -1,1 +1,0 @@
-# Huertos service models
