@@ -18,7 +18,7 @@ _mongo_client: AsyncIOMotorClient | None = None
 async def connect_mongodb() -> AsyncIOMotorDatabase:
     """Connect to MongoDB and return the database instance."""
     global _mongo_client
-    _mongo_client = AsyncIOMotorClient(settings.MONGO_URI)
+    _mongo_client = AsyncIOMotorClient(settings.MONGO_URI, serverSelectionTimeoutMS=5000, connectTimeoutMS=5000, tz_aware=True)
     db = _mongo_client[settings.MONGO_DB]
     # Verify connection
     await db.command("ping")
@@ -45,7 +45,7 @@ def get_postgres_engine():
     async_uri = settings.POSTGRES_URI.replace(
         "postgresql://", "postgresql+asyncpg://"
     )
-    return create_async_engine(async_uri, echo=False)
+    return create_async_engine(async_uri, echo=False, pool_pre_ping=True, pool_size=5, max_overflow=10)
 
 
 def get_session_factory(engine):
@@ -56,4 +56,12 @@ def get_session_factory(engine):
 async def init_postgres_tables(engine):
     """Create all tables defined by SQLAlchemy models."""
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        def migrate(connection):
+            from pathlib import Path
+            from alembic.config import Config
+            from alembic import command
+            config = Config(str(Path(__file__).resolve().parents[1] / "alembic.ini"))
+            config.attributes["connection"] = connection
+            config.attributes["version_table"] = "alembic_reportes" if "reportes" in Base.metadata.tables else "alembic_plagas"
+            command.upgrade(config, "head")
+        await conn.run_sync(migrate)
