@@ -29,6 +29,18 @@ Para detener la pila conservando imágenes y datos:
 docker compose stop
 ```
 
+Para el servidor con Cloudflare Tunnel, el archivo
+`docker-compose.cloudflare.yml` configura la conexión interna `http://gateway:8000`,
+los enlaces HTTPS y los puertos internos. El token se configura en `.env` como
+`CLOUDFLARE_TUNNEL_TOKEN`; el dominio predeterminado es `api.huertoconnect.com`.
+La [sección Cloudflare del manual](docs/DOCUMENTACION_API.md#14-servidor-con-cloudflare-tunnel)
+describe la ruta publicada y los parámetros del dominio.
+
+```powershell
+.\start.ps1 -Cloudflare -CheckOnly
+.\start.ps1 -Cloudflare -Build
+```
+
 ## Estructura
 
 - `auth-service`: cuentas, OTP, Google y sesiones.

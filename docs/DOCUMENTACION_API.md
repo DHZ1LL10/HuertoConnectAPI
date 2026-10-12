@@ -718,7 +718,7 @@ destino. `benchmark_agent.py` mide preguntas agrícolas genéricas sin persisten
 
 ### Evidencia funcional
 
-- La suite integrada aprobó 125 pruebas, incluidos los contratos, permisos,
+- La suite integrada aprobó 131 pruebas, incluidos los contratos, permisos,
   procesos de inferencia y la organización de Swagger.
 - Google Sign-In completó la prueba interactiva reportada por el usuario.
 - Comunidad completó creación, comentarios, filtros, me gusta idempotente,
@@ -754,3 +754,124 @@ Las etiquetas identifican las entregas integradas de cada módulo. Las versiones
 de API son independientes de la versión V6 de los artefactos de inferencia.
 Auth 1.0.1 incorpora la dependencia de SQLAlchemy asíncrono requerida por su
 validación en un entorno limpio, sin cambiar los contratos de autenticación.
+
+## 14. Servidor con Cloudflare Tunnel
+
+La configuración de despliegue se identifica con `deploy/cloudflare-v1.0.0`.
+`docker-compose.cloudflare.yml` complementa el Compose base para un servidor
+doméstico. `cloudflared` conecta con el Gateway mediante `http://gateway:8000`
+en la red Docker. El tráfico del navegador utiliza HTTPS en el dominio público.
+Requiere Docker Compose 2.24.4 o posterior y un dominio activo en Cloudflare.
+
+### Configuración privada y dominio
+
+El archivo `.env` del servidor contiene las credenciales habituales de la API y
+estas variables de despliegue:
+
+```dotenv
+CLOUDFLARE_TUNNEL_TOKEN=TOKEN_DEL_TUNEL
+CLOUDFLARE_PUBLIC_HOSTNAME=api.huertoconnect.com
+CLOUDFLARE_FRONTEND_HOSTNAME=huertoconnect.com
+CLOUDFLARE_ADMIN_HOSTNAME=admin.huertoconnect.com
+```
+
+El token procede del túnel creado en la cuenta de Cloudflare. Compose lo entrega
+únicamente al conector como secreto en `/run/secrets/cloudflare_tunnel_token`;
+el comando del contenedor no contiene su valor. `.env` permanece fuera del
+repositorio. Las variables de hostname contienen únicamente el dominio, sin
+esquema HTTPS, puerto ni ruta.
+
+`CLOUDFLARE_PUBLIC_HOSTNAME` define `API_PUBLIC_URL` para los enlaces públicos
+de verificación de Auth. `CLOUDFLARE_FRONTEND_HOSTNAME` define las URLs del
+cliente. `CLOUDFLARE_ADMIN_HOSTNAME` autoriza el origen del panel administrativo.
+Los orígenes CORS se derivan de estos dominios; para otro cliente se
+configura `CLOUDFLARE_CORS_ORIGINS` como una lista de orígenes HTTPS separados
+por comas. El origen del cliente utilizado por Google Sign-In se registra en
+el cliente OAuth correspondiente de Google.
+
+La aplicación móvil y el panel utilizan `https://api.huertoconnect.com` como URL
+base de sus solicitudes. Las rutas, cuerpos, JWT, permisos y fotos originales
+conservan sus contratos. La aplicación nativa normalmente no aplica CORS; los
+clientes que ejecutan solicitudes desde un navegador o WebView utilizan los
+orígenes explícitos de la configuración. Si un cliente híbrido utiliza otro
+origen, se agrega a `CLOUDFLARE_CORS_ORIGINS` junto con los dominios autorizados.
+Permitir el origen del panel no publica su interfaz: esa interfaz se despliega
+por separado y conserva la autorización de administrador que aplica la API.
+
+La configuración establece `ENVIRONMENT=production`, entrega OTP por SMTP y
+códigos ocultos en respuestas. Se utilizan las mismas bases de datos, pesos V6,
+volúmenes y políticas de conservación que en la instalación local.
+
+### Ruta publicada en Cloudflare
+
+En la cuenta de Cloudflare, `Networking > Tunnels` contiene el túnel asociado
+al token. Su ruta `Published application` utiliza estos valores:
+
+| Campo | Valor |
+|---|---|
+| Hostname | `api.huertoconnect.com`, o el valor de `CLOUDFLARE_PUBLIC_HOSTNAME` |
+| Service URL | `http://gateway:8000` |
+| Path | Vacío; el Gateway administra las rutas de la API |
+
+Esta ruta se guarda en Cloudflare, que crea el registro DNS del hostname. La
+variable del proyecto configura las URLs de la API; por sí sola no modifica
+el DNS ni crea rutas en la cuenta. El dominio debe pertenecer a esa cuenta y
+usar sus nameservers. [Configuración oficial de Tunnel](https://developers.cloudflare.com/tunnel/get-started/).
+
+### Arranque y comprobación
+
+Desde PowerShell, en la raíz del proyecto:
+
+```powershell
+.\start.ps1 -Cloudflare -CheckOnly
+.\start.ps1 -Cloudflare -Build
+```
+
+`-CheckOnly` valida los archivos sin iniciar contenedores. `-Build` construye las
+imágenes modificadas; en los arranques posteriores se utiliza:
+
+```powershell
+.\start.ps1 -Cloudflare
+```
+
+El script espera la disponibilidad de los servicios y del conector. El túnel
+se considera saludable cuando establece una conexión con Cloudflare, mediante
+su comprobación `/ready`; esa comprobación no garantiza que la ruta o el DNS
+de la cuenta estén configurados. El tiempo de espera predeterminado es 600
+segundos y se ajusta con `-WaitTimeoutSeconds`. La configuración validada aprobó
+seis pruebas de aislamiento de puertos, secreto exclusivo del conector, URLs
+HTTPS/CORS, conservación del arranque local y solicitudes de navegador del panel
+con orígenes autorizados y rechazados.
+
+Los comandos equivalentes, también utilizables desde Linux, son:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.cloudflare.yml config --quiet
+docker compose -f docker-compose.yml -f docker-compose.cloudflare.yml up -d --build --wait --wait-timeout 600
+docker compose -f docker-compose.yml -f docker-compose.cloudflare.yml logs --tail 100 cloudflared
+docker compose -f docker-compose.yml -f docker-compose.cloudflare.yml stop
+```
+
+Una vez conectados el túnel y la ruta, las direcciones públicas son:
+
+- `https://api.huertoconnect.com/docs`: Swagger, incluidas las subidas de fotos.
+- `https://api.huertoconnect.com/redoc`: referencia de contratos.
+- `https://api.huertoconnect.com/api/health`: estado integrado de la API.
+
+La configuración de servidor mantiene Swagger disponible para la revisión de
+la API. Auth, Huertos, Plagas, Chat, Reportes y Agent no publican puertos del host.
+MongoDB, PostgreSQL y Ollama conservan su acceso interno. El Gateway solo publica
+`127.0.0.1:8000` para diagnóstico local; el conector no publica puertos ni necesita
+reglas de entrada en el router. `http://localhost:8000/api/health` comprueba la API
+desde la propia laptop. El Gateway acepta los encabezados de proxy para reconocer
+HTTPS detrás del túnel.
+
+La conexión a Cloudflare requiere conectividad saliente al puerto 7844. Las
+conexiones salientes restantes corresponden a SMTP, Google e ImageKit. El
+conector se reinicia automáticamente con Docker; la disponibilidad del servidor
+depende de que la laptop permanezca encendida, con Docker activo y sin suspensión.
+La pérdida de energía o de Internet interrumpe el acceso público.
+
+Para volver al modo de desarrollo local se utiliza `start.ps1` sin `-Cloudflare`
+o el Compose base. Al cambiar de modo, se detiene el conector con
+`docker compose -f docker-compose.yml -f docker-compose.cloudflare.yml stop cloudflared`.
